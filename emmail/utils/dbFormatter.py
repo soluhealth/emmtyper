@@ -10,7 +10,7 @@ parser.add_argument("--filetype", default="fasta", help="Type of file of the MLS
 parser.add_argument("--outputDB", required=True, help="Name of fasta file where reference db should be")
 parser.add_argument("--outputRef", required=True, help="Name of txt file where reference should be")
 
-args = parser.parse_args("--inputDB March17_emm.fasta --outputDB db.fasta --outputRef ref.txt".split())
+args = parser.parse_args()
 
 # Open files
 
@@ -26,7 +26,7 @@ fasta_sequences = SeqIO.parse(input_file, args.filetype)
 print "Starting building MLST DB"
 
 for fasta in SeqIO.parse(open(args.inputDB, "r"), args.filetype):
-    new_db.write("{}-{}\n{}\n".format(fasta.id[0:3],fasta.id, fasta.seq))
+    new_db.write(">{}-{}\n{}\n".format(fasta.id[0:3],fasta.id, fasta.seq))
 
 print "Finished building MLST DB"
 
