@@ -1,0 +1,5 @@
+# db will not change a lot
+db/
+
+# pyc files
+*.pyc
