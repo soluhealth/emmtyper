@@ -1,0 +1,7 @@
+# db will not change a lot
+
+# do not submit pastFolder
+pastFolder/
+
+# pyc files
+*.pyc
