@@ -2,8 +2,8 @@ import argparse
 import subprocess
 import filterBlastOutput
 
-def buildParser():
-    parser = argparse.ArgumentParser(description="Run Blastn from command line.")
+def buildSubparser(parser):
+    # parser = argparse.ArgumentParser(description="Run Blastn from command line.")
 
     parser.add_argument("-makeblastDB", action="store_true", dest="makeDB",
                         help="Make blast db on directory on mention.")
@@ -59,7 +59,6 @@ def runBlast(args):
 
     return process.communicate()
 
-
 def stderr_logic_filter(stderr):
     """
     Some stderr that we need not worry about.
@@ -72,7 +71,7 @@ def stderr_logic_filter(stderr):
     if stderr not in ignore_err:
         print stderr
 
-def main():
+# def main():
     parser = buildParser()
     args = parser.parse_args()
 
@@ -94,5 +93,5 @@ def main():
 
     return(filtered_outputs)
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     main()
