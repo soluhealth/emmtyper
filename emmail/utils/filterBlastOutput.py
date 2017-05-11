@@ -2,24 +2,28 @@
 
 # Main workhorse.
 
-def filter(variable):
+def filter(variable, header):
     # Change arguments here.
     # IMPORTANT TO KNOW: FUNCTIONS DO NOT AUTOMATICALLY RELATE TO EACH OTHER. USE ALL NEEDED.
+    output = ""
 
     variableList = ['Query', 'Blast Hit', 'Identity', 'Alignment Length', 'Mismatch',
                        'Gap Open', 'Query Start', 'Query End', 'Hit Start', 'Hit End',
                        'E-Value', 'Bit Score', 'Subject Length']
 
     line = ""
-    for var in variableList:
-        line += "{}\t".format(var)
-    print line
+    for i in range(len(variableList)):
+        if i == (len(variableList) - 1):
+            line += "{}\n".format(variableList[i])
+        else:
+            line += "{}\t".format(variableList[i])
+
+    if header:
+        output += line
 
     for line in variable:
-
+        # Split line by tab, and build dictionary of variables in tab.
         line_tmp = line.split("\t")
-
-        # Build dictionary of variables in tab
         Vars = {}
 
         for i in range(len(variableList)):
@@ -29,7 +33,9 @@ def filter(variable):
                 Vars[variableList[i]] = line_tmp[i]
 
         if mismatch_k(Vars, 4) and alignment_to_subject_length_k(Vars, 5) and gap_k(Vars, 2):
-            print line[0:-1]
+            output += str(line) + "\n"
+
+    return output
 
 # Argument functions.
 
