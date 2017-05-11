@@ -8,15 +8,13 @@ EmMail is an ongoing project of a bioinformatics student as a capstone project.
 
 ###
 
-EmMAIL is a command line tool for emm-type classification of Streptococcus pyogenes based on the isolate's whole genome sequencing reads.
+EmMAIL is a command line tool for emm-type classification of Streptococcus pyogenes based on the isolate's whole genome sequence.
 
-Input	: FASTA set of WGS reads of a Streptococcus pyogenes isolate
+Input	: Assembled WGS reads of Streptococcus pyogenes
 
 Output	: Predicted emm type of the isolate
 
-The use of EmMAIL will follow the dependencies of the tools within its pipeline, namely SRST2 and SPAdes (version TBC).
-
-This README file will be filled as soon as possible.
+The use of EmMAIL will follow the dependencies of the tools within its pipeline, namely BLAST and isPcr.
 
 ###
 
