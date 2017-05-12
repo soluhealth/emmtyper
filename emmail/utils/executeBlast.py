@@ -102,4 +102,3 @@ def run(args):
     filtered_outputs = filterBlastOutput.filter(outputs, args.header)
 
     write_where(args, filtered_outputs)
-    print("Finished! Thank you for using EmMAIL!")

@@ -21,6 +21,7 @@ def main():
     parser = buildParser()
     args = parser.parse_args()
     args.func(args)
+    print("Finished! Thank you for using EmMAIL!")
 
 if __name__ == "__main__":
     main()
