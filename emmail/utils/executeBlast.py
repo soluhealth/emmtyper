@@ -12,7 +12,7 @@ def stderr_logic_filter(stderr):
                     "Title ends with at least 20 valid nucleotide characters."
                     "  Was the sequence accidentally put in the title line?\n")]
 
-    if stderr not in ignore_err:
+    if stderr and stderr not in ignore_err:
         print(stderr)
 
 def write_where(args, output):
@@ -27,6 +27,9 @@ def write_where(args, output):
 ### MAIN FUNCTIONS ###
 
 def buildSubparser(parser):
+    """
+    Add arguments to the subparser, and return the subparser.
+    """
     # parser = argparse.ArgumentParser(description="Run Blastn from command line.")
 
     parser.add_argument("--db", required=True,
@@ -55,7 +58,6 @@ def makeblastDB(args):
     """
     We might need to make a blastDB if the DB is not set up.
     """
-
     db_in = args.db
     db_name = db_in.split("/")[-1].split(".")[0]
 
@@ -84,12 +86,14 @@ def runBlast(args):
 
     return process.communicate()
 
-def run(args):
+def runAll(args):
     # If user wants to make db, make one in working directory.
     # Assume no options change to makeblastdb.
-    if args.makeDB == True:
-        makeblastDB(args)
-        args.db = args.db.split("/")[-1].split(".")[0]
+
+    if "args.makeDB" in globals():
+        if args.makeDB == True:
+            makeblastDB(args)
+            args.db = args.db.split("/")[-1].split(".")[0]
 
     stdout, stderr = runBlast(args)
 

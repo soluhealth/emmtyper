@@ -35,7 +35,7 @@ def filter(variable, header):
         if mismatch_k(Vars, 4) and alignment_to_subject_length_k(Vars, 5) and gap_k(Vars, 2):
             output += str(line) + "\n"
 
-    return output
+    return output[:-1]
 
 # Argument functions.
 
