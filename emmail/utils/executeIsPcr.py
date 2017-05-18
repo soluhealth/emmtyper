@@ -9,9 +9,7 @@ def stderr_logic_filter(stderr):
     Some stderr that we need not worry about.
     stderr within the list ignore_err will not be printed out.
     """
-    ignore_err = [("FASTA-Reader: "
-                    "Title ends with at least 20 valid nucleotide characters."
-                    "  Was the sequence accidentally put in the title line?\n")]
+    ignore_err = []
 
     if stderr and stderr not in ignore_err:
         print(stderr)
@@ -74,10 +72,10 @@ def runIsPcr(args):
 def runAll(args):
     stdout, stderr = runIsPcr(args)
 
-    #stderr_logic_filter(stderr)
+    stderr_logic_filter(stderr)
 
     args.query = args.output
 
     executeBlast.runAll(args)
 
-    # subprocess.Popen(args=("rm {}".format(args.output)), shell=True)
+    subprocess.Popen(args=("rm {}".format(args.output)), shell=True)
