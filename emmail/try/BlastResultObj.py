@@ -7,18 +7,20 @@ class Row:
 					'E-Value', 'Bit Score', 'Subject Length']
 	
 	def __init__(self, string):
+	
+		self.fullRow = string
 		
-		if len(self.variableList) != len(string.split("\t")):
+		rowSplit = string.split("\t")
+		
+		if len(self.variableList) != len(rowSplit):
 			raise wrongLengthException("Wrong row length!")
 		
-		stringSplit = string.split("\t")
-		
-		stringSplit[2:10] = [int(x) for x in stringSplit[2:10]]
-		stringSplit[11:] = [int(x) for x in stringSplit[11:]]
+		rowSplit[2:10] = [int(x) for x in rowSplit[2:10]]
+		rowSplit[11:] = [int(x) for x in rowSplit[11:]]
 		
 		(query, blastHit, identity, alignmentLength, mismatch, 
 		gapOpen, queryStart, queryEnd, hitStart, hitEnd, 
-		eValue, bitScore, subjectLength) = stringSplit
+		eValue, bitScore, subjectLength) = rowSplit
 
 		self.Query = query
 		self.BlastHit = blastHit
@@ -34,14 +36,51 @@ class Row:
 		self.BitScore = bitScore
 		self.SubjectLength = subjectLength
 		
-	def get_query(self):
-		return self.Query
+	def __repr__(self):
+		string = "Query {0} has hit {1} with {2} identity and {3}bp alignment"
 		
-	def get_blastHit(self):
-		return self.BlastHit
+		return (string.format(self.Query, self.BlastHit, self.Identity, self.AlignmentLength))
 	
-	def get_mismatch(self):
-		return self.Mismatch
+	def filterMe(self, mismatch=4, align_diff=5, gap=2):
+		if (self.mismatch_k(mismatch) \
+		and self.alignment_to_subject_length_k(align_diff) \
+		and self.gap_k(gap)):
+			return self.fullRow
+		
+		return None
 	
-	def get_subjectLength(self):
-		return self.SubjectLength
+	### Filter functions.
+
+	def alignment_to_subject_length_k(self, k = 0):
+		# Check whether alignment length is within minimum k threshold to subject length.
+
+		return (self.SubjectLength - self.AlignmentLength) <= k
+
+	def mismatch_k(self, k = 0):
+		# Accounts possibility of k mismatch(es) as okay for classification.
+
+		return self.Mismatch <= k
+
+	def gap_k(self, k = 0):
+		# Check whether there are k (or less) gaps in Row instance.
+
+		return self.GapOpen <= k
+	
+	### Prototype filter functions. Currently not used.
+	
+	def hit_start_end_k(self, k = 0):
+		# Reduces need for alignment length to be same as subject length by k value.
+		# Requires other functions to work well, such as mismatch functions.
+
+		start = 1 + k
+		end = self.SubjectLength - k
+
+		start_bool = self.HitStart <= start or self.HitStart >= end
+		end_bool = self.HitEnd <= start or self.HitEnd >= end
+
+		return start_bool and end_bool
+
+	def bit_score_346(self, bit = 346):
+		# Check whether bit score is full.
+
+		return self.BitScore == bit
