@@ -16,7 +16,7 @@ class Command(object, metaclass=ABCMeta):
         self.tool_name = tool_name
         
         self.tool_path = self.get_tool_path()
-        self.version = self.run_command(check_version=True)
+        self.version = None
         self.command_string = ""
 	
     def get_tool_path(self):
