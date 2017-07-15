@@ -1,5 +1,8 @@
 # db will not change a lot
 
+# ignore .gitignore
+gitignore
+
 # do not submit pastFolder
 pastFolder/
 
