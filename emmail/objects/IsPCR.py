@@ -1,5 +1,5 @@
 from os import path
-from Command import Command, FileNotInPathException
+from emmail.objects.Command import Command, FileNotInPathException
 
 class IsPCR(Command):
 
@@ -50,3 +50,5 @@ class IsPCR(Command):
                         max_product_length=4000):
                         
         return IsPCR(assembly, primers, min_perfect, min_good, min_product_length, max_product_length, output)
+        
+# NEED A MAIN()

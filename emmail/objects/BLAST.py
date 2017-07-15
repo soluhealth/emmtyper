@@ -1,6 +1,34 @@
 from os import path
-from Command import Command, FileNotInPathException
-from Row import Row
+from emmail.objects.Command import Command, FileNotInPathException
+from emmail.objects.Row import Row
+
+def buildSubparser(parser):
+    """
+    Add arguments to the subparser, and return the subparser.
+    """
+    # parser = argparse.ArgumentParser(description="Run Blastn from command line.")
+
+    parser.add_argument("--db", required=True,
+                        help="The database to BLAST against.")
+    parser.add_argument("--query", required=True,
+                        help="Query FASTA.")
+
+    parser.add_argument("-makeblastDB", action="store_true", dest="makeDB",
+                        help="Make blast db on directory on mention.")
+    parser.add_argument("-add_header", action="store_true", dest="header",
+                        help="Add header to the output file on mention.")
+    parser.add_argument("-dust", default="no",
+                        help="Filter query sequence with DUST. Default no.")
+    parser.add_argument("-perc_identity", default=95,
+                        help="Minimal percent identity of sequence. Default 95.")
+    parser.add_argument("-culling_limit", default=1,
+                        help="Total hits to return in a position. Default 1.")
+    parser.add_argument("-outfmt", default="6 std slen",
+                        help="Output format as in BLAST. Default \"6 std slen\".")
+    parser.add_argument("-out", action="store",
+                        help="File to stream output. Default to terminal.")
+
+    return parser
 
 class BLAST(Command):
     
@@ -110,3 +138,5 @@ class BLAST(Command):
                         outfmt="6 std slen"):
                         
         return BLAST(db, query, dust, perc_identity, culling_limit, outfmt)
+        
+# NEED A MAIN(), AS IS ISPCR
