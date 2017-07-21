@@ -42,13 +42,3 @@ class IsPCR(Command):
     def run_isPcr_pipeline(self):
         stdout = Command.run_command(self)
         return stdout
-    
-    @staticmethod
-    def generateIsPCRobj(assembly, primers, output="stdout",
-                        min_perfect=15, min_good=15,
-                        min_product_length=0,
-                        max_product_length=4000):
-                        
-        return IsPCR(assembly, primers, min_perfect, min_good, min_product_length, max_product_length, output)
-        
-# NEED A MAIN()

@@ -1,34 +1,8 @@
 from os import path
+import subprocess
+
 from emmail.objects.Command import Command, FileNotInPathException
 from emmail.objects.Row import Row
-
-def buildSubparser(parser):
-    """
-    Add arguments to the subparser, and return the subparser.
-    """
-    # parser = argparse.ArgumentParser(description="Run Blastn from command line.")
-
-    parser.add_argument("--db", required=True,
-                        help="The database to BLAST against.")
-    parser.add_argument("--query", required=True,
-                        help="Query FASTA.")
-
-    parser.add_argument("-makeblastDB", action="store_true", dest="makeDB",
-                        help="Make blast db on directory on mention.")
-    parser.add_argument("-add_header", action="store_true", dest="header",
-                        help="Add header to the output file on mention.")
-    parser.add_argument("-dust", default="no",
-                        help="Filter query sequence with DUST. Default no.")
-    parser.add_argument("-perc_identity", default=95,
-                        help="Minimal percent identity of sequence. Default 95.")
-    parser.add_argument("-culling_limit", default=1,
-                        help="Total hits to return in a position. Default 1.")
-    parser.add_argument("-outfmt", default="6 std slen",
-                        help="Output format as in BLAST. Default \"6 std slen\".")
-    parser.add_argument("-out", action="store",
-                        help="File to stream output. Default to terminal.")
-
-    return parser
 
 class BLAST(Command):
     
@@ -37,6 +11,8 @@ class BLAST(Command):
                 outfmt, out=None):
                 
         Command.__init__(self, "blastn")
+        
+        self.version = self.get_version()
         
         self.db = self.assert_db_and_return(db)
         self.query = Command.assert_filepath_and_return(query)
@@ -66,6 +42,16 @@ class BLAST(Command):
         
         return string
     
+    def get_version(self):
+        process = subprocess.Popen(args="{} -version".format(self.tool_name), 
+                        shell=True,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE)
+        
+        stdout, stderr = process.communicate()
+        
+        return stdout.decode("ascii")
+    
     def assert_db_and_return(self, file_path):
     
         if not (path.isfile(file_path+".nin") and path.isfile(file_path+".nhr") and path.isfile(file_path+".nsq")):
@@ -82,9 +68,7 @@ class BLAST(Command):
         command = string.format(self.db, self.query, self.dust,
                                 self.perc_identity, self.culling_limit,
                                 "\"{}\"".format(self.outformat))
-        
-        # string = ("echo -e \">name\nATGCCCGACAGATAGA\" | blastn -db {} -outfmt {}")
-        
+
         return command
     
     def filter_blastn_rows(self, outputs):
@@ -131,12 +115,3 @@ class BLAST(Command):
         filtered_outputs = self.filter_blastn_rows(outputs)
         
         return self.write_where(filtered_outputs)
-        
-    @staticmethod
-    def generateBLASTobj(db, query, dust="no",
-                        perc_identity=95, culling_limit=1,
-                        outfmt="6 std slen"):
-                        
-        return BLAST(db, query, dust, perc_identity, culling_limit, outfmt)
-        
-# NEED A MAIN(), AS IS ISPCR

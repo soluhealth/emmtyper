@@ -38,14 +38,9 @@ class Command(object, metaclass=ABCMeta):
             
         return file_path
                 
-    def run_command(self, check_version=False):
-        
-        if check_version == True:
-            command = "{} -version".format(self.tool_name)
-        else:
-            command = self.command_string
-            
-        process = subprocess.Popen(args=command, 
+    def run_command(self):
+ 
+        process = subprocess.Popen(args=self.command_string, 
                                     shell=True,
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE)
