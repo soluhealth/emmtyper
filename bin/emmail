@@ -1,7 +1,9 @@
 import argparse
 import subprocess
 
-from emmail.objects.BLAST import BLAST, buildSubparser
+from emmail.objects.BLAST import BLAST
+from emmail.utilities import runBLAST
+
 from emmail.objects.IsPCR import IsPCR
 
 def buildParser():
@@ -11,8 +13,8 @@ def buildParser():
 
     # BLAST subparser
     parser_blast = subparsers.add_parser("blast", help="Direct BLAST to genome reads.")
-    parser_blast = buildSubparser(parser_blast)
-    parser_blast.set_defaults(func=BLAST.main)
+    parser_blast = runBLAST.buildSubparser(parser_blast)
+    parser_blast.set_defaults(func=runBLAST.main)
 
     # PCR + BLAST subparser
     # YOU HAVE NOT SET UP THE +BLAST subparser
