@@ -5,6 +5,7 @@ from emmail.objects.BLAST import BLAST
 from emmail.utilities import runBLAST
 
 from emmail.objects.IsPCR import IsPCR
+from emmail.utilities import runIsPCR
 
 def buildParser():
     parser = argparse.ArgumentParser(description="EmMAIL - emm Automatic Isolate Labeler")
@@ -17,10 +18,10 @@ def buildParser():
     parser_blast.set_defaults(func=runBLAST.main)
 
     # PCR + BLAST subparser
-    # YOU HAVE NOT SET UP THE +BLAST subparser
-    #parser_pcr = subparsers.add_parser("pcr", help="PCR genome, then BLAST against it.")
-    #parser_pcr = executeIsPcr.buildSubparser(parser_pcr)
-    #parser_pcr.set_defaults(func=IsPCR.main)
+    
+    parser_pcr = subparsers.add_parser("pcr", help="PCR genome, then BLAST against it.")
+    parser_pcr = runIsPCR.buildSubparser(parser_pcr)
+    parser_pcr.set_defaults(func=runIsPCR.main)
 
     return parser
 
