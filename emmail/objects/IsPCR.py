@@ -1,5 +1,11 @@
-from os import path
+from os import path, environ
+import logging
+import subprocess
+
 from emmail.objects.Command import Command, FileNotInPathException
+
+logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
+logger = logging.getLogger(__name__)
 
 class IsPCR(Command):
 
@@ -7,6 +13,7 @@ class IsPCR(Command):
                 min_product_length, max_product_length, output_stream):
                 
         Command.__init__(self, "isPcr")
+        
         self.assembly_filename = Command.assert_filepath_and_return(assembly_filename)
         self.primer_filename = Command.assert_filepath_and_return(primer_filename)
         
@@ -17,12 +24,12 @@ class IsPCR(Command):
         self.max_product_length = max_product_length
         self.output_stream = output_stream
         
-        self.command_string = self.build_isPcr_command()
+        self.command_string = self.build_isPCR_command()
     
     def __repr__(self):
         return self.command_string
     
-    def build_isPcr_command(self):
+    def build_isPCR_command(self):
             
         string = ("isPcr {db} {query} {output} "
                     "-minPerfect={} -minGood={} "
@@ -39,6 +46,9 @@ class IsPCR(Command):
         
         return command
     
-    def run_isPcr_pipeline(self):
-        stdout = Command.run_command(self)
-        return stdout
+    def run_isPCR(self):
+        logger.info("Running on {}".format(self.assembly_filename))
+        
+        output = Command.run(self)
+        
+        return repr(output[:-1])
