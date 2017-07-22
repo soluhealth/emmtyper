@@ -1,9 +1,13 @@
-from os import path
+from os import path, environ
 import shutil
 import subprocess
+import logging
 
 from sys import exit
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod, abstractproperty
+
+logging.basicConfig(level=environ.get("LOGLEVEL", "DEBUG"))
+logger = logging.getLogger()
 
 class FileNotInPathException(Exception):
     pass
@@ -17,8 +21,9 @@ class Command(object, metaclass=ABCMeta):
         
         self.tool_path = self.get_tool_path()
         self.version = None
-        self.command_string = ""
-	
+        self.command_string = None
+        self.output_stream = None
+    
     def get_tool_path(self):
         """Check whether tool exists. If True, return path to the tool."""
         tool_path = shutil.which(self.tool_name)
@@ -37,19 +42,16 @@ class Command(object, metaclass=ABCMeta):
             exit(1)
             
         return file_path
-                
-    def run_command(self):
- 
+    
+    def run(self):
         process = subprocess.Popen(args=self.command_string, 
                                     shell=True,
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE)
         
         stdout, stderr = process.communicate()
+
+        if stderr.decode("ascii"):
+            logger.warning("{} stderr: {}".format(self.tool_name.upper(), stderr.decode("ascii")[:-1]))
         
-        # Note: Move to Logging
-        if stderr.decode("ascii") != "":
-            print(stderr)
-            exit(1)
-            
         return stdout.decode("ascii")
