@@ -11,11 +11,12 @@ The use of EmMAIL will follow the dependencies of the tools within its pipeline,
 ## Requirements
 
 EmMAIL needs BLAST and isPcr. As is, there is no way to automatically install both within the setup.py.
-User for now will need to manually install the tools themselves and set them on $PATH for EmMAIL to work.
+
+User (for now) will need to manually install the tools themselves and set them on $PATH for EmMAIL to work.
 
 ## Installation
 
-EmMAIL uses setup.py for easier installation. Clone the GitHub page for EmMAIL, and run setup.py over the command line on the directory where setup.py for Pincer is located.
+EmMAIL uses setup.py for easier installation. Clone the GitHub page for EmMAIL, and run setup.py over the command line on the directory where setup.py for EmMAIL is located.
 The command is:
 
 ```sh
@@ -44,7 +45,7 @@ Arguments for isPcr:
 | Argument | Variable Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | -minPerfect | integer | 15 | Minimum size of perfect match at 3' primer end |
-| -minGood | integer | 15 | Minimum size where there must be 2 matches for each mismatch. | 
+| -minGood | integer | 15 | Minimum size where there must be 2 matches for each mismatch | 
 | -minSize | integer | 0bps | Positive integer value for minimum product length | 
 | -maxSize | integer | 4000bps | Positive integer value for maximum product length |
 | -outPCR | filename | None (stdout) | A character string for if you want the amplicons sent to a file |
@@ -58,7 +59,7 @@ The required arguments are:
 
 | Argument | Variable Type | Description |
 | ------ | ------ | ------ |
-| --query | FASTA | An assembled genome FASTA. Alignment will be checked within contigs; the longer the contigs, the better chance we have to find possible existing alignments |
+| --query | FASTA | An assembled genome FASTA |
 | --db | blast DB | A BLAST database file |
 
 Arguments for BLAST:
