@@ -1,5 +1,5 @@
 import unittest
-from emmail.objects.BLAST import BLAST, FileNotInPathException
+from emmail.objects.BLAST import BLAST
 
 test_no_path = "this is a null test"
 
