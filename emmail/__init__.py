@@ -1,5 +1,5 @@
 __name__ = "EmMAIL"
-__version__ = "0.5"
+__version__ = "1.0"
 __author__ = "Andre Tan"
 __email__ = "andre.sutanto.91@gmail.com"
 __url__ = "https://github.com/Andre-Tan/EmMAIL"

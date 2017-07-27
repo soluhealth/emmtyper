@@ -1,6 +1,7 @@
 import argparse
 import subprocess
 
+from emmail import __name__ as name, __description__ as description, __version__ as version, __author__ as author, __email__ as email
 from emmail.objects.BLAST import BLAST
 from emmail.utilities import runBLAST
 
@@ -8,7 +9,9 @@ from emmail.objects.IsPCR import IsPCR
 from emmail.utilities import runIsPCR
 
 def buildParser():
-    parser = argparse.ArgumentParser(description="EmMAIL - emm Automatic Isolate Labeler")
+    parser = argparse.ArgumentParser(prog=name, 
+                                    description="{} - Version {}".format(description, version),
+                                    epilog="Developed by {} ({})".format(author, email))
     subparsers = parser.add_subparsers(title='Pipelines to choose from',
                                        metavar='')
 
