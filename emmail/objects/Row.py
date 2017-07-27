@@ -2,14 +2,13 @@ class wrongLengthException(Exception):
 	pass
 
 class Row:
-    variableList = ['Query', 'Blast Hit', 'Identity', 'Alignment Length', 'Mismatch',
-                    'Gap Open', 'Query Start', 'Query End', 'Hit Start', 'Hit End',
-                    'E-Value', 'Bit Score', 'Subject Length']
+    variableList = ['Query', 'BlastHit', 'Identity', 'AlignmentLength', 'Mismatch',
+                    'GapOpen', 'QueryStart', 'QueryEnd', 'HitStart', 'HitEnd',
+                    'E-Value', 'BitScore', 'SubjectLength']
 
     def __init__(self, string):
-
         self.fullRow = string
-        
+    
         rowSplit = string.split("\t")
         
         if len(self.variableList) != len(rowSplit):
@@ -36,7 +35,7 @@ class Row:
         self.EValue = eValue
         self.BitScore = bitScore
         self.SubjectLength = subjectLength
-        
+            
     def __repr__(self):
         return self.fullRow
     
@@ -45,10 +44,19 @@ class Row:
         
         return (string.format(self.Query, self.BlastHit, self.Identity, self.AlignmentLength))
     
+    @staticmethod
+    def buildHeader():
+        header = ""
+        
+        for variable in Row.variableList:
+            header += variable + "\t"
+            
+        return header[:-1] + "\n"
+    
     def filterMe(self, mismatch=4, align_diff=5, gap=2):
         if (self.mismatch_k(mismatch) and self.alignment_to_subject_length_k(align_diff) and self.gap_k(gap)):
             return self
-            
+    
     ### Filter functions.
 
     def alignment_to_subject_length_k(self, k = 0):
