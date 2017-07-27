@@ -12,7 +12,7 @@ class BLAST(Command):
     
     def __init__(self, db, query, dust,
                 perc_identity, culling_limit,
-                outfmt, out):
+                out, header):
                 
         Command.__init__(self, "blastn")
         
@@ -26,8 +26,10 @@ class BLAST(Command):
         self.perc_identity = perc_identity
         self.culling_limit = culling_limit
         
-        self.outformat = outfmt
+        self.outformat = "6 std slen"
         self.output_stream = out
+        
+        self.header = header
         
         self.command_string = self.build_blastn_command()
     
@@ -84,7 +86,10 @@ class BLAST(Command):
     
     def row_to_output(self, filtered_outputs):
         string = ""
-       
+        
+        if self.header:
+            string += Row.buildHeader()
+        
         for output in filtered_outputs:
             string += repr(output) + "\n"
         
