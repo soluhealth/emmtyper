@@ -12,7 +12,7 @@ class BLAST(Command):
     
     def __init__(self, db, query, dust,
                 perc_identity, culling_limit,
-                out, header,
+                output_stream, header,
                 mismatch, align_diff, gap):
                 
         Command.__init__(self, "blastn")
@@ -27,7 +27,7 @@ class BLAST(Command):
         self.culling_limit = culling_limit
         
         self.outformat = "6 std slen"
-        self.output_stream = out
+        self.output_stream = output_stream
         
         self.header = header
         
@@ -50,10 +50,14 @@ class BLAST(Command):
                     "% Identity = {4}\n"
                     "Culling limit = {5}\n"
                     "Outformat = {6}\n"
-                    "Output to = {7}\n")
+                    "Output to = {7}\n"
+                    "Mismatch filter = {8}\n"
+                    "Align difference filter = {9}\n"
+                    "Gap filter = {10}")
         
         string = string.format(self.version, self.query, self.db, self.dust, self.perc_identity, 
-                                self.culling_limit, self.outformat, self.output_stream)
+                                self.culling_limit, self.outformat, self.output_stream,
+                                self.mismatch, self.align_diff, self.gap)
         
         return string
     
@@ -107,6 +111,8 @@ class BLAST(Command):
         else:
             with open(self.output_stream, "w") as handle:
                 handle.write(string[:-1])
+                
+        return string[:-1]
         
     def run_blastn_pipeline(self):
         logger.info("Running on {}".format(self.query))
