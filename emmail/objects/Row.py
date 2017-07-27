@@ -7,8 +7,9 @@ class Row:
                     'E-Value', 'Bit Score', 'Subject Length']
 
     def __init__(self, string):
+
         self.fullRow = string
-    
+        
         rowSplit = string.split("\t")
         
         if len(self.variableList) != len(rowSplit):
@@ -35,7 +36,7 @@ class Row:
         self.EValue = eValue
         self.BitScore = bitScore
         self.SubjectLength = subjectLength
-            
+        
     def __repr__(self):
         return self.fullRow
     
