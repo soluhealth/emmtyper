@@ -16,12 +16,14 @@ The arguments used in the pipeline are derived from the mentioned tools.
 ### BLAST Path
 We directly use BLAST (specifically, blastn) against the assembled genome FASTA.
 The required arguments are:
+
 | Argument | Variable Type | Description |
 | ------ | ------ | ------ |
 | --query | FASTA | An assembled genome FASTA. Alignment will be checked within contigs; the longer the contigs, the better chance we have to find possible existing alignments |
 | --db | blast DB | A BLAST database file |
 
 Arguments for BLAST:
+
 | Argument | Variable Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | -dust | string | no | Filter query sequence with DUST |
@@ -31,6 +33,7 @@ Arguments for BLAST:
 | -add_header | boolean | False | On mention, add header to BLAST output |
 
 Arguments for BLAST filter:
+
 | Argument | Variable Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | -mismatch | integer | 4 | Threshold number of mismatch to allow in BLAST hit |
@@ -40,6 +43,7 @@ Arguments for BLAST filter:
 ### isPcr Path
 We first extract targeted sequences using in silico PCR, and then BLAST the amplicons.
 The required arguments are:
+
 | Argument | Variable Type | Description |
 | ------ | ------ | ------ |
 | --primer | FASTA | A FASTA containing primer1 and primer2 as separate records |
@@ -47,6 +51,7 @@ The required arguments are:
 | --db | blast DB | A BLAST database file |
 
 Arguments for isPcr:
+
 | Argument | Variable Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | -minPerfect | integer | 15 | Minimum size of perfect match at 3' primer end |
