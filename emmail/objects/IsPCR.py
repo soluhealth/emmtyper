@@ -51,4 +51,4 @@ class IsPCR(Command):
         
         output = Command.run(self)
         
-        return repr(output[:-1])
+        return output[:-1]
