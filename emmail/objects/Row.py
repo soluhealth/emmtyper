@@ -53,7 +53,7 @@ class Row:
             
         return header[:-1] + "\n"
     
-    def filterMe(self, mismatch=4, align_diff=5, gap=2):
+    def filterMe(self, mismatch, align_diff, gap):
         if (self.mismatch_k(mismatch) and self.alignment_to_subject_length_k(align_diff) and self.gap_k(gap)):
             return self
     

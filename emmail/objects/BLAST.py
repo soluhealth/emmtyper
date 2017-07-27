@@ -12,14 +12,14 @@ class BLAST(Command):
     
     def __init__(self, db, query, dust,
                 perc_identity, culling_limit,
-                out, header):
+                out, header,
+                mismatch, align_diff, gap):
                 
         Command.__init__(self, "blastn")
         
         self.version = self.get_version()
         
         self.db = self.assert_db_and_return(db)
-        
         self.query = Command.assert_filepath_and_return(query)
         
         self.dust = dust
@@ -30,6 +30,12 @@ class BLAST(Command):
         self.output_stream = out
         
         self.header = header
+        
+        # Threshold for row filtering
+        
+        self.mismatch = mismatch
+        self.align_diff = align_diff
+        self.gap = gap
         
         self.command_string = self.build_blastn_command()
     
@@ -80,7 +86,10 @@ class BLAST(Command):
     
     def filter_blastn_rows(self, outputs):
         
-        ok_results = [Row(output).filterMe() for output in outputs if Row(output).filterMe() is not None]
+        ok_results = [Row(output).filterMe(self.mismatch, self.align_diff, self.gap) 
+                        for output in outputs 
+                        if Row(output).filterMe(self.mismatch, self.align_diff, self.gap) 
+                        is not None]
         
         return ok_results
     
