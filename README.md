@@ -8,6 +8,22 @@ Output	: Predicted emm type of the isolate
 
 The use of EmMAIL will follow the dependencies of the tools within its pipeline, namely BLAST and isPcr.
 
+## Requirements
+
+EmMAIL needs BLAST and isPcr. As is, there is no way to automatically install both within the setup.py.
+User for now will need to manually install the tools themselves and set them on $PATH for EmMAIL to work.
+
+## Installation
+
+EmMAIL uses setup.py for easier installation. Clone the GitHub page for EmMAIL, and run setup.py over the command line on the directory where setup.py for Pincer is located.
+The command is:
+
+```sh
+$ python3 setup.py install
+``` 
+
+You will then be able to use EmMAIL by calling `emmail` on the command line.
+
 ## Usage
 
 EmMAIL has 2 branches of usage: direct BLAST, and isPcr followed with BLAST.
