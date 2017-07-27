@@ -13,6 +13,29 @@ The use of EmMAIL will follow the dependencies of the tools within its pipeline,
 EmMAIL has 2 branches of usage: direct BLAST, and isPcr followed with BLAST.
 The arguments used in the pipeline are derived from the mentioned tools.
 
+### isPcr Path
+We first extract targeted sequences using in silico PCR, and then BLAST the amplicons.
+The required arguments are:
+
+| Argument | Variable Type | Description |
+| ------ | ------ | ------ |
+| --primer | FASTA | A FASTA containing primer1 and primer2 as separate records |
+| --query | FASTA | An assembled genome FASTA. Alignment will be checked within contigs; the longer the contigs, the better chance we have to find possible existing alignments |
+| --db | blast DB | A BLAST database file |
+
+Arguments for isPcr:
+
+| Argument | Variable Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| -minPerfect | integer | 15 | Minimum size of perfect match at 3' primer end |
+| -minGood | integer | 15 | Minimum size where there must be 2 matches for each mismatch. | 
+| -minSize | integer | 0bps | Positive integer value for minimum product length | 
+| -maxSize | integer | 4000bps | Positive integer value for maximum product length |
+| -outPCR | filename | None (stdout) | A character string for if you want the amplicons sent to a file |
+| -savePCR | boolean | False | On mention, PCR output file will not be automatically removed | 
+
+Post-PCR, the arguments are the same as the ones in the BLAST path.
+
 ### BLAST Path
 We directly use BLAST (specifically, blastn) against the assembled genome FASTA.
 The required arguments are:
@@ -39,29 +62,6 @@ Arguments for BLAST filter:
 | -mismatch | integer | 4 | Threshold number of mismatch to allow in BLAST hit |
 | -align_diff | integer | 5 | Threshold for difference between alignment length and subject length in BLAST hit |
 | -gap | integer | 2 | Threshold number of gap to allow in BLAST hit |
-
-### isPcr Path
-We first extract targeted sequences using in silico PCR, and then BLAST the amplicons.
-The required arguments are:
-
-| Argument | Variable Type | Description |
-| ------ | ------ | ------ |
-| --primer | FASTA | A FASTA containing primer1 and primer2 as separate records |
-| --query | FASTA | An assembled genome FASTA. Alignment will be checked within contigs; the longer the contigs, the better chance we have to find possible existing alignments |
-| --db | blast DB | A BLAST database file |
-
-Arguments for isPcr:
-
-| Argument | Variable Type | Default | Description |
-| ------ | ------ | ------ | ------ |
-| -minPerfect | integer | 15 | Minimum size of perfect match at 3' primer end |
-| -minGood | integer | 15 | Minimum size where there must be 2 matches for each mismatch. | 
-| -minSize | integer | 0bps | Positive integer value for minimum product length | 
-| -maxSize | integer | 4000bps | Positive integer value for maximum product length |
-| -outPCR | filename | None (stdout) | A character string for if you want the amplicons sent to a file |
-| -savePCR | boolean | False | On mention, PCR output file will not be automatically removed | 
-
-Post-PCR, the arguments are the same as the ones in the BLAST path.
 
 ## Contact 
 
