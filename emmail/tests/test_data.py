@@ -4,7 +4,7 @@ primer_path = "/home/andret1/dev/EmMAIL/emmail/tests/isPcrPrim.tsv"
 db = "/home/andret1/projects/blastDB/8Jun17.fasta"
 
 test_sequence_path = "/home/andret1/dev/EmMAIL/emmail/tests/contig.fasta"
-test_empty_path = "/home/andret1/dev/EmMAIL/emmail/tests/no.fasta"
+test_empty_path = "/home/andret1/dev/EmMAIL/emmail/tests/empty.fasta"
 test_pcr_product_path = "/home/andret1/dev/EmMAIL/emmail/tests/amplicon.fasta"
 
 blast_command = "blastn -db {} -query {} -dust no -perc_identity 95 -culling_limit 1 -outfmt \"6 std slen\"".format(db, test_sequence_path)
