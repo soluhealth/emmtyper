@@ -52,6 +52,6 @@ class Command(object, metaclass=ABCMeta):
         stdout, stderr = process.communicate()
 
         if stderr.decode("ascii"):
-            logger.warning("{} stderr: {}".format(self.tool_name.upper(), stderr.decode("ascii")[:-1]))
+            logger.warning("{}: {}".format(self.tool_name, stderr.decode("ascii")[:-1]))
         
         return stdout.decode("ascii")
