@@ -1,5 +1,0 @@
-__version__ = "0.0.1"
-__author__ = "Andre Tan"
-__email__ = "andre.sutanto.91@gmail.com"
-__license__ = "GPL-3.0"
-__description__ = "EmMAIL - emm Automatic Isolate Labeller"
