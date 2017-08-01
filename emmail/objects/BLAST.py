@@ -29,7 +29,7 @@ class BLAST(Command):
         self.outformat = "6 std slen"
         self.output_stream = output_stream
         
-        self.header = header
+        self.want_header = header
         
         # Threshold for row filtering
         
@@ -100,18 +100,23 @@ class BLAST(Command):
     def row_to_output(self, filtered_outputs):
         string = ""
         
-        if self.header:
-            string += Row.buildHeader()
-        
+        # I want to run this without repr
         for output in filtered_outputs:
             string += repr(output) + "\n"
         
-        if self.output_stream in [None, "None", "stdout"]:
-            print(string[:-1])
-        else:
-            with open(self.output_stream, "w") as handle:
-                handle.write(string[:-1])
+        if string:
+            if self.want_header:
+                string = Row.buildHeader() + string
                 
+            if self.output_stream in [None, "None", "stdout"]:
+                print(string[:-1])
+            else:
+                with open(self.output_stream, "w") as handle:
+                    handle.write(string[:-1])
+                
+        else:
+            logger.info("There is no output for {}".format(self.query))
+        
         return string[:-1]
         
     def run_blastn_pipeline(self):
