@@ -65,7 +65,7 @@ def buildSubparser(parser):
     
 def main(args):
     
-    pcr = IsPCR(assembly_filename = args.genome,
+    pcr = IsPCR(assembly_filename = args.query,
                 primer_filename = args.primer,
                 min_perfect = args.minPerfect,
                 min_good = args.minGood,
@@ -82,7 +82,7 @@ def main(args):
                     dust = args.dust, 
                     perc_identity = args.perc_identity,
                     culling_limit = args.culling_limit, 
-                    out = args.outBLAST,
+                    output_stream = args.outBLAST,
                     header = args.add_header,
                     
                     mismatch = args.mismatch,
@@ -91,10 +91,11 @@ def main(args):
                     
     blast.run_blastn_pipeline()
     
-    # logger.info("PCR and BLAST pipeline finished")
-    
     if args.savePCR == False:
         remove(args.outPCR)
         logger.info("{} is removed from directory".format(args.outPCR))
+    
     else:
         logger.info("{} is kept on directory".format(args.outPCR))
+        
+    logger.info("Result for {} is saved as {}".format(args.query.split("/")[-1], args.outBLAST))
