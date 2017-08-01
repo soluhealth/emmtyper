@@ -1,4 +1,10 @@
+from os import environ
+import logging
+
 from emmail.objects.BLAST import BLAST
+
+logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
+logger = logging.getLogger(__name__)
 
 def buildSubparser(parser):
     """
@@ -42,7 +48,7 @@ def main(args):
                     perc_identity = args.perc_identity,
                     culling_limit = args.culling_limit, 
                     
-                    out = args.outBLAST,
+                    output_stream = args.outBLAST,
                     header = args.add_header,
                     
                     mismatch = args.mismatch,
@@ -50,3 +56,5 @@ def main(args):
                     gap = args.gap)
                     
     blast.run_blastn_pipeline()
+    
+    logger.info("Result for {} is saved as {}".format(args.query.split("/")[-1], args.outBLAST))
