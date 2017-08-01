@@ -1,5 +1,4 @@
 import unittest
-from os import listdir
 
 from emmail.objects.BLAST import BLAST
 from emmail.tests.test_data import *
@@ -26,8 +25,7 @@ class testBLASTapp(unittest.TestCase):
     
     def test_sanity(self):
         self.assertEqual(test_null, "this is a null test")
-        self.assertTrue("contig.fasta" in listdir())
-    
+
     def test_is_BLAST(self):
         self.assertIs(type(blast), BLAST)
         self.assertIs(type(blast_h), BLAST)
@@ -49,9 +47,6 @@ class testBLASTapp(unittest.TestCase):
     
     def test_e_out(self):
         self.assertEqual(blast_e.run_blastn_pipeline(), "")
-    
-    def test_e_no_output(self):
-        self.assertFalse(blast_e.output_stream in listdir())
         
 if __name__ == '__main__':
     unittest.main()
