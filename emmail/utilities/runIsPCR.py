@@ -69,7 +69,7 @@ def main(args):
                 primer_filename = args.primer,
                 min_perfect = args.minPerfect,
                 min_good = args.minGood,
-                min_product_length = args.minSize,
+                # min_product_length = args.minSize,
                 max_product_length = args.maxSize,
                 output_stream = "stdout")
     
