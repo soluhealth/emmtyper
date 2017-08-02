@@ -1,7 +1,7 @@
 class wrongLengthException(Exception):
 	pass
 
-class Row:
+class Result:
     variableList = ['Query', 'BlastHit', 'Identity', 'AlignmentLength', 'Mismatch',
                     'GapOpen', 'QueryStart', 'QueryEnd', 'HitStart', 'HitEnd',
                     'E-Value', 'BitScore', 'SubjectLength']
@@ -21,20 +21,20 @@ class Row:
         gapOpen, queryStart, queryEnd, hitStart, hitEnd, 
         eValue, bitScore, subjectLength) = rowSplit
 
-        self.Query = query
-        self.BlastHit = blastHit
+        self.query = query
+        self.blastHit = blastHit
         
-        self.Identity = float(identity)
-        self.AlignmentLength = alignmentLength
-        self.Mismatch = mismatch
-        self.GapOpen = gapOpen
-        self.QueryStart = queryStart
-        self.QueryEnd = queryEnd
-        self.HitStart = hitStart
-        self.HitEnd = hitEnd
-        self.EValue = eValue
-        self.BitScore = bitScore
-        self.SubjectLength = subjectLength
+        self.identity = float(identity)
+        self.alignmentLength = alignmentLength
+        self.mismatch = mismatch
+        self.gapOpen = gapOpen
+        self.queryStart = queryStart
+        self.queryEnd = queryEnd
+        self.hitStart = hitStart
+        self.hitEnd = hitEnd
+        self.eValue = eValue
+        self.bitScore = bitScore
+        self.subjectLength = subjectLength
             
     def __repr__(self):
         return self.fullRow
@@ -48,7 +48,7 @@ class Row:
     def buildHeader():
         header = ""
         
-        for variable in Row.variableList:
+        for variable in Result.variableList:
             header += variable + "\t"
             
         return header[:-1] + "\n"
@@ -62,17 +62,17 @@ class Row:
     def alignment_to_subject_length_k(self, k = 0):
         # Check whether alignment length is within minimum k threshold to subject length.
 
-        return (self.SubjectLength - self.AlignmentLength) <= k
+        return (self.subjectLength - self.alignmentLength) <= k
 
     def mismatch_k(self, k = 0):
         # Accounts possibility of k mismatch(es) as okay for classification.
 
-        return self.Mismatch <= k
+        return self.mismatch <= k
 
     def gap_k(self, k = 0):
         # Check whether there are k (or less) gaps in Row instance.
 
-        return self.GapOpen <= k
+        return self.gapOpen <= k
 
     ### Prototype filter functions. Currently not used.
 
@@ -81,14 +81,14 @@ class Row:
         # Requires other functions to work well, such as mismatch functions.
 
         start = 1 + k
-        end = self.SubjectLength - k
+        end = self.subjectLength - k
 
-        start_bool = self.HitStart <= start or self.HitStart >= end
-        end_bool = self.HitEnd <= start or self.HitEnd >= end
+        start_bool = self.hitStart <= start or self.hitStart >= end
+        end_bool = self.hitEnd <= start or self.hitEnd >= end
 
         return start_bool and end_bool
 
     def bit_score_346(self, bit = 346):
         # Check whether bit score is full.
 
-        return self.BitScore == bit
+        return self.bitScore == bit
