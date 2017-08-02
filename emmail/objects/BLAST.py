@@ -3,7 +3,7 @@ import logging
 import subprocess
 
 from emmail.objects.Command import Command, FileNotInPathException
-from emmail.objects.Row import Row
+from emmail.objects.Result import Result
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
@@ -88,16 +88,16 @@ class BLAST(Command):
 
         return command
     
-    def filter_blastn_rows(self, outputs):
+    def filter_blastn_results(self, outputs):
         
-        ok_results = [Row(output).filterMe(self.mismatch, self.align_diff, self.gap) 
+        ok_results = [Result(output).filterMe(self.mismatch, self.align_diff, self.gap) 
                         for output in outputs 
-                        if Row(output).filterMe(self.mismatch, self.align_diff, self.gap) 
+                        if Result(output).filterMe(self.mismatch, self.align_diff, self.gap) 
                         is not None]
         
         return ok_results
     
-    def row_to_output(self, filtered_outputs):
+    def result_to_output(self, filtered_outputs):
         string = ""
         
         # I want to run this without repr
@@ -106,7 +106,7 @@ class BLAST(Command):
         
         if string:
             if self.want_header:
-                string = Row.buildHeader() + string
+                string = Result.buildHeader() + string
                 
             if self.output_stream in [None, "None", "stdout"]:
                 print(string[:-1])
@@ -124,6 +124,6 @@ class BLAST(Command):
         
         outputs = Command.run(self).split("\n")[:-1]
         
-        filtered_outputs = self.filter_blastn_rows(outputs)
+        filtered_outputs = self.filter_blastn_results(outputs)
         
-        return self.row_to_output(filtered_outputs)
+        return self.result_to_output(filtered_outputs)
