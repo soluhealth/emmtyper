@@ -43,7 +43,7 @@ class testBLASTapp(unittest.TestCase):
         self.assertEqual(blast_h.build_blastn_command(), blast_command_h)
     
     def test_h_out(self):
-        self.assertEqual(blast_h.run_blastn_pipeline(), blast_header+blast_result)    
+        self.assertEqual(blast_h.run_blastn_pipeline(), header+blast_result)    
     
     def test_e_out(self):
         self.assertEqual(blast_e.run_blastn_pipeline(), "")
