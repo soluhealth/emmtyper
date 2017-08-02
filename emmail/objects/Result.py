@@ -1,4 +1,4 @@
-class wrongLengthException(Exception):
+class WrongLengthException(Exception):
 	pass
 
 class Result:
@@ -12,7 +12,7 @@ class Result:
         rowSplit = string.split("\t")
         
         if len(self.variableList) != len(rowSplit):
-            raise wrongLengthException("Wrong row length!")
+            raise WrongLengthException("Wrong row length!")
         
         rowSplit[3:10] = map(int, rowSplit[3:10])
         rowSplit[12:14] = map(int, rowSplit[12:14])
@@ -45,7 +45,7 @@ class Result:
         return (string.format(self.Query, self.BlastHit, self.Identity, self.AlignmentLength))
     
     @staticmethod
-    def buildHeader():
+    def build_header():
         header = ""
         
         for variable in Result.variableList:
@@ -53,7 +53,7 @@ class Result:
             
         return header[:-1] + "\n"
     
-    def filterMe(self, mismatch, align_diff, gap):
+    def filter(self, mismatch, align_diff, gap):
         if (self.mismatch_k(mismatch) and self.alignment_to_subject_length_k(align_diff) and self.gap_k(gap)):
             return self
     

@@ -90,9 +90,8 @@ class BLAST(Command):
     
     def filter_blastn_results(self, outputs):
         
-        ok_results = [Result(output).filterMe(self.mismatch, self.align_diff, self.gap) 
-                        for output in outputs 
-                        if Result(output).filterMe(self.mismatch, self.align_diff, self.gap) 
+        ok_results = [Result(output) for output in outputs 
+                        if Result(output).filter(self.mismatch, self.align_diff, self.gap) 
                         is not None]
         
         return ok_results
@@ -106,7 +105,7 @@ class BLAST(Command):
         
         if string:
             if self.want_header:
-                string = Result.buildHeader() + string
+                string = Result.build_header() + string
                 
             if self.output_stream in [None, "None", "stdout"]:
                 print(string[:-1])
