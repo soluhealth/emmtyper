@@ -4,7 +4,7 @@ EmMAIL is a command line tool for emm-type classification of Streptococcus pyoge
 
 Input	: Assembled WGS reads of Streptococcus pyogenes
 
-Output	: Predicted emm type of the isolate
+Output	: BLAST output format 6 with predicted emm type of the isolate
 
 The use of EmMAIL will follow the dependencies of the tools within its pipeline, namely BLAST and isPcr.
 
@@ -36,7 +36,7 @@ The required arguments are:
 
 | Argument | Variable Type | Description |
 | ------ | ------ | ------ |
-| --primer | FASTA | A FASTA containing primer1 and primer2 as separate records |
+| --primer | tsv | A tsv file containing primer set in the format "{PrimerSetName}\t{Primer1Sequence}\t{Primer2Sequence}" |
 | --query | FASTA | An assembled genome FASTA. Alignment will be checked within contigs; the longer the contigs, the better chance we have to find possible existing alignments |
 | --db | blast DB | A BLAST database file |
 
