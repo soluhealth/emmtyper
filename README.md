@@ -80,6 +80,7 @@ Arguments for BLAST filter:
 | -align_diff | integer | 5 | Threshold for difference between alignment length and subject length in BLAST hit |
 | -gap | integer | 2 | Threshold number of gap to allow in BLAST hit |
 
+
 An example command for direct BLAST is shown below:
 
 ```sh
