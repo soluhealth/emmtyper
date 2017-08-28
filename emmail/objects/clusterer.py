@@ -83,7 +83,7 @@ class Clusterer:
         string = "{0}\t{1}\t{2}".format(
                             self.isolate,
                             ", ".join([str(answer) for answer in self.answer]), 
-                            ", ".join([str(answer) for answer in self.possible_imposters]) if len(self.possible_imposters) >= 1 else "")                           )
+                            ", ".join([str(answer) for answer in self.possible_imposters]))
                             
         return string
     
@@ -93,11 +93,12 @@ class Clusterer:
                                         len(self.results), 
                                         self.flag, 
                                         ", ".join([str(x.blastHit) for x in self.answer]),
-                                        [x.score for x in self.answer],
-                                        [x.queryStart for x in self.answer],
+                                        ", ".join([str(x.score) for x in self.answer]),
+                                        ", ".join([str(x.queryStart) for x in self.answer]),
                                         self.cluster_number, 
                                         ", ".join([str(x.blastHit) for x in self.possible_imposters]),
                                         self.others)
+        
         return string
     
     def main(self):
