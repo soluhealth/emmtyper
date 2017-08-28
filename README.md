@@ -106,6 +106,13 @@ The short result returns: **Isolate name_Predicted type_Possible imposters**
 
 While the verbose result returns: **Isolate name_Number of BLAST hits_Clusterer decision flag_Predicted type_Type score_Position in assembly_Number of clusters_Possible imposters**
 
+The types are presented with flags when something is not right, the possible flags for now being:
+
+| Flag | Description | Additional Information |
+| ------ | ------ | ------ |
+| * | Suspect Imposter | Types acknowledged in the CDC database as possibly not emm |
+| ~ | Imperfect score | Imperfect typing score |
+
 ## Contact 
 
 Should you want to fill issues or contact me about anything regarding EmMAIL, 
