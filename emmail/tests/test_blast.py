@@ -1,3 +1,4 @@
+from os import remove
 import unittest
 
 from emmail.objects.blast import BLAST
@@ -50,3 +51,4 @@ class testBLASTapp(unittest.TestCase):
         
 if __name__ == '__main__':
     unittest.main()
+    remove("no_output.fa")
