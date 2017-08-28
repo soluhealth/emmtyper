@@ -1,7 +1,8 @@
-from os import environ
+from os import remove, environ
 import logging
 
-from emmail.objects.BLAST import BLAST
+from emmail.objects.blast import BLAST
+from emmail.objects.clusterer import Clusterer
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
@@ -14,7 +15,13 @@ def buildSubparser(parser):
                         help="Query FASTA.")
     parser.add_argument("--db", required=True, type=str,
                         help="The database to BLAST against.")
-                        
+    
+    
+    parser.add_argument("-saveBLAST", default=False, action="store_true",
+                        help="Temporary BLAST output will not be removed on mention.")
+    #parser.add_argument("-add_header", default=False, action="store_true", 
+                        #help="Add header to the output file on mention.")
+    
     # BLAST Options
     
     parser.add_argument("-dust", default="no", type=str,
@@ -23,14 +30,8 @@ def buildSubparser(parser):
                         help="Minimal percent identity of sequence. Default is 95.")
     parser.add_argument("-culling_limit", default=1, type=int,
                         help="Total hits to return in a position. Default is 1.")
-    parser.add_argument("-outBLAST", default="None", 
-                        action="store", type=str,
-                        help="File to stream output. Default to terminal.")
-
-    parser.add_argument("-add_header", default=False, action="store_true", 
-                        help="Add header to the output file on mention.")
     
-    # Row Options
+    # ResultRow Options
     
     parser.add_argument("-mismatch", default=4, type=int,
                         help="Threshold for number of mismatch to allow in BLAST hit. Default is 4.")
@@ -39,17 +40,26 @@ def buildSubparser(parser):
     parser.add_argument("-gap", default=2, type=int,
                         help="Threshold gap to allow in BLAST hit. Default is 2.")
     
+    # Clusterer Options
+    
+    parser.add_argument("-verbose", default=False, action="store_true",
+                        help="Return verbose results instead of truncated result.")
+    parser.add_argument("-outClusterer", default="stdout", type=str,
+                        help="File to stream final output. Default to terminal.")
+    
     return parser
 
 def main(args):
+    outBLAST = args.query.split("/")[-1].split(".")[0] + ".tmp"
+    
     blast = BLAST(db = args.db, 
                     query = args.query, 
                     dust = args.dust, 
                     perc_identity = args.perc_identity,
                     culling_limit = args.culling_limit, 
                     
-                    output_stream = args.outBLAST,
-                    header = args.add_header,
+                    output_stream = outBLAST,
+                    header = False,
                     
                     mismatch = args.mismatch,
                     align_diff = args.align_diff,
@@ -57,4 +67,12 @@ def main(args):
                     
     blast.run_blastn_pipeline()
     
-    logger.info("Result for {} is saved as {}".format(args.query.split("/")[-1], args.outBLAST))
+    clusterer = Clusterer(blastOutputFile=outBLAST, 
+                        output_stream=args.outClusterer,
+                        verbose=args.verbose).main()
+                        
+    if not args.saveBLAST:
+        remove(outBLAST)
+        # logger.info("{} is removed from directory".format(outBLAST))
+        
+    # logger.info("Result for {} is saved as {}".format(args.query.split("/")[-1], outBLAST))

@@ -3,6 +3,7 @@ import logging
 
 from emmail.objects.ispcr import IsPCR
 from emmail.objects.blast import BLAST
+from emmail.objects.clusterer import Clusterer
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
@@ -18,6 +19,9 @@ def buildSubparser(parser):
                         help="The genome to PCR against.")
     parser.add_argument("--db", required=True, type=str,
                         help="The database to BLAST PCR product against.")
+    
+    parser.add_argument("-saveIntermediary", default=False, action="store_true",
+                    help="Temporary isPcr and BLAST outputs will not be removed on mention.")
 
     # isPcr options
                       
@@ -29,11 +33,8 @@ def buildSubparser(parser):
     parser.add_argument("-maxSize", default=4000, type=int,
                         help="Maximum size of PCR product. Default is 4000.")
     
-    parser.add_argument("-outPCR", default="pcr.tmp", type=str, 
-                        help="Output filename, to use as BLAST query. Default to pcr.tmp.")  
-    
-    parser.add_argument("-savePCR", default=False, action="store_true",
-                        help="Temporary isPcr output \"pcr.tmp\" will not be removed on mention.")
+    #parser.add_argument("-outPCR", default="pcr.tmp", type=str, 
+                        #help="Output filename, to use as BLAST query. Default to pcr.tmp.")  
     
     # BLAST options
 
@@ -43,14 +44,11 @@ def buildSubparser(parser):
                         help="Minimal percent identity of sequence. Default is 95.")
     parser.add_argument("-culling_limit", default=1, type=int,
                         help="Total hits to return in a position. Default is 1.")
-    parser.add_argument("-outBLAST", default="None", 
-                        action="store", type=str,
-                        help="File to stream BLAST output. Default to terminal.")
 
-    parser.add_argument("-add_header", action="store_true", default=False,
-                        help="Add header to the output file on mention.")
+    #parser.add_argument("-add_header", action="store_true", default=False,
+                        #help="Add header to the output file on mention.")
     
-    # Row options
+    # ResultRow options
     
     parser.add_argument("-mismatch", default=4, type=int,
                         help="Threshold for number of mismatch to allow in BLAST hit. Default is 4.")
@@ -58,30 +56,39 @@ def buildSubparser(parser):
                         help="Threshold for difference between alignment length and subject length in BLAST hit. Default is 5.")                        
     parser.add_argument("-gap", default=2, type=int,
                         help="Threshold gap to allow in BLAST hit. Default is 2.")
-                        
+    
+    # Clusterer Options
+    
+    parser.add_argument("-verbose", default=False, action="store_true",
+                        help="Return verbose results instead of truncated result.")
+    parser.add_argument("-outClusterer", default="stdout", type=str,
+                        help="File to stream final output. Default to terminal.")
+    
     return parser
     
 def main(args):
+    outPCR = args.query.split("/")[-1].split(".")[0] + "_pcr.tmp"
+    outBLAST = args.query.split("/")[-1].split(".")[0] + ".tmp"
     
     pcr = IsPCR(assembly_filename = args.query,
                 primer_filename = args.primer,
                 min_perfect = args.minPerfect,
                 min_good = args.minGood,
-                # min_product_length = args.minSize,
                 max_product_length = args.maxSize,
                 output_stream = "stdout")
     
     # Run isPcr, take output and use it as input for Blast.
-    with open(args.outPCR, "w") as temp:
+    with open(outPCR, "w") as temp:
         temp.write(pcr.run_isPCR())
     
     blast = BLAST(db = args.db, 
-                    query = args.outPCR, 
+                    query = outPCR, 
                     dust = args.dust, 
                     perc_identity = args.perc_identity,
                     culling_limit = args.culling_limit, 
-                    output_stream = args.outBLAST,
-                    header = args.add_header,
+                    
+                    output_stream = outBLAST,
+                    header = False,
                     
                     mismatch = args.mismatch,
                     align_diff = args.align_diff,
@@ -89,11 +96,13 @@ def main(args):
                     
     blast.run_blastn_pipeline()
     
-    if args.savePCR == False:
-        remove(args.outPCR)
-        logger.info("{} is removed from directory".format(args.outPCR))
+    clusterer = Clusterer(blastOutputFile=outBLAST, 
+                        output_stream=args.outClusterer,
+                        verbose=args.verbose).main()
     
-    else:
-        logger.info("{} is kept on directory".format(args.outPCR))
-        
-    logger.info("Result for {} is saved as {}".format(args.query.split("/")[-1], args.outBLAST))
+    if not args.saveIntermediary:
+        remove(outPCR)
+        remove(outBLAST)
+        # logger.info("{} and {} are removed from directory".format(args.outPCR))
+    
+    # logger.info("Result for {} is saved as {}".format(args.query.split("/")[-1], args.outBLAST))
