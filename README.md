@@ -46,9 +46,7 @@ Arguments for isPcr:
 | ------ | ------ | ------ | ------ |
 | -minPerfect | integer | 15 | Minimum size of perfect match at 3' primer end |
 | -minGood | integer | 15 | Minimum size where there must be 2 matches for each mismatch | 
-| -minSize | integer | 0bps | Positive integer value for minimum product length | 
 | -maxSize | integer | 4000bps | Positive integer value for maximum product length |
-| -outPCR | filename | None (stdout) | A character string for if you want the amplicons sent to a file |
 | -savePCR | boolean | False | On mention, PCR output file will not be automatically removed | 
 
 Post-PCR, the arguments are the same as the ones in the BLAST path.
@@ -69,8 +67,6 @@ Arguments for BLAST:
 | -dust | string | no | Filter query sequence with DUST |
 | -perc_identity | integer | 95 | Minimal percent identity of sequence |
 | -culling_limit | integer | 1 | Total hits to return in a single position |
-| -outBLAST | filename | None | File to stream BLAST output to |
-| -add_header | boolean | False | On mention, add header to BLAST output |
 
 Arguments for BLAST filter:
 
@@ -80,11 +76,19 @@ Arguments for BLAST filter:
 | -align_diff | integer | 5 | Threshold for difference between alignment length and subject length in BLAST hit |
 | -gap | integer | 2 | Threshold number of gap to allow in BLAST hit |
 
+### Clusterer Options
+
+Both pipelines will end up with BLAST results, which will be processed with Clusterer:
+
+| Argument | Variable Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| -verbose | boolean | False | On mention, return a more verbose result |
+| -outFinal | tsv | stdout | File to stream final output. Default to terminal |
 
 An example command for direct BLAST is shown below:
 
 ```sh
-$ emmail blast --query <isolate FASTA> --db <BLAST DB filepath> -outBLAST <filename>.tsv
+$ emmail blast --query <isolate FASTA> --db <BLAST DB filepath> -outFinal <filename>.tsv
 ```
 
 ## Contact 
