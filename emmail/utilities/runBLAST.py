@@ -2,7 +2,6 @@ from os import remove, environ
 import logging
 
 from emmail.objects.blast import BLAST
-from emmail.objects.clusterer import Clusterer
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
@@ -44,7 +43,7 @@ def buildSubparser(parser):
     
     parser.add_argument("-verbose", default=False, action="store_true",
                         help="Return verbose results instead of truncated result.")
-    parser.add_argument("-outClusterer", default="stdout", type=str,
+    parser.add_argument("-outFinal", default="stdout", type=str,
                         help="File to stream final output. Default to terminal.")
     
     return parser
@@ -68,7 +67,7 @@ def main(args):
     blast.run_blastn_pipeline()
     
     clusterer = Clusterer(blastOutputFile=outBLAST, 
-                        output_stream=args.outClusterer,
+                        output_stream=args.outFinal,
                         verbose=args.verbose).main()
                         
     if not args.saveBLAST:

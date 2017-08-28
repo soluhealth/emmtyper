@@ -61,7 +61,7 @@ def buildSubparser(parser):
     
     parser.add_argument("-verbose", default=False, action="store_true",
                         help="Return verbose results instead of truncated result.")
-    parser.add_argument("-outClusterer", default="stdout", type=str,
+    parser.add_argument("-outFinal", default="stdout", type=str,
                         help="File to stream final output. Default to terminal.")
     
     return parser
