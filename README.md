@@ -1,5 +1,15 @@
 # EmMAIL - Emm Automatic Isolate Labeller
 
+## Table of Content
+1. [Introduction](##Introduction)
+2. [Requirements](##Requirements)
+3. [Installation](##Installation)
+4. [Usage](##Usage)
+5. [Result Format](##Result Format)
+6. [Contact](##Contact)
+
+## Introduction
+
 EmMAIL is a command line tool for emm-type classification of Streptococcus pyogenes based on the isolate's whole genome sequence.
 
 Input	: Assembled WGS reads of Streptococcus pyogenes
@@ -27,7 +37,8 @@ You will then be able to use EmMAIL by calling `emmail` on the command line.
 
 ## Usage
 
-EmMAIL has 2 branches of usage: direct BLAST, and isPcr followed with BLAST.
+EmMAIL has 2 branches of usage: direct BLAST, or isPcr followed with BLAST. Product of any of the two pipelines (in the form of BLAST output 6 with SubjectLength) will then go through EmMAIL's Clusterer to derive the type of the isolate.
+
 The arguments used in the pipeline are derived from the mentioned tools.
 
 ### isPcr Path
@@ -46,7 +57,7 @@ Arguments for isPcr:
 | ------ | ------ | ------ | ------ |
 | -minPerfect | integer | 15 | Minimum size of perfect match at 3' primer end |
 | -minGood | integer | 15 | Minimum size where there must be 2 matches for each mismatch | 
-| -maxSize | integer | 4000bps | Positive integer value for maximum product length |
+| -maxSize | integer | 4000 | Positive integer value for maximum product length |
 | -savePCR | boolean | False | On mention, PCR output file will not be automatically removed | 
 
 Post-PCR, the arguments are the same as the ones in the BLAST path.
@@ -76,9 +87,7 @@ Arguments for BLAST filter:
 | -align_diff | integer | 5 | Threshold for difference between alignment length and subject length in BLAST hit |
 | -gap | integer | 2 | Threshold number of gap to allow in BLAST hit |
 
-### Clusterer Options
-
-Both pipelines will end up with BLAST results, which will be processed with Clusterer:
+### Clusterer Arguments
 
 | Argument | Variable Type | Default | Description |
 | ------ | ------ | ------ | ------ |
@@ -86,10 +95,17 @@ Both pipelines will end up with BLAST results, which will be processed with Clus
 | -outFinal | tsv | stdout | File to stream final output. Default to terminal |
 
 An example command for direct BLAST is shown below:
-
 ```sh
 $ emmail blast --query <isolate FASTA> --db <BLAST DB filepath> -outFinal <filename>.tsv
 ```
+
+## Result Format
+EmMAIL by default produces three tab-separated values to the command line. Calling `-verbose` will make EmMAIL return eight tab-separated values.
+
+The short result returns: **<Isolate name> <Predicted type> <Possible imposters>**
+
+While the verbose result returns: **<Isolate name> <Number of BLAST hits> <Clusterer decision flag> <Predicted type> <Type score> <Position in assembly> <Number of clusters> <Possible imposters>**
+
 
 ## Contact 
 
