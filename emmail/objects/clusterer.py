@@ -7,9 +7,12 @@ from sys import argv, stdin
 from emmail.objects.resultRow import ResultRow
 
 class Clusterer:
-    def __init__(self, blastOutputFile, binwidth=800):
+    def __init__(self, blastOutputFile, output_stream, verbose=False, binwidth=800):
         self.isolate = blastOutputFile.split("/")[-1].split(".")[0]
         self.results, self.positions, self.starts = self.extractFromFile(blastOutputFile)
+        
+        self.output_stream = output_stream
+        self.verbose = verbose
         self.binwidth = binwidth
         
         self.cluster_number = self.get_cluster_number()
@@ -63,7 +66,7 @@ class Clusterer:
             otherClusters = [result for key, result in enumerate(self.results) if kmeans.labels_[key] != Counter(kmeans.labels_).most_common()[0][0] and result.score == 100]
             
             self.answer = [result for result in self.get_best_scoring(maxCluster)]
-            self.possible_imposters = [(res.queryStart, res.score, res.blastHit) for res in otherClusters]
+            self.possible_imposters = [result for result in otherClusters]
                 
     def update_additional_information(self):
         EmmImposters = ["EMM51", "EMM138", "EMM149", "EMM156",
@@ -80,7 +83,7 @@ class Clusterer:
         string = "{0}\t{1}\t{2}\t{3}".format(
                             self.isolate,
                             ", ".join([str(answer) for answer in self.answer]), 
-                            self.possible_imposters if len(self.possible_imposters) > 1 else "",
+                            ", ".join([str(answer) for answer in self.possible_imposters]) if len(self.possible_imposters) > 1 else "",
                             self.others)
                             
         return string
@@ -97,12 +100,17 @@ class Clusterer:
                                         self.possible_imposters,
                                         self.others)
         return string
-        
+    
     def main(self):
         self.clust()
         self.update_additional_information()
-        return self.short_stringer()
         
-if __name__ == "__main__":
-    clusterer = Clusterer(argv[1])
-    print(clusterer.main())
+        final_result =  self.verbose_stringer() if self.verbose else self.short_stringer()
+        
+        if self.output_stream in [None, "None", "stdout"]:
+            print(final_result)
+        else:
+            with open(self.output_stream, "w") as handle:
+                handle.write(final_result)
+                
+        return final_result
