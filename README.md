@@ -102,10 +102,9 @@ $ emmail blast --query <isolate FASTA> --db <BLAST DB filepath> -outFinal <filen
 ## Result Format
 EmMAIL by default produces three tab-separated values to the command line. Calling `-verbose` will make EmMAIL return eight tab-separated values.
 
-The short result returns: **<Isolate name> <Predicted type> <Possible imposters>**
+The short result returns: **Isolate name_Predicted type_Possible imposters**
 
-While the verbose result returns: **<Isolate name> <Number of BLAST hits> <Clusterer decision flag> <Predicted type> <Type score> <Position in assembly> <Number of clusters> <Possible imposters>**
-
+While the verbose result returns: **Isolate name_Number of BLAST hits_Clusterer decision flag_Predicted type_Type score_Position in assembly_Number of clusters_Possible imposters**
 
 ## Contact 
 
