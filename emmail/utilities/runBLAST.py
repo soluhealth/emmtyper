@@ -2,6 +2,7 @@ from os import remove, environ
 import logging
 
 from emmail.objects.blast import BLAST
+from emmail.objects.clusterer import Clusterer
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
