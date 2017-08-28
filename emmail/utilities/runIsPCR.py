@@ -1,8 +1,8 @@
 from os import remove, environ
 import logging
 
-from emmail.objects.IsPCR import IsPCR
-from emmail.objects.BLAST import BLAST
+from emmail.objects.ispcr import IsPCR
+from emmail.objects.blast import BLAST
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
@@ -26,8 +26,6 @@ def buildSubparser(parser):
     parser.add_argument("-minGood", default=15, type=int,
                         help=("Minimum size where there must be 2 matches for each mismatch. "
                               "Default is 15; there must be 10 match in 15bp primer size."))
-    parser.add_argument("-minSize", default=0, type=int,
-                        help="Minimum size of PCR product. Default is 0.")
     parser.add_argument("-maxSize", default=4000, type=int,
                         help="Maximum size of PCR product. Default is 4000.")
     
