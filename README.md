@@ -111,7 +111,7 @@ The types are presented with flags when something is not right, the possible fla
 | Flag | Description | Additional Information |
 | ------ | ------ | ------ |
 | * | Suspect Imposter | Types acknowledged in the CDC database as possibly not emm |
-| ~ | Imperfect score | Imperfect typing score |
+| ~ | Imperfect score | Match score below 100% |
 
 ## Contact 
 
