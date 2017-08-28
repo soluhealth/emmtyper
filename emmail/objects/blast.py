@@ -2,8 +2,8 @@ from os import path, environ
 import logging
 import subprocess
 
-from emmail.objects.Command import Command, FileNotInPathException
-from emmail.objects.Result import Result
+from emmail.objects.command import Command, FileNotInPathException
+from emmail.objects.resultRow import ResultRow
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
@@ -90,9 +90,8 @@ class BLAST(Command):
     
     def filter_blastn_results(self, outputs):
         
-        ok_results = [Result(output) for output in outputs 
-                        if Result(output).filter(self.mismatch, self.align_diff, self.gap) 
-                        is not None]
+        ok_results = [ResultRow(output) for output in outputs 
+                        if ResultRow(output).filter(self.mismatch, self.align_diff, self.gap)]
         
         return ok_results
     
@@ -103,19 +102,18 @@ class BLAST(Command):
         for output in filtered_outputs:
             string += repr(output) + "\n"
         
-        if string:
-            if self.want_header:
-                string = Result.build_header() + string
-                
-            if self.output_stream in [None, "None", "stdout"]:
-                print(string[:-1])
-            else:
-                with open(self.output_stream, "w") as handle:
-                    handle.write(string[:-1])
-                
-        else:
+        if not string:
             logger.info("There is no output for {}".format(self.query))
         
+        if self.want_header and string:
+            string = ResultRow.build_header() + string
+            
+        if self.output_stream in [None, "None", "stdout"]:
+            print(string[:-1])
+        else:
+            with open(self.output_stream, "w") as handle:
+                handle.write(string[:-1])
+                
         return string[:-1]
         
     def run_blastn_pipeline(self):

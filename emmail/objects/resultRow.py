@@ -1,11 +1,20 @@
+EmmImposters = ["EMM51", "EMM138", "EMM149", "EMM156",
+                    "EMM159", "EMM164", "EMM170", "EMM174", 
+                    "EMM202", "EMM205", "EMM236", "EMM240"]
+
 class WrongLengthException(Exception):
 	pass
 
-class Result:
+class ResultRow:
     variableList = ['Query', 'BlastHit', 'Identity', 'AlignmentLength', 'Mismatch',
                     'GapOpen', 'QueryStart', 'QueryEnd', 'HitStart', 'HitEnd',
                     'E-Value', 'BitScore', 'SubjectLength']
-
+    
+    flagDict = {(False, True): "~", 
+            (True, False): "*", 
+            (True, True): "",
+            (False, False): "~*"}
+                
     def __init__(self, string):
         self.fullRow = string
     
@@ -22,7 +31,11 @@ class Result:
         eValue, bitScore, subjectLength) = rowSplit
 
         self.query = query
+        self.contig = query.split(".")[-1]    
+        
         self.blastHit = blastHit
+        self.type = blastHit.split(".")[0]
+        self.subtype = blastHit.split(".")[1]
         
         self.identity = float(identity)
         self.alignmentLength = alignmentLength
@@ -35,34 +48,32 @@ class Result:
         self.eValue = eValue
         self.bitScore = bitScore
         self.subjectLength = subjectLength
+        
+        self.score = self.identity - (self.gapOpen + abs(self.alignmentLength - self.subjectLength))
             
     def __repr__(self):
         return self.fullRow
     
     def __str__(self):
-        string = "Contig {0} has hit {1} with {2} identity and {3}bps alignment"
+        return "{}{}".format(self.blastHit, 
+                            Result.flagDict[(self.score == 100, 
+                                self.type not in EmmImposters)])
         
-        return (string.format(self.Query, self.BlastHit, self.Identity, self.AlignmentLength))
-    
     @staticmethod
     def build_header():
-        header = ""
+        header = "\t".join([variable for variable in ResultRow.variableList])
         
-        for variable in Result.variableList:
-            header += variable + "\t"
-            
-        return header[:-1] + "\n"
+        return header + "\n"
     
     def filter(self, mismatch, align_diff, gap):
-        if (self.mismatch_k(mismatch) and self.alignment_to_subject_length_k(align_diff) and self.gap_k(gap)):
-            return self
+        return (self.mismatch_k(mismatch) and self.alignment_to_subject_length_k(align_diff) and self.gap_k(gap))
     
     ### Filter functions.
 
     def alignment_to_subject_length_k(self, k = 0):
         # Check whether alignment length is within minimum k threshold to subject length.
 
-        return (self.subjectLength - self.alignmentLength) <= k
+        return abs(self.subjectLength - self.alignmentLength) <= k
 
     def mismatch_k(self, k = 0):
         # Accounts possibility of k mismatch(es) as okay for classification.

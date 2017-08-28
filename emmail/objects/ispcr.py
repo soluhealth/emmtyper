@@ -2,7 +2,7 @@ from os import path, environ
 import logging
 import subprocess
 
-from emmail.objects.Command import Command, FileNotInPathException
+from emmail.objects.command import Command, FileNotInPathException
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
