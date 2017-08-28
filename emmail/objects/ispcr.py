@@ -44,7 +44,7 @@ class IsPCR(Command):
         return command
     
     def run_isPCR(self):
-        logger.info("Running on {}".format(self.assembly_filename))
+        # logger.info("Running on {}".format(self.assembly_filename))
         
         output = Command.run(self)
         

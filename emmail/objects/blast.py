@@ -117,7 +117,7 @@ class BLAST(Command):
         return string[:-1]
         
     def run_blastn_pipeline(self):
-        logger.info("Running on {}".format(self.query))
+        # logger.info("Running on {}".format(self.query))
         
         outputs = Command.run(self).split("\n")[:-1]
         
