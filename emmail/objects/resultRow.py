@@ -56,7 +56,7 @@ class ResultRow:
     
     def __str__(self):
         return "{}{}".format(self.blastHit, 
-                            Result.flagDict[(self.score == 100, 
+                            ResultRow.flagDict[(self.score == 100, 
                                 self.type not in EmmImposters)])
         
     @staticmethod
