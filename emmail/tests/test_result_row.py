@@ -1,8 +1,8 @@
 import unittest
-from emmail.objects.Result import Result, WrongLengthException
+from emmail.objects.resultRow import ResultRow, WrongLengthException
 from emmail.tests.test_data import *
 
-row = Result(string)
+row = ResultRow(string)
 
 class TestResultMethods(unittest.TestCase):
 	
@@ -10,10 +10,10 @@ class TestResultMethods(unittest.TestCase):
         self.assertEqual(test_null, "this is a null test")
         
     def test_is_row(self):
-        self.assertIs(type(row), Result)
+        self.assertIs(type(row), ResultRow)
         
     def test_raises_wrong_length(self):
-        self.assertRaises(WrongLengthException, Result, string_long)
+        self.assertRaises(WrongLengthException, ResultRow, string_long)
         
     def test_build_header(self):
         self.assertEqual(row.build_header(), header)
@@ -27,8 +27,8 @@ class TestResultMethods(unittest.TestCase):
     def test_gap(self):
         self.assertTrue(row.gap_k(2))
         
-    def test_filterMe(self):
-        self.assertEqual(repr(row.filter(mismatch=4, align_diff=5, gap=2)), string)
+    def test_filter_me(self):
+        self.assertTrue(row.filter(mismatch=4, align_diff=5, gap=2))
 
 if __name__ == '__main__':
     unittest.main()

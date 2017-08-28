@@ -1,6 +1,6 @@
 import unittest
 
-from emmail.objects.BLAST import BLAST
+from emmail.objects.blast import BLAST
 from emmail.tests.test_data import *
 
 # Normal no nonsense BLAST.
