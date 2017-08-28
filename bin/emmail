@@ -2,10 +2,10 @@ import argparse
 import subprocess
 
 from emmail import __name__ as name, __description__ as description, __version__ as version, __author__ as author, __email__ as email
-from emmail.objects.BLAST import BLAST
+from emmail.objects.blast import BLAST
 from emmail.utilities import runBLAST
 
-from emmail.objects.IsPCR import IsPCR
+from emmail.objects.ispcr import IsPCR
 from emmail.utilities import runIsPCR
 
 def buildParser():
