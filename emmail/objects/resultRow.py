@@ -1,6 +1,12 @@
-EmmImposters = ["EMM51", "EMM138", "EMM149", "EMM156",
-                    "EMM159", "EMM164", "EMM170", "EMM174", 
-                    "EMM202", "EMM205", "EMM236", "EMM240"]
+PHE_emmLike = ["EMM51", "EMM134", "EMM138", "EMM149", 
+                    "EMM156", "EMM159", "EMM164", "EMM167", 
+                    "EMM170", "EMM174", 
+                    "EMM202", "EMM205", "EMM236", "EMM240"] 
+                
+Suspects = [# "EMM134", "EMM167", 
+            "EMM137", "EMM141", "EMM166", "EMM203"]
+
+EmmImposters = PHE_emmLike + Suspects
 
 class WrongLengthException(Exception):
 	pass
@@ -31,7 +37,7 @@ class ResultRow:
         eValue, bitScore, subjectLength) = rowSplit
 
         self.query = query
-        self.contig = query.split(".")[-1]    
+        self.contig = int(query.split(".")[-1]) if len(query.split(".")) > 1 else 0
         
         self.blastHit = blastHit
         self.type = blastHit.split(".")[0]
