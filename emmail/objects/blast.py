@@ -98,23 +98,25 @@ class BLAST(Command):
     def result_to_output(self, filtered_outputs):
         string = ""
         
-        # I want to run this without repr
         for output in filtered_outputs:
-            string += repr(output) + "\n"
-        
+            string = "\n".join([repr(output) for output in filtered_outputs]) 
+            
+        # Log if BLAST produces no result
         if not string:
             logger.info("There is no output for {}".format(self.query))
         
+        # Produces header if wanted, attach to string
         if self.want_header and string:
             string = ResultRow.build_header() + string
-            
+        
+        # Where to output product
         if self.output_stream in [None, "None", "stdout"]:
-            print(string[:-1])
+            print(string)
         else:
             with open(self.output_stream, "w") as handle:
-                handle.write(string[:-1])
+                handle.write(string)
                 
-        return string[:-1]
+        return string
         
     def run_blastn_pipeline(self):
         # logger.info("Running on {}".format(self.query))
