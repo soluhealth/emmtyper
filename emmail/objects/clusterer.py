@@ -71,8 +71,8 @@ class Clusterer:
             tmp_s = float("inf")
             
             for cluster in range(2, self.positions.shape[0] + 1):
-                kmeans = KMeans(n_clusters=cluster).fit(normalize(self.positions, axis = 0))
-                s_score = silhouette_score(self.positions, kmeans.labels_)
+                model = KMeans(n_clusters=cluster).fit(normalize(self.positions, axis = 0))
+                s_score = silhouette_score(self.positions, model.labels_)
                 # print("silhouette score is {} for {} cl".format(s_score, cluster))
                 
                 # If residuals do not decrease, return the previous cluster
@@ -94,8 +94,8 @@ class Clusterer:
         
         try:
             for cluster in range(2, self.positions.shape[0] + 1):
-                kmeans = KMeans(n_clusters=cluster).fit(normalize(self.positions, axis = 0))
-                ch_score = calinski_harabaz_score(self.positions, kmeans.labels_)
+                model = KMeans(n_clusters=cluster).fit(normalize(self.positions, axis = 0))
+                ch_score = calinski_harabaz_score(self.positions, model.labels_)
                 # print("ch score is {} for {} cl".format(ch_score, cluster))
                 
                 if ch_score <= max_ch_score:
@@ -143,12 +143,12 @@ class Clusterer:
             self.flag = 2
             self.cluster_number = self.get_cluster_number_elbow()
             # print("clustering for {}".format(self.cluster_number))
-            kmeans = AgglomerativeClustering(n_clusters=self.cluster_number).fit(normalize(self.positions, axis = 0))
+            model = AgglomerativeClustering(n_clusters=self.cluster_number).fit(normalize(self.positions, axis = 0))
             
-            # [print(self.positions[i].astype("int32"), self.results[i], kmeans.labels_[i]) for i in range(len(self.positions))]
+            # [print(self.positions[i].astype("int32"), self.results[i], model.labels_[i]) for i in range(len(self.positions))]
                 
-            maxCluster = [result for key, result in enumerate(self.results) if kmeans.labels_[key] in self.get_cluster_with_max_vote(Counter(kmeans.labels_))]
-            otherClusters = [result for key, result in enumerate(self.results) if kmeans.labels_[key] not in self.get_cluster_with_max_vote(Counter(kmeans.labels_))]
+            maxCluster = [result for key, result in enumerate(self.results) if model.labels_[key] in self.get_cluster_with_max_vote(Counter(model.labels_))]
+            otherClusters = [result for key, result in enumerate(self.results) if model.labels_[key] not in self.get_cluster_with_max_vote(Counter(model.labels_))]
 
             self.answer = [result for result in self.get_best_scoring(maxCluster)]
             self.possible_imposters = [result for result in otherClusters]
