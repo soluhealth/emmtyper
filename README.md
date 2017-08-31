@@ -92,7 +92,7 @@ Arguments for BLAST filter:
 | Argument | Variable Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | -verbose | boolean | False | On mention, return a more verbose result |
-| -outFinal | tsv | stdout | File to stream final output. Default to terminal |
+| -outFinal | tsv | stdout | File to stream final output |
 
 An example command for direct BLAST is shown below:
 ```sh
