@@ -1,33 +1,56 @@
+from emmail.objects.resultRow import ResultRow, EmmImposters
+
 from collections import Counter
 
 from numpy import array
-from sklearn.cluster import KMeans
-from sys import argv, stdin
-
-from emmail.objects.resultRow import ResultRow
+from sklearn.cluster import KMeans, AgglomerativeClustering
+from sklearn.preprocessing import normalize, scale
+from sklearn.metrics import silhouette_score, calinski_harabaz_score
 
 class Clusterer:
     def __init__(self, blastOutputFile, output_stream, verbose=False, binwidth=800):
         self.isolate = blastOutputFile.split("/")[-1].split(".")[0]
-        self.results, self.positions, self.starts = self.extractFromFile(blastOutputFile)
+        self.results, self.positions = self.extractFromFile(blastOutputFile)
         
         self.output_stream = output_stream
         self.verbose = verbose
         self.binwidth = binwidth
         
-        self.cluster_number = self.get_cluster_number()
+        self.cluster_number = 1
         
         self.flag = 0
         self.answer = ""
         self.possible_imposters = []
-        self.others = ""
         
     def extractFromFile(self, blastOutputFile):
         with open(blastOutputFile, "r") as handle:
             results = [ResultRow(line.strip()) for line in handle.readlines()]
-            positions = [(result.queryStart, result.queryEnd) for result in results]
-            starts = [result.queryStart for result in results]
-        return results, positions, starts
+            positions = array([(result.contig, result.queryStart, result.queryEnd) for result in results], dtype="float64")
+        return results, positions
+    
+    def short_stringer(self):
+        string = "{0}\t{1}\t\t{2}".format(
+                            self.isolate,
+                            ", ".join([str(answer) for answer in self.answer]), 
+                            ", ".join([str(x) for x in self.possible_imposters 
+                                       if x.score == 100]))
+                            
+        return string
+    
+    def verbose_stringer(self):
+        string = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(
+                                        self.isolate, 
+                                        len(self.results), 
+                                        self.flag, 
+                                        self.cluster_number, 
+                                        ", ".join([str(answer) for answer in self.answer]),
+                                        ", ".join(["{}:{}".format(answer.contig, answer.queryStart) for answer in self.answer]),
+                                        ", ".join([str(x) for x in self.possible_imposters
+                                                    if x.score == 100]),
+                                        ", ".join(["{}:{}".format(x.contig, x.queryStart) for x in self.possible_imposters
+                                                    if x.score == 100]))
+        
+        return string
 
     def get_best_scoring(self, results):
         maxScore = max([result.score for result in results])
@@ -35,77 +58,106 @@ class Clusterer:
         
         return maxResult
     
-    def get_cluster_number(self):
-        bins = range(min(self.starts), max(self.starts) + self.binwidth, self.binwidth)
-        binnings = [0] * (len(bins) - 1)
+    def get_cluster_with_max_vote(self, clusters_counter):
+        count = clusters_counter.items()
+        maximum_occurence = max([occ for clust, occ in count])
         
-        for idx in range(len(bins) - 1):
-            for start in self.starts:
-                if start >= bins[idx] and start <= bins[idx+1]:
-                    binnings[idx] += 1
+        return [clust for clust, occ in count if occ == maximum_occurence]
+    
+    def get_cluster_number_elbow(self):
+        # USING SILHOUETTE
         
-        cluster_w_hits = sum([1 for bin in binnings if bin > 0])
-        
-        return cluster_w_hits if cluster_w_hits > 0 else 1
+        try:
+            tmp_s = float("inf")
             
+            for cluster in range(2, self.positions.shape[0] + 1):
+                kmeans = KMeans(n_clusters=cluster).fit(normalize(self.positions, axis = 0))
+                s_score = silhouette_score(self.positions, kmeans.labels_)
+                # print("silhouette score is {} for {} cl".format(s_score, cluster))
+                
+                # If residuals do not decrease, return the previous cluster
+                if tmp_s == s_score:
+                    return cluster-1
+                
+                tmp_s = s_score
+            
+            return 1    
+            #print("flag 3 = {}".format(cluster_number))
+            
+        except ValueError:
+            return self.positions.shape[0]
+    
+    def get_cluster_number_ch(self):
+        # USING CALINSKI HARABAZ
+        max_ch_score = 1
+        cluster_number = 1
+        
+        try:
+            for cluster in range(2, self.positions.shape[0] + 1):
+                kmeans = KMeans(n_clusters=cluster).fit(normalize(self.positions, axis = 0))
+                ch_score = calinski_harabaz_score(self.positions, kmeans.labels_)
+                # print("ch score is {} for {} cl".format(ch_score, cluster))
+                
+                if ch_score <= max_ch_score:
+                    return cluster
+                
+                max_ch_score = ch_score
+            
+            return 1
+            #print("flag 3 = {}".format(cluster_number))
+        
+        except ValueError:
+            return self.positions.shape[0]
+    
+    def quicker_c(self, threshold=100):
+        ### EXPERIMENTAL ###
+        flag = 0
+        answer = [answer for answer in self.results 
+                        if answer.score == 100 and answer.type not in EmmImposters]
+        
+        possible_imposters = [x for x in self.results 
+                                    if x.score >= threshold and x != answer[0]]
+        
+        string = "({})".format(answer[0])
+        
+        for imposter in possible_imposters:
+            distance = abs(imposter.queryStart - answer[0].queryStart) // 500
+            if imposter.queryStart < answer[0].queryStart:
+                string = "{} {} ".format(imposter, "-" * distance) + string
+            elif imposter.queryStart > answer[0].queryStart:
+                string = string + " {} {}".format("-" * distance, imposter)
+                
+        return "{}\t{}".format(self.isolate, string)
+    
     def clust(self):
         best_score = self.get_best_scoring(self.results)
         
         if len(best_score) == 1:
             self.flag = 1
+            # print("no clustering done")
             self.answer = [best_score[0]]
-            self.possible_imposters = [res.blastHit for res in best_score 
-                                        if res.score == 100 and res.type != self.answer[0].type]
-            
+            self.possible_imposters = [res for res in self.results
+                                        if res not in self.answer and res.score == 100]
+        
         else:
             self.flag = 2
+            self.cluster_number = self.get_cluster_number_elbow()
+            # print("clustering for {}".format(self.cluster_number))
+            kmeans = AgglomerativeClustering(n_clusters=self.cluster_number).fit(normalize(self.positions, axis = 0))
             
-            kmeans = KMeans(n_clusters=self.cluster_number).fit(self.positions)
-           
-            maxCluster = [result for key, result in enumerate(self.results) if kmeans.labels_[key] == Counter(kmeans.labels_).most_common()[0][0]]
-            otherClusters = [result for key, result in enumerate(self.results) if kmeans.labels_[key] != Counter(kmeans.labels_).most_common()[0][0] and result.score == 100]
-            
+            # [print(self.positions[i].astype("int32"), self.results[i], kmeans.labels_[i]) for i in range(len(self.positions))]
+                
+            maxCluster = [result for key, result in enumerate(self.results) if kmeans.labels_[key] in self.get_cluster_with_max_vote(Counter(kmeans.labels_))]
+            otherClusters = [result for key, result in enumerate(self.results) if kmeans.labels_[key] not in self.get_cluster_with_max_vote(Counter(kmeans.labels_))]
+
             self.answer = [result for result in self.get_best_scoring(maxCluster)]
             self.possible_imposters = [result for result in otherClusters]
-                
-    def update_additional_information(self):
-        EmmImposters = ["EMM51", "EMM138", "EMM149", "EMM156",
-                    "EMM159", "EMM164", "EMM170", "EMM174", 
-                    "EMM202", "EMM205", "EMM236", "EMM240"]        
-    
-        for result in self.answer:
-            if result.type in EmmImposters:
-                self.others = "Suspect"
-            if result.score != 100:
-                self.others = "Not100"
-    
-    def short_stringer(self):
-        string = "{0}\t{1}\t{2}".format(
-                            self.isolate,
-                            ", ".join([str(answer) for answer in self.answer]), 
-                            ", ".join([str(answer) for answer in self.possible_imposters]))
-                            
-        return string
-    
-    def verbose_stringer(self):
-        string = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}".format(
-                                        self.isolate, 
-                                        len(self.results), 
-                                        self.flag, 
-                                        ", ".join([str(x.blastHit) for x in self.answer]),
-                                        ", ".join([str(x.score) for x in self.answer]),
-                                        ", ".join([str(x.queryStart) for x in self.answer]),
-                                        self.cluster_number, 
-                                        ", ".join([str(x.blastHit) for x in self.possible_imposters]),
-                                        self.others)
-        
-        return string
     
     def main(self):
         self.clust()
-        self.update_additional_information()
         
         final_result =  self.verbose_stringer() if self.verbose else self.short_stringer()
+        # final_result = self.quicker(threshold=100)
         
         if self.output_stream in [None, "None", "stdout"]:
             print(final_result)
