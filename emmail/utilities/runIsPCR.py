@@ -42,8 +42,8 @@ def buildSubparser(parser):
                         help="Filter query sequence with DUST. Default no.")
     parser.add_argument("-perc_identity", default=95, type=int,
                         help="Minimal percent identity of sequence. Default is 95.")
-    parser.add_argument("-culling_limit", default=1, type=int,
-                        help="Total hits to return in a position. Default is 1.")
+    parser.add_argument("-culling_limit", default=5, type=int,
+                        help="Total hits to return in a position. Default is 5.")
 
     #parser.add_argument("-add_header", action="store_true", default=False,
                         #help="Add header to the output file on mention.")
