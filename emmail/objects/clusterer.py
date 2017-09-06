@@ -3,8 +3,8 @@ from emmail.objects.resultRow import ResultRow, EmmImposters
 from collections import Counter
 
 from numpy import array
-from sklearn.cluster import KMeans, AgglomerativeClustering
-from sklearn.preprocessing import normalize, scale
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import normalize
 from sklearn.metrics import silhouette_score, calinski_harabaz_score
 
 class Clusterer:
@@ -143,7 +143,7 @@ class Clusterer:
             self.flag = 2
             self.cluster_number = self.get_cluster_number_elbow()
             # print("clustering for {}".format(self.cluster_number))
-            model = AgglomerativeClustering(n_clusters=self.cluster_number).fit(normalize(self.positions, axis = 0))
+            model = KMeans(n_clusters=self.cluster_number).fit(normalize(self.positions, axis = 0))
             
             # [print(self.positions[i].astype("int32"), self.results[i], model.labels_[i]) for i in range(len(self.positions))]
                 
