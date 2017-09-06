@@ -29,8 +29,9 @@ class Clusterer:
         return results, positions
     
     def short_stringer(self):
-        string = "{0}\t{1}\t\t{2}".format(
+        string = "{0}\t{1}\t{2}\t\t{3}".format(
                             self.isolate,
+                            self.cluster_number,
                             ", ".join([str(answer) for answer in self.answer]), 
                             ", ".join([str(x) for x in self.possible_imposters 
                                        if x.score == 100]))
