@@ -77,7 +77,7 @@ Arguments for BLAST:
 | ------ | ------ | ------ | ------ |
 | -dust | string | no | Filter query sequence with DUST |
 | -perc_identity | integer | 95 | Minimal percent identity of sequence |
-| -culling_limit | integer | 1 | Total hits to return in a single position |
+| -culling_limit | integer | 5 | Total hits to return in a single position |
 
 Arguments for BLAST filter:
 
