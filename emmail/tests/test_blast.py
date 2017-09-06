@@ -1,4 +1,3 @@
-from os import remove
 import unittest
 
 from emmail.objects.blast import BLAST
@@ -19,7 +18,7 @@ blast_h = BLAST(db, test_sequence_path, dust="no",
 # BLAST result will be empty.
 blast_e = BLAST(db, test_empty_path, dust="no",
               perc_identity=100, culling_limit=1,
-              output_stream="no_output.fa", header=True,
+              output_stream=None, header=True,
               mismatch=0, align_diff=0, gap=0)
               
 class testBLASTapp(unittest.TestCase):
@@ -51,4 +50,3 @@ class testBLASTapp(unittest.TestCase):
         
 if __name__ == '__main__':
     unittest.main()
-    remove("no_output.fa")

@@ -3,6 +3,8 @@ from emmail.objects.resultRow import ResultRow, WrongLengthException
 from emmail.tests.test_data import *
 
 row = ResultRow(string)
+row_not100 = ResultRow(string_not100)
+row_imp = ResultRow(string_imp)
 
 class TestResultMethods(unittest.TestCase):
 	
@@ -29,6 +31,11 @@ class TestResultMethods(unittest.TestCase):
         
     def test_filter_me(self):
         self.assertTrue(row.filter(mismatch=4, align_diff=5, gap=2))
+        
+    def test_string_representation(self):
+        self.assertEqual(str(row), string_str)
+        self.assertEqual(str(row_not100), string_not100_str)
+        self.assertEqual(str(row_imp), string_imp_str)
 
 if __name__ == '__main__':
     unittest.main()
