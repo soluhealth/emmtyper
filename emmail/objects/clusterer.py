@@ -21,7 +21,13 @@ class Clusterer:
         self.flag = 0
         self.answer = ""
         self.possible_imposters = []
+    
+    def __repr__(self):
+        string = ("Clusterer for {} with binwidth {}bp, resulting in {} cluster(s)\n{} output to {}")
         
+        return string.format(self.isolate, self.binwidth, self.cluster_number,
+                            "Verbose" if self.verbose else "Short", self.output_stream)
+    
     def extractFromFile(self, blastOutputFile):
         with open(blastOutputFile, "r") as handle:
             results = [ResultRow(line.strip()) for line in handle.readlines()]
@@ -112,6 +118,7 @@ class Clusterer:
     
     def quicker_c(self, threshold=100):
         ### EXPERIMENTAL ###
+        # Visual map of emm hits within WGS
         flag = 0
         answer = [answer for answer in self.results 
                         if answer.score == 100 and answer.type not in EmmImposters]
@@ -145,7 +152,7 @@ class Clusterer:
             self.cluster_number = self.get_cluster_number_elbow()
             # print("clustering for {}".format(self.cluster_number))
             model = KMeans(n_clusters=self.cluster_number).fit(normalize(self.positions, axis = 0))
-            
+            # print(model.cluster_centers_)
             # [print(self.positions[i].astype("int32"), self.results[i], model.labels_[i]) for i in range(len(self.positions))]
                 
             maxCluster = [result for key, result in enumerate(self.results) if model.labels_[key] in self.get_cluster_with_max_vote(Counter(model.labels_))]
