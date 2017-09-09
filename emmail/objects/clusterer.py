@@ -1,27 +1,22 @@
-from emmail.objects.resultRow import ResultRow, EmmImposters
-
 from collections import Counter
 
 from numpy import array
-from sklearn.cluster import KMeans
 from sklearn.preprocessing import normalize
-from sklearn.metrics import silhouette_score, calinski_harabaz_score
+from scipy.cluster.hierarchy import dendrogram, linkage
+from emmail.objects.resultRow import ResultRow
 
 class Clusterer:
-    def __init__(self, blastOutputFile, output_stream, verbose=False, binwidth=800):
+    def __init__(self, blastOutputFile, output_stream, verbose=False, binwidth=500, linkage="ward"):
         self.isolate = blastOutputFile.split("/")[-1].split(".")[0]
         self.results, self.positions = self.extractFromFile(blastOutputFile)
         
         self.output_stream = output_stream
         self.verbose = verbose
-        self.binwidth = binwidth
         
+        self.binwidth = binwidth
+        self.linkage = linkage
         self.cluster_number = 1
         
-        self.flag = 0
-        self.answer = ""
-        self.possible_imposters = []
-    
     def __repr__(self):
         string = ("Clusterer for {} with binwidth {}bp, resulting in {} cluster(s)\n{} output to {}")
         
@@ -58,65 +53,8 @@ class Clusterer:
                                                     if x.score == 100]))
         
         return string
-
-    def get_best_scoring(self, results):
-        maxScore = max([result.score for result in results])
-        maxResult = [result for result in results if result.score == maxScore]
-        
-        return maxResult
     
-    def get_cluster_with_max_vote(self, clusters_counter):
-        count = clusters_counter.items()
-        maximum_occurence = max([occ for clust, occ in count])
-        
-        return [clust for clust, occ in count if occ == maximum_occurence]
-    
-    def get_cluster_number_elbow(self):
-        # USING SILHOUETTE
-        
-        try:
-            tmp_s = float("inf")
-            
-            for cluster in range(2, self.positions.shape[0] + 1):
-                model = KMeans(n_clusters=cluster).fit(normalize(self.positions, axis = 0))
-                s_score = silhouette_score(self.positions, model.labels_)
-                # print("silhouette score is {} for {} cl".format(s_score, cluster))
-                
-                # If residuals do not decrease, return the previous cluster
-                if tmp_s == s_score:
-                    return cluster-1
-                
-                tmp_s = s_score
-            
-            return 1    
-            #print("flag 3 = {}".format(cluster_number))
-            
-        except ValueError:
-            return self.positions.shape[0]
-    
-    def get_cluster_number_ch(self):
-        # USING CALINSKI HARABAZ
-        max_ch_score = 1
-        cluster_number = 1
-        
-        try:
-            for cluster in range(2, self.positions.shape[0] + 1):
-                model = KMeans(n_clusters=cluster).fit(normalize(self.positions, axis = 0))
-                ch_score = calinski_harabaz_score(self.positions, model.labels_)
-                # print("ch score is {} for {} cl".format(ch_score, cluster))
-                
-                if ch_score <= max_ch_score:
-                    return cluster
-                
-                max_ch_score = ch_score
-            
-            return 1
-            #print("flag 3 = {}".format(cluster_number))
-        
-        except ValueError:
-            return self.positions.shape[0]
-    
-    def quicker_c(self, threshold=100):
+    def visual_c(self, threshold=100):
         ### EXPERIMENTAL ###
         # Visual map of emm hits within WGS
         flag = 0
@@ -137,26 +75,38 @@ class Clusterer:
                 
         return "{}\t{}".format(self.isolate, string)
     
+    
+    def get_best_scoring(self, results):
+        maxScore = max([result.score for result in results])
+        maxResult = [result for result in results if result.score == maxScore]
+        
+        return maxResult
+    
+    def get_cluster_with_max_vote(self, clusters_counter):
+        count = clusters_counter.items()
+        maximum_occurence = max([occ for clust, occ in count])
+        
+        return [clust for clust, occ in count if occ == maximum_occurence]
+            
     def clust(self):
         best_score = self.get_best_scoring(self.results)
         
         if len(best_score) == 1:
             self.flag = 1
-            # print("no clustering done")
             self.answer = [best_score[0]]
             self.possible_imposters = [res for res in self.results
                                         if res not in self.answer and res.score == 100]
         
         else:
             self.flag = 2
-            self.cluster_number = self.get_cluster_number_elbow()
-            # print("clustering for {}".format(self.cluster_number))
-            model = KMeans(n_clusters=self.cluster_number).fit(normalize(self.positions, axis = 0))
-            # print(model.cluster_centers_)
-            # [print(self.positions[i].astype("int32"), self.results[i], model.labels_[i]) for i in range(len(self.positions))]
-                
-            maxCluster = [result for key, result in enumerate(self.results) if model.labels_[key] in self.get_cluster_with_max_vote(Counter(model.labels_))]
-            otherClusters = [result for key, result in enumerate(self.results) if model.labels_[key] not in self.get_cluster_with_max_vote(Counter(model.labels_))]
+            Z = linkage(self.positions, "ward")
+            
+            clusters = fcluster(Z, self.binwidth, criterion='distance')
+            print(clusters)
+            self.cluster_number = max(clusters)
+            
+            maxCluster = [result for key, result in enumerate(self.results) if clusters[key] in self.get_cluster_with_max_vote(Counter(clusters))]
+            otherClusters = [result for key, result in enumerate(self.results) if clusters[key] not in self.get_cluster_with_max_vote(Counter(clusters))]
 
             self.answer = [result for result in self.get_best_scoring(maxCluster)]
             self.possible_imposters = [result for result in otherClusters]

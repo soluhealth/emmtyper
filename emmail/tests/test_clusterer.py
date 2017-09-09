@@ -28,9 +28,6 @@ class testClusterer(unittest.TestCase):
         self.assertEqual(repr(clusterer), clusterer_repr_short)
         self.assertEqual(repr(clusterer_verbose), clusterer_repr_verbose)
         
-    def test_cluster_number(self):
-        self.assertEqual(clusterer.get_cluster_number_elbow(), 2)
-    
     def test_run_short(self):
         self.assertEqual(clusterer.main(), clusterer_result_short)
         
