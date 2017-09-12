@@ -2,7 +2,7 @@ from collections import Counter
 
 from numpy import array
 from sklearn.preprocessing import normalize
-from scipy.cluster.hierarchy import dendrogram, linkage
+from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 from emmail.objects.resultRow import ResultRow
 
 class Clusterer:
@@ -75,13 +75,17 @@ class Clusterer:
                 
         return "{}\t{}".format(self.isolate, string)
     
-    
     def get_best_scoring(self, results):
-        maxScore = max([result.score for result in results])
-        maxResult = [result for result in results if result.score == maxScore]
-        
-        return maxResult
-    
+        try:
+            maxScore = max([result.score for result in results])
+            maxResult = [result for result in results if result.score == maxScore]
+            
+            return maxResult
+            
+        except ValueError:
+            # When there is no result to iterate over, return null ResultRow
+            return [ResultRow("0\tEMM0.0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0")]
+            
     def get_cluster_with_max_vote(self, clusters_counter):
         count = clusters_counter.items()
         maximum_occurence = max([occ for clust, occ in count])
@@ -99,10 +103,10 @@ class Clusterer:
         
         else:
             self.flag = 2
-            Z = linkage(self.positions, "ward")
+            Z = linkage(self.positions, self.linkage)
             
             clusters = fcluster(Z, self.binwidth, criterion='distance')
-            print(clusters)
+            
             self.cluster_number = max(clusters)
             
             maxCluster = [result for key, result in enumerate(self.results) if clusters[key] in self.get_cluster_with_max_vote(Counter(clusters))]
