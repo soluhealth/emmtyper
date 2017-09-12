@@ -55,6 +55,7 @@ class ResultRow:
         self.bitScore = bitScore
         self.subjectLength = subjectLength
         
+        # Score is percent identity, penalized by gap opening and difference in alignment length and actual subject length
         self.score = self.identity - (self.gapOpen + abs(self.alignmentLength - self.subjectLength))
             
     def __repr__(self):
