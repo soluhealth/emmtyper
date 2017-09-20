@@ -1,12 +1,12 @@
 # EmMAIL - Emm Automatic Isolate Labeller
 
 ## Table of Content
-1. [Introduction](##Introduction)
-2. [Requirements](##Requirements)
-3. [Installation](##Installation)
-4. [Usage](##Usage)
-5. [Result Format](##Result_Format)
-6. [Contact](##Contact)
+1. [Introduction](##introduction)
+2. [Requirements](##requirements)
+3. [Installation](##installation)
+4. [Usage](##usage)
+5. [Result Format](##result_Format)
+6. [Contact](##contact)
 
 ## Introduction
 
@@ -118,10 +118,10 @@ Example for both short and verbose result format:
 
 ```
 Isolate1   1    EMM65.0
-Isolate2   3    EMM4.0   EMM236.3*, EMM156.0*
+Isolate2   3    EMM4.0   EMM236.3*;EMM156.0*
 
 Isolate1    6   1   1   EMM65.0 5:82168
-Isolate2    8   2   3   EMM4.0  2:104111    EMM236.3*, EMM156.0*    2:102762, 2:105504
+Isolate2    8   2   3   EMM4.0  2:104111    EMM236.3*;EMM156.0*    2:102762;2:105504
 ```
 
 ## Contact 
