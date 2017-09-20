@@ -8,12 +8,12 @@ from emmail.tests.test_data import *
 clusterer = Clusterer(blastOutputFile=test_blast_product, 
                         output_stream="stdout",
                         verbose=False,
-                        binwidth=800)
+                        distance=800)
 
 clusterer_verbose = Clusterer(blastOutputFile=test_blast_product, 
                         output_stream="stdout",
                         verbose=True,
-                        binwidth=800)                        
+                        distance=800)                        
                         
 class testClusterer(unittest.TestCase):
 
