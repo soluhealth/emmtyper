@@ -12,17 +12,11 @@ def buildSubparser(parser):
     """
     Add arguments to the subparser, and return the subparser.
     """
+    parser.usage = "emmail --db <DB> --query <QUERY> [OPTIONS] pcr --primer <PRIMER> [OPTIONS]"
+    
     parser.add_argument("--primer", required=True, type=str,
                         help="PCR primer. Text file with 3 columns: Name, Forward Primer, Reverse Primer.")
     
-    parser.add_argument("--query", required=True, type=str,
-                        help="The genome to PCR against.")
-    parser.add_argument("--db", required=True, type=str,
-                        help="The database to BLAST PCR product against.")
-    
-    parser.add_argument("-saveIntermediary", default=False, action="store_true",
-                    help="Temporary isPcr and BLAST outputs will not be removed on mention.")
-
     # isPcr options
                       
     parser.add_argument("-minPerfect", default=15, type=int,
@@ -57,52 +51,48 @@ def buildSubparser(parser):
     parser.add_argument("-gap", default=2, type=int,
                         help="Threshold gap to allow in BLAST hit. Default is 2.")
     
-    # Clusterer Options
-    
-    parser.add_argument("-verbose", default=False, action="store_true",
-                        help="Return verbose results instead of truncated result.")
-    parser.add_argument("-outFinal", default="stdout", type=str,
-                        help="File to stream final output. Default to terminal.")
-    
     return parser
     
 def main(args):
-    outPCR = args.query.split("/")[-1].split(".")[0] + "_pcr.tmp"
-    outBLAST = args.query.split("/")[-1].split(".")[0] + ".tmp"
-    
-    pcr = IsPCR(assembly_filename = args.query,
-                primer_filename = args.primer,
-                min_perfect = args.minPerfect,
-                min_good = args.minGood,
-                max_product_length = args.maxSize,
-                output_stream = "stdout")
-    
-    # Run isPcr, take output and use it as input for Blast.
-    with open(outPCR, "w") as temp:
-        temp.write(pcr.run_isPCR())
-    
-    blast = BLAST(db = args.db, 
-                    query = outPCR, 
-                    dust = args.dust, 
-                    perc_identity = args.perc_identity,
-                    culling_limit = args.culling_limit, 
-                    
-                    output_stream = outBLAST,
-                    header = False,
-                    
-                    mismatch = args.mismatch,
-                    align_diff = args.align_diff,
-                    gap = args.gap)
-                    
-    blast.run_blastn_pipeline()
-    
-    clusterer = Clusterer(blastOutputFile=outBLAST, 
-                        output_stream=args.outClusterer,
-                        verbose=args.verbose).main()
-    
-    if not args.saveIntermediary:
-        remove(outPCR)
-        remove(outBLAST)
-        # logger.info("{} and {} are removed from directory".format(args.outPCR))
-    
-    # logger.info("Result for {} is saved as {}".format(args.query.split("/")[-1], args.outBLAST))
+    for query in args.query:
+
+        outPCR = query.split("/")[-1].split(".")[0] + "_pcr.tmp"
+        outBLAST = query.split("/")[-1].split(".")[0] + ".tmp"
+        
+        pcr = IsPCR(assembly_filename = query,
+                    primer_filename = args.primer,
+                    min_perfect = args.minPerfect,
+                    min_good = args.minGood,
+                    max_product_length = args.maxSize,
+                    output_stream = "stdout")
+        
+        # Run isPcr, take output and use it as input for Blast.
+        with open(outPCR, "w") as temp:
+            temp.write(pcr.run_isPCR())
+        
+        blast = BLAST(db = args.db, 
+                        query = outPCR, 
+                        dust = args.dust, 
+                        perc_identity = args.perc_identity,
+                        culling_limit = args.culling_limit, 
+                        
+                        output_stream = outBLAST,
+                        header = False,
+                        
+                        mismatch = args.mismatch,
+                        align_diff = args.align_diff,
+                        gap = args.gap)
+                        
+        blast.run_blastn_pipeline()
+        
+        clusterer = Clusterer(blastOutputFile=outBLAST,
+                            distance = args.clust_distance,
+                            output_stream=args.outFinal,
+                            verbose=args.verbose).main()
+        
+        if not args.saveIntermediary:
+            remove(outPCR)
+            remove(outBLAST)
+            # logger.info("{} and {} are removed from directory".format(args.outPCR))
+        
+        # logger.info("Result for {} is saved as {}".format(args.query.split("/")[-1], args.outBLAST))
