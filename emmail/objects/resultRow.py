@@ -1,10 +1,12 @@
+from numpy import array 
+
 PHE_emmLike = ["EMM51", "EMM134", "EMM138", "EMM149", 
                     "EMM156", "EMM159", "EMM164", "EMM167", 
                     "EMM170", "EMM174", 
                     "EMM202", "EMM205", "EMM236", "EMM240"] 
                 
-Suspects = [# "EMM134", "EMM167", 
-            "EMM137", "EMM141", "EMM166", "EMM203"]
+Suspects = []# "EMM134", "EMM167", 
+            #"EMM137", "EMM141", "EMM166", "EMM203"]
 
 EmmImposters = PHE_emmLike + Suspects
 
@@ -37,7 +39,7 @@ class ResultRow:
         eValue, bitScore, subjectLength) = rowSplit
 
         self.query = query
-        self.contig = int(query.split(".")[-1]) if len(query.split(".")) > 1 else 0
+        self.contig = int(query.split(".")[-1].split(":")[0]) if len(query.split(".")) > 1 else 0
         
         self.blastHit = blastHit
         self.type = blastHit.split(".")[0]
@@ -56,16 +58,20 @@ class ResultRow:
         self.subjectLength = subjectLength
         
         # Score is percent identity, penalized by gap opening and difference in alignment length and actual subject length
+        self.positions = array([self.contig, self.queryStart, self.queryEnd], dtype="float64")
         self.score = self.identity - (self.gapOpen + abs(self.alignmentLength - self.subjectLength))
             
     def __repr__(self):
         return self.fullRow
     
     def __str__(self):
-        return "{}{}".format(self.blastHit, 
-                            ResultRow.flagDict[(self.score == 100, 
+        if self.blastHit == "EMM0.0":
+            return "-"
+        else:
+            return "{}{}".format(self.blastHit, 
+                                ResultRow.flagDict[(self.score == 100, 
                                 self.type not in EmmImposters)])
-        
+    
     @staticmethod
     def build_header():
         header = "\t".join([variable for variable in ResultRow.variableList])
