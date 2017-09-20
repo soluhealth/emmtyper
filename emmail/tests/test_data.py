@@ -1,7 +1,7 @@
 import os
 
 def find(filename):
-    for root, dirs, files in os.walk(".", topdown=False):
+    for root, dirs, files in os.walk(os.path.dirname(__file__), topdown=False):
         for name in files:
             if name == filename:
                 return os.path.join(root, name)
@@ -38,9 +38,11 @@ isPcr_result = ">contig1:113750+114924 emm 1175bp TATTCGCTTAGAAAATTAA GCAAGTTCTT
 isPcr_result_e = ""
 
 # For Clusterer
+header_short = "Isolate\tNumberOfClusters\tAnswers\tSuspectImposters\n"
+header_verbose = "Isolate\tNumberOfHits\tNumberOfClusters\tAnswers\tAnswerPositions\tSuspectImposters\tSuspectPositions\n"
 
-test_blast_product = find("LD_11791_7_71.fa.tsv")
-clusterer_repr_short = "Clusterer for LD_11791_7_71 with binwidth 800bp, resulting in 1 cluster(s)\nShort output to stdout"
-clusterer_result_short = "LD_11791_7_71\t1\tEMM65.0\t\t"
-clusterer_repr_verbose = "Clusterer for LD_11791_7_71 with binwidth 800bp, resulting in 1 cluster(s)\nVerbose output to stdout"
-clusterer_result_verbose = "LD_11791_7_71\t6\t1\t1\tEMM65.0\t5:82168\t\t"
+test_blast_product = find("blast.fa.tsv")
+clusterer_repr_short = "Clusterer for {} with clustering distance 800bp, resulting in 1 cluster(s)\nShort output to stdout".format(test_blast_product)
+clusterer_result_short = "{}{}\t2\tEMM65.0\tEMM156.0~*".format(header_short, test_blast_product)
+clusterer_repr_verbose = "Clusterer for {} with clustering distance 800bp, resulting in 1 cluster(s)\nVerbose output to stdout".format(test_blast_product)
+clusterer_result_verbose = "{}{}\t6\t2\tEMM65.0\t5:82168\tEMM156.0~*\t5:80776".format(header_verbose, test_blast_product)
