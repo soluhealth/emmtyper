@@ -13,7 +13,22 @@ def buildParser():
                                     epilog="Developed by {} ({})".format(author, email))
     subparsers = parser.add_subparsers(title='Pipelines to choose from',
                                        metavar='')
-
+    
+    parser.add_argument("--query", required=True, type=str, nargs="+",
+                        help="The genome to PCR against.")
+    parser.add_argument("--db", required=True, type=str,
+                        help="The database to BLAST PCR product against.")
+    
+    parser.add_argument("-saveIntermediary", default=False, action="store_true",
+                    help="Temporary isPcr and BLAST outputs will not be removed on mention.")
+    
+    # Clusterer Options
+    
+    parser.add_argument("-verbose", default=False, action="store_true",
+                        help="Return verbose results instead of truncated result.")
+    parser.add_argument("-outFinal", default="stdout", type=str,
+                        help="File to stream final output. Default to terminal.")
+    
     # BLAST subparser
     parser_blast = subparsers.add_parser("blast", help="Direct BLAST to genome reads.")
     parser_blast = runBLAST.buildSubparser(parser_blast)
