@@ -1,12 +1,12 @@
 # EmMAIL - Emm Automatic Isolate Labeller
 
 ## Table of Content
-1. [Introduction](##introduction)
-2. [Requirements](##requirements)
-3. [Installation](##installation)
+1. [Introduction](#introduction)
+2. [Requirements](#requirements)
+3. [Installation](#installation)
 4. [Usage](##usage)
-5. [Result Format](##result_Format)
-6. [Contact](##contact)
+5. [Result Format](#result-format)
+6. [Contact](#contact)
 
 ## Introduction
 
