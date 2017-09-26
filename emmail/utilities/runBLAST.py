@@ -11,7 +11,7 @@ def buildSubparser(parser):
     """
     Add arguments to the subparser, and return the subparser.
     """
-    parser.usage = "emmail --db <DB> --query <QUERY> [OPTIONS] blast [OPTIONS]"
+    parser.usage = "emmail --query <QUERY>  --db <DB> [OPTIONS] blast [OPTIONS]"
 
     # BLAST options
 

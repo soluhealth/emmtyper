@@ -12,7 +12,7 @@ def buildSubparser(parser):
     """
     Add arguments to the subparser, and return the subparser.
     """
-    parser.usage = "emmail --db <DB> --query <QUERY> [OPTIONS] pcr --primer <PRIMER> [OPTIONS]"
+    parser.usage = "emmail --query <QUERY> --db <DB> [OPTIONS] pcr --primer <PRIMER> [OPTIONS]"
     
     parser.add_argument("--primer", required=True, type=str,
                         help="PCR primer. Text file with 3 columns: Name, Forward Primer, Reverse Primer.")
