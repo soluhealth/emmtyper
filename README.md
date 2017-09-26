@@ -104,7 +104,7 @@ EmMAIL by default produces four tab-separated values to the command line. Callin
 
 The short result returns: **Isolate name_Number of clusters_Predicted type_Possible imposters**
 
-While the verbose result returns: **Isolate name_Number of BLAST hits_Clusterer decision flag_Number of clusters_Predicted type_Position in assembly_Possible imposters_Imposters position in assembly**,
+While the verbose result returns: **Isolate name_Number of BLAST hits_Number of clusters_Predicted type_Position in assembly_Possible imposters_Imposters position in assembly**,
 where the positions are presented in <contig_number>:<position_in_contig>.
 
 The types are presented with flags when something is not right, the possible flags for now being:
