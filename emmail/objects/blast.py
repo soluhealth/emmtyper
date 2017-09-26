@@ -9,6 +9,26 @@ logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
 
 class BLAST(Command):
+    """
+    Wrapper class for command-line blastn.
+    
+    Command-line blastn only allows filtering using e-value, percent identity, and culling limit.
+    Additional filter option is given in this wrapper, namely:
+    1. Mismatch 
+        Regular blastn can do this with perc_identity, but needs to be in percentage of alignment length.
+        Specify an integer N, number of mismatches allowed as result. Default = 4.
+    2. GapOpen
+        Regular blastn cannot do this directly, but you can calculate the resulting e-value from gap open penalty.
+        Specify an integer N, number of gap open allowed. Default = 2.
+    3. AlignDiff
+        This cannot be done only with regular blastn.
+        Specify an integer N, which is the maximum allowed difference between subject and alignment length. Default = 5.
+    
+    Requires user to install blastn on own, and needs ResultRow class.
+    
+    This class is developed to be used within emmail, thus the output format. 
+    You need to change the output format AFTER filtering if you want anything other than "6 std slen".
+    """
     
     def __init__(self, db, query, dust,
                 perc_identity, culling_limit,
@@ -31,7 +51,7 @@ class BLAST(Command):
         
         self.want_header = header
         
-        # Threshold for row filtering
+        # Threshold for ResultRow filtering
         
         self.mismatch = mismatch
         self.align_diff = align_diff
