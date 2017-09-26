@@ -16,10 +16,10 @@ def buildParser():
                                        metavar='')
     
     parser.add_argument("--query", required=True, type=str, nargs="+",
-                        help="The genome to PCR against.")
+                        help="Genome(s) to PCR against.")
     parser.add_argument("--db", required=True, type=str,
                         help="The database to BLAST PCR product against.")
-    
+                        
     parser.add_argument("-saveIntermediary", default=False, action="store_true",
                     help="Temporary isPcr and BLAST outputs will not be removed on mention.")
     
