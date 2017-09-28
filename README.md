@@ -4,7 +4,10 @@
 1. [Introduction](#introduction)
 2. [Requirements](#requirements)
 3. [Installation](#installation)
-4. [Usage](##usage)
+4. [Usage](#usage)
+    4.1 [Arguments for EmMAIL](#arguments-for-emmail)
+    4.2 [Arguments for Tools in EmMAIL](#arguments-for-tools-in-emmail)
+    4.3 [Example Commands](#example-commands)
 5. [Result Format](#result-format)
 6. [Contact](#contact)
 
@@ -37,21 +40,50 @@ You will then be able to use EmMAIL by calling `emmail` on the command line.
 
 ## Usage
 
-EmMAIL has 2 branches of usage: direct BLAST, or isPcr followed with BLAST. Product of any of the two pipelines (in the form of BLAST output 6 with SubjectLength) will then go through EmMAIL's Clusterer to derive the type of the isolate.
+EmMAIL has 2 branches of usage: direct BLAST, or isPcr followed by BLAST. Product of any of the two pipelines will go through EmMAIL's clusterer to derive the type of the isolate.
 
-The arguments used in the pipeline are derived from the mentioned tools.
+The basic usage of EmMAIL is in the form of:
 
-### isPcr Path
-We first extract targeted sequences using in silico PCR, and then BLAST the amplicons.
-The required arguments are:
+```sh
+emmail ... [blast/pcr] ...
+```
 
+On `[blast/pcr]`, you are required to choose between `blast` or `pcr` to choose which pipeline you want. The first ellipsis `...` is for EmMAIL's arguments. The second ellipsis `...` is for arguments within the tools used in EmMAIL; `blastn` for BLAST pathway, and `ispcr` and `blastn` for PCR pathway.
+
+If you are not sure which pipeline to choose from, I recommend using `blast` first, and use `pcr` when you want to check if anything weird is happening in your `blast` result. An example problem where this might be useful is when there are too much hits reported by EmMAIL; in this case, you can use PCR pipeline to see which hits would be returned in the setting of a conventional typing.
+
+### Arguments for EmMAIL
+These arguments are required for both of the pipelines:
 | Argument | Variable Type | Description |
 | ------ | ------ | ------ |
-| --primer | tsv | A tsv file containing primer set in the format "{PrimerSetName}\t{Primer1Sequence}\t{Primer2Sequence}" |
-| --query | FASTA | An assembled genome FASTA. Alignment will be checked within contigs; the longer the contigs, the better chance we have to find possible existing alignments |
+| --query | FASTA | An assembled genome FASTA |
 | --db | blast DB | A BLAST database file |
 
-Arguments for isPcr:
+While the optional arguments are:
+| Argument | Variable Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| -clust_distance | integer | 500 | Distance between clusters to use |
+| -verbose | boolean | False | On mention, return a more verbose result |
+| -saveIntermediary | boolean | False | On mention, do not remove intermediary files between tools |
+| -outFinal | tsv | stdout | File to stream final output |
+
+### Arguments for Tools in EmMAIL
+#### blastn Options
+Options in `blastn` that can be manually changed for both BLAST and PCR pipeline.
+| Argument | Variable Type | Default | Description |
+| ------ | ------ | ------ | ------ |
+| -dust | string | no | Filter query sequence with DUST |
+| -perc_identity | integer | 95 | Minimal percent identity of sequence |
+| -culling_limit | integer | 5 | Total hits to return in a single position |
+| -mismatch | integer | 4 | Threshold number of mismatch to allow in BLAST hit |
+| -align_diff | integer | 5 | Threshold for difference between alignment length and subject length in BLAST hit |
+| -gap | integer | 2 | Threshold number of gap to allow in BLAST hit |
+
+#### ispcr Options
+Options in `ispcr` that can be manually changed for the PCR pipeline. Aside from the optionals, the PCR pipeline has an additional required argument.
+| Argument | Variable Type | Description |
+| ------ | ------ | ------ |
+| --primer | tsv | A tsv file containing primer set in the format "PrimerSetName\tPrimer1Sequence\tPrimer2Sequence" |
 
 | Argument | Variable Type | Default | Description |
 | ------ | ------ | ------ | ------ |
@@ -60,43 +92,14 @@ Arguments for isPcr:
 | -maxSize | integer | 4000 | Positive integer value for maximum product length |
 | -savePCR | boolean | False | On mention, PCR output file will not be automatically removed | 
 
-Post-PCR, the arguments are the same as the ones in the BLAST path.
+Again, you can also manually change the [options in blastn](#blastn-options) within the PCR pipeline.
 
-### BLAST Path
-We directly use BLAST (specifically, blastn) against the assembled genome FASTA.
-The required arguments are:
-
-| Argument | Variable Type | Description |
-| ------ | ------ | ------ |
-| --query | FASTA | An assembled genome FASTA |
-| --db | blast DB | A BLAST database file |
-
-Arguments for BLAST:
-
-| Argument | Variable Type | Default | Description |
-| ------ | ------ | ------ | ------ |
-| -dust | string | no | Filter query sequence with DUST |
-| -perc_identity | integer | 95 | Minimal percent identity of sequence |
-| -culling_limit | integer | 5 | Total hits to return in a single position |
-
-Arguments for BLAST filter:
-
-| Argument | Variable Type | Default | Description |
-| ------ | ------ | ------ | ------ |
-| -mismatch | integer | 4 | Threshold number of mismatch to allow in BLAST hit |
-| -align_diff | integer | 5 | Threshold for difference between alignment length and subject length in BLAST hit |
-| -gap | integer | 2 | Threshold number of gap to allow in BLAST hit |
-
-### Clusterer Arguments
-
-| Argument | Variable Type | Default | Description |
-| ------ | ------ | ------ | ------ |
-| -verbose | boolean | False | On mention, return a more verbose result |
-| -outFinal | tsv | stdout | File to stream final output |
-
-An example command for direct BLAST is shown below:
+### Example Commands
 ```sh
-$ emmail blast --query <isolate FASTA> --db <BLAST DB filepath> -outFinal <filename>.tsv
+emmail --query isolate1.fa --db emm.fasta blast
+emmail --query *.fa --db emm.fasta pcr --primer emmPrimer.tsv
+emmail --query *.fa --db blastDB/emm.fasta -saveIntermediary blast -culling_limit 10 -align_diff 10
+emmail --query Run19Jun/*.fa --db emm.fasta -verbose pcr --primer emmPrimer.tsv -mismatch 5 -maxSize 2000
 ```
 
 ## Result Format
