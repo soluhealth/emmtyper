@@ -137,9 +137,9 @@ Isolate2    8   3   EMM4.0  2:104111    EMM236.3*;EMM156.0*    2:102762;2:105504
 
 If you are not sure which pipeline to choose from, I recommend using `blast` first, and use `pcr` when you want to check if anything weird is happening in your `blast` result. 
 
-An example problem where this might be useful is when there are too much hits reported by EmMAIL. An important thing to note is that not all emm-like can be caught in the conventional PCR typing. PCR pipeline here can be used to see which hits would be returned in the setting of a conventional typing.
+An example problem where this might be useful is when there are too much hits reported by EmMAIL. 
 
-This is however not fail-proof, as in silico PCR fails when the two primers do not align in the same contig. Better assembly would resolve this problem.
+An important thing to note is that not all emm-like can be caught in the conventional PCR typing. PCR pipeline here can be used to see which hits would be returned in the setting of a conventional typing. This is however not fail-proof, as in silico PCR fails when the two primers do not align in the same contig. Better assembly would resolve this problem.
 
 ## Contact 
 
