@@ -11,8 +11,9 @@
 		- [blastn Options](#blastn-options)
 		- [ispcr Options](#ispcr-options)
 	- [Example Commands](#example-commands)
-5. [Result Format](#result-format)
-6. [Contact](#contact)
+5. [BLAST or PCR?](#blast-or-pcr)
+6. [Result Format](#result-format)
+7. [Contact](#contact)
 
 ## Introduction
 
@@ -52,8 +53,6 @@ emmail ... [blast/pcr] ...
 ```
 
 On `[blast/pcr]`, you are required to choose between `blast` or `pcr` to choose which pipeline you want. The first ellipsis `...` is for EmMAIL's arguments. The second ellipsis `...` is for arguments within the tools used in EmMAIL; `blastn` for BLAST pathway, and `ispcr` and `blastn` for PCR pathway.
-
-If you are not sure which pipeline to choose from, I recommend using `blast` first, and use `pcr` when you want to check if anything weird is happening in your `blast` result. An example problem where this might be useful is when there are too much hits reported by EmMAIL; in this case, you can use PCR pipeline to see which hits would be returned in the setting of a conventional typing.
 
 ### Arguments for EmMAIL
 These arguments are required for both of the pipelines:
@@ -108,6 +107,14 @@ emmail --query *.fa --db emm.fasta pcr --primer emmPrimer.tsv
 emmail --query *.fa --db blastDB/emm.fasta -saveIntermediary blast -culling_limit 10 -align_diff 10
 emmail --query Run19Jun/*.fa --db emm.fasta -verbose pcr --primer emmPrimer.tsv -maxSize 2000 -mismatch 5
 ```
+
+## BLAST or PCR?
+
+If you are not sure which pipeline to choose from, I recommend using `blast` first, and use `pcr` when you want to check if anything weird is happening in your `blast` result. 
+
+An example problem where this might be useful is when there are too much hits reported by EmMAIL. An important thing to note is that not all emm-like can be caught in the conventional PCR typing. PCR pipeline here can be used to see which hits would be returned in the setting of a conventional typing.
+
+This is however not fail-proof, as in silico PCR fails when the two primers do not align in the same contig. Better assembly would resolve this problem.
 
 ## Result Format
 EmMAIL by default produces four tab-separated values to the command line. Calling `-verbose` will make EmMAIL return seven tab-separated values.
