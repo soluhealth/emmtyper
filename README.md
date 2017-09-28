@@ -19,13 +19,13 @@
 
 EmMAIL is a command line tool for emm-type classification of Streptococcus pyogenes based on the isolate's whole genome sequence.
 
-The use of EmMAIL will follow the dependencies of the tools within its pipeline, namely BLAST and isPcr.
+The use of EmMAIL will follow the dependencies of the tools within its pipeline, namely `blastn` and `ispcr`.
 
 ## Requirements
 
-EmMAIL needs BLAST and isPcr. As is, there is no way to automatically install both within the setup.py.
+EmMAIL needs `blastn` and `ispcr`. As is, there is no way to automatically install both automatically with setup.py.
 
-User (for now) will need to manually install the tools themselves and set them on $PATH for EmMAIL to work.
+User (for now) will need to manually install the tools themselves and set them on $PATH for EmMAIL to work (EmMAIL expected both tools to be on $PATH).
 
 ## Installation
 
