@@ -1,13 +1,16 @@
 # EmMAIL - Emm Automatic Isolate Labeller
 
 ## Table of Content
+
 1. [Introduction](#introduction)
 2. [Requirements](#requirements)
 3. [Installation](#installation)
 4. [Usage](#usage)
-    4.1 [Arguments for EmMAIL](#arguments-for-emmail)
-    4.2 [Arguments for Tools in EmMAIL](#arguments-for-tools-in-emmail)
-    4.3 [Example Commands](#example-commands)
+	- [Arguments for EmMAIL](#arguments-for-emmail)
+	- [Arguments for Tools in EmMAIL](#arguments-for-tools-in-emmail)
+		- [blastn Options](#blastn-options)
+		- [ispcr Options](#ispcr-options)
+	- [Example Commands](#example-commands)
 5. [Result Format](#result-format)
 6. [Contact](#contact)
 
@@ -54,12 +57,14 @@ If you are not sure which pipeline to choose from, I recommend using `blast` fir
 
 ### Arguments for EmMAIL
 These arguments are required for both of the pipelines:
+
 | Argument | Variable Type | Description |
 | ------ | ------ | ------ |
 | --query | FASTA | An assembled genome FASTA |
 | --db | blast DB | A BLAST database file |
 
 While the optional arguments are:
+
 | Argument | Variable Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | -clust_distance | integer | 500 | Distance between clusters to use |
@@ -70,6 +75,7 @@ While the optional arguments are:
 ### Arguments for Tools in EmMAIL
 #### blastn Options
 Options in `blastn` that can be manually changed for both BLAST and PCR pipeline.
+
 | Argument | Variable Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | -dust | string | no | Filter query sequence with DUST |
@@ -81,6 +87,7 @@ Options in `blastn` that can be manually changed for both BLAST and PCR pipeline
 
 #### ispcr Options
 Options in `ispcr` that can be manually changed for the PCR pipeline. Aside from the optionals, the PCR pipeline has an additional required argument.
+
 | Argument | Variable Type | Description |
 | ------ | ------ | ------ |
 | --primer | tsv | A tsv file containing primer set in the format "PrimerSetName\tPrimer1Sequence\tPrimer2Sequence" |
@@ -99,7 +106,7 @@ Again, you can also manually change the [options in blastn](#blastn-options) wit
 emmail --query isolate1.fa --db emm.fasta blast
 emmail --query *.fa --db emm.fasta pcr --primer emmPrimer.tsv
 emmail --query *.fa --db blastDB/emm.fasta -saveIntermediary blast -culling_limit 10 -align_diff 10
-emmail --query Run19Jun/*.fa --db emm.fasta -verbose pcr --primer emmPrimer.tsv -mismatch 5 -maxSize 2000
+emmail --query Run19Jun/*.fa --db emm.fasta -verbose pcr --primer emmPrimer.tsv -maxSize 2000 -mismatch 5
 ```
 
 ## Result Format
