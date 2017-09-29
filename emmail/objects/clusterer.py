@@ -8,14 +8,13 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-### Implement functions to use these headers.
 short_header = "Isolate\tNumberOfClusters\tAnswers\tSuspectImposters\n"
 verbose_header = "Isolate\tNumberOfHits\tNumberOfClusters\tAnswers\tAnswerPositions\tSuspectImposters\tSuspectPositions\n"
 
 nullResult = ResultRow("0\tEMM0.0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0") 
 
 class Clusterer:
-    def __init__(self, blastOutputFile, output_stream, verbose=False, distance=500, linkage="ward", header=True):
+    def __init__(self, blastOutputFile, output_stream, verbose=False, distance=500, linkage="ward", header=False):
         self.isolate = blastOutputFile
         self.results = self.extractFromFile(blastOutputFile)
         self.header = header
@@ -41,7 +40,7 @@ class Clusterer:
             
         return results
     
-    def list_to_string(self, answers):
+    def list_to_string_emm(self, answers):
         string = ""
         logger.debug("There are {} answers".format(len(answers)))
         
@@ -58,34 +57,49 @@ class Clusterer:
             string += ";"
             
         return string[:-1]
+        
+    def list_to_string_positions(self, answers):
+        string = ""
+        logger.debug("There are {} answers".format(len(answers)))
+        
+        for answer in answers:
+            if type(answer) is ResultRow:
+                string += "{}:{}".format(answer.contig, answer.queryStart)
+            elif type(answer) is list:
+                positions = set([ans.queryStart for ans in answer])
+                for pos in positions:
+                    string += "({}:{})".format(";".join([(ans.contig, ans.queryStart) for ans in answer if ans.queryStart == pos]))
+            else:
+                raise Exception("answer is {}".format(type(answer)))
+            
+            string += ";"
+            
+        return string[:-1]
     
     def short_stringer(self):
-        header = "Isolate\tNumberOfClusters\tAnswers\tSuspectImposters\n"
         string = "{0}\t{1}\t{2}\t{3}".format(
                             self.isolate,
                             self.cluster_number,
-                            self.list_to_string(self.answers),
-                            self.list_to_string(self.possible_imposters))
+                            self.list_to_string_emm(self.answers),
+                            self.list_to_string_emm(self.possible_imposters))
 
         string = short_header + string if self.header else string
         return string
     
     def verbose_stringer(self):
-        header = "Isolate\tNumberOfHits\tNumberOfClusters\tAnswers\tAnswerPositions\tSuspectImposters\tSuspectPositions\n"
         string = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}".format(
                                         self.isolate, 
                                         len(self.results), 
                                         self.cluster_number, 
-                                        self.list_to_string(self.answers),
-                                        ";".join(["{}:{}".format(answer.contig, answer.queryStart) for answer in self.answers]),
-                                        self.list_to_string(self.possible_imposters),
-                                        ";".join(["{}:{}".format(x.contig, x.queryStart) for x in self.possible_imposters
-                                                    if x.score >= 92]))
+                                        self.list_to_string_emm(self.answers),
+                                        self.list_to_string_positions(self.answers),
+                                        self.list_to_string_emm(self.possible_imposters),
+                                        self.list_to_string_positions(self.possible_imposters))
         
         string = verbose_header + string if self.header else string
         return string
     
-    def visualize_contig(self, contig):
+    def map_stringer(self, contig):
         ### EXPERIMENTAL
         # Visual map of emm hits within WGS
         
@@ -316,7 +330,7 @@ class Clusterer:
                 self.best_in_clusters.extend(contig_best)
                 
                 self.cluster_number += len(contig_best)
-                self.ascii_vis += "\t" + self.visualize_contig(contig_best)
+                self.ascii_vis += "\t" + self.map_stringer(contig_best)
             
             # Now get final answer
             self.classify_expected_answer()
