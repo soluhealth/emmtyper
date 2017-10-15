@@ -88,7 +88,7 @@ def main(args):
         clusterer = Clusterer(blastOutputFile=outBLAST,
                             distance = args.clust_distance,
                             output_stream=args.outFinal,
-                            verbose=args.verbose).main()
+                            output_type=args.output_type).main()
         
         if not args.saveIntermediary:
             remove(outPCR)

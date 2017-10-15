@@ -27,8 +27,9 @@ def buildParser():
     
     parser.add_argument("-clust_distance", default=500, type=int,
                         help="Distance between cluster to use. Default to cluster together within 500bp.")
-    parser.add_argument("-verbose", default=False, action="store_true",
-                        help="Return verbose results instead of truncated result.")
+    parser.add_argument("-output_type", nargs="?", type=str,
+                        default="short", choices=["short", "verbose", "visual"],
+                        help="Choose which output type is wanted. Default to short output.")
     parser.add_argument("-outFinal", default="stdout", type=str,
                         help="File to stream final output. Default to terminal.")
     

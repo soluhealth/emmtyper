@@ -14,13 +14,13 @@ verbose_header = "Isolate\tNumberOfHits\tNumberOfClusters\tAnswers\tAnswerPositi
 nullResult = ResultRow("0\tEMM0.0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0") 
 
 class Clusterer:
-    def __init__(self, blastOutputFile, output_stream, verbose=False, distance=500, linkage="ward", header=False):
+    def __init__(self, blastOutputFile, output_stream, output_type="short", distance=500, linkage="ward", header=False):
         self.isolate = blastOutputFile
         self.results = self.extractFromFile(blastOutputFile)
         self.header = header
         
         self.output_stream = output_stream
-        self.verbose = verbose
+        self.output_type = output_type
         
         self.clust_distance = distance
         self.linkage = linkage
@@ -29,10 +29,10 @@ class Clusterer:
         self.ascii_vis = self.isolate
     
     def __repr__(self):
-        string = ("Clusterer for {} with binwidth {}bp, resulting in {} cluster(s)\n{} output to {}")
+        string = ("Clusterer for {} with clustering distance {}bp\n{} output to {}")
         
-        return string.format(self.isolate, self.clust_distance, self.cluster_number,
-                            "Verbose" if self.verbose else "Short", self.output_stream)
+        return string.format(self.isolate, self.clust_distance,
+                            self.output_type, self.output_stream)
     
     def extractFromFile(self, blastOutputFile):
         with open(blastOutputFile, "r") as handle:
@@ -109,7 +109,7 @@ class Clusterer:
             elif type(result) is list:
                 return sum([p.queryStart for p in result])/len(result)
             else:
-                raise Exception("Something is wrong in visContig")
+                raise Exception("Something is wrong in visualization.")
                 
         contig = [result[1] for result in contig]
         string = ""
@@ -131,6 +131,16 @@ class Clusterer:
             
         return string   
     
+    def produce_final_result(self):
+        if self.output_type == "short":
+            return self.short_stringer()
+        elif self.output_type == "verbose":
+            return self.verbose_stringer()
+        elif self.output_type == "visual":
+            return self.map_stringer()
+        else:
+            raise Exception("Choice of output type is not provided.")
+        
     def cluster(self, results):
         """
         Cluster a list of results.
@@ -339,7 +349,7 @@ class Clusterer:
             self.answers = [nullResult]
             self.possible_imposters = [nullResult]
                     
-        final_result =  self.verbose_stringer() if self.verbose else self.short_stringer()
+        final_result = self.produce_final_result()
         
         if self.output_stream in [None, "None", "stdout"]:
             print(final_result)
