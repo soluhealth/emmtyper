@@ -63,7 +63,7 @@ While the optional arguments are:
 | Argument | Variable Type | Default | Description |
 | ------ | ------ | ------ | ------ |
 | -clust_distance | integer | 500 | Distance between clusters to use |
-| -verbose | boolean | False | On mention, return a more verbose result |
+| -output_type | string | short | Output type format. Choose within "short", "verbose", or "visual" |
 | -saveIntermediary | boolean | False | On mention, do not remove intermediary files between tools |
 | -outFinal | tsv | stdout | File to stream final output |
 
@@ -101,16 +101,20 @@ Again, you can also manually change the [options in blastn](#blastn-options) wit
 emmail --query isolate1.fa --db emm.fasta blast
 emmail --query *.fa --db emm.fasta pcr --primer emmPrimer.tsv
 emmail --query *.fa --db blastDB/emm.fasta -saveIntermediary blast -culling_limit 10 -align_diff 10
-emmail --query Run19Jun/*.fa --db emm.fasta -verbose pcr --primer emmPrimer.tsv -maxSize 2000 -mismatch 5
+emmail --query Run19Jun/*.fa --db emm.fasta -output_type visual pcr --primer emmPrimer.tsv -maxSize 2000 -mismatch 5
 ```
 
 ## Result Format
-EmMAIL by default produces four tab-separated values to the command line. Calling `-verbose` will make EmMAIL return seven tab-separated values.
+EmMAIL has three different result formats: `short`, `verbose`, and `visual`.
+
+EmMAIL by default produces the `short` four tab-separated values to the command line. You can call `-output_type <option>` to choose the other two result format.
 
 The short result returns: **Isolate name_Number of clusters_Predicted type_Possible imposters**
 
 While the verbose result returns: **Isolate name_Number of BLAST hits_Number of clusters_Predicted type_Position in assembly_Possible imposters_Imposters position in assembly**,
 where the positions are presented in <contig_number>:<position_in_contig>.
+
+The visual result returns an ASCII map of the emm-types in the genome. Types in a single contig are separated with "-", each representing 500bp distance from each other. Types found in different contigs are separated with tab.
 
 The types are presented with flags when something is not right, the possible flags for now being:
 
@@ -119,14 +123,20 @@ The types are presented with flags when something is not right, the possible fla
 | * | Suspect Imposter | Types acknowledged in the CDC database as possibly not emm |
 | ~ | Imperfect score | Match score below 100% |
 
-Example for both short and verbose result format:
+Example for all result format:
 
 ```
-Isolate1   1    EMM65.0
-Isolate2   3    EMM4.0   EMM236.3*;EMM156.0*
+Isolate1	1	EMM65.0
+Isolate2	3	EMM4.0	EMM236.3*;EMM156.0*
+Isolate3	2	EMM52.1	EMM134.2*
 
-Isolate1    6   1   EMM65.0 5:82168
-Isolate2    8   3   EMM4.0  2:104111    EMM236.3*;EMM156.0*    2:102762;2:105504
+Isolate1	6	1	EMM65.0	5:82168
+Isolate2	8	3	EMM4.0	2:104111	EMM236.3*;EMM156.0*	2:102762;2:105504
+Isolate3	5	2	EMM52.1	14:10502	EMM134.2*	5:913
+
+Isolate1	EMM65.0
+Isolate2	EMM156.0*--EMM4.0--EMM236.3*
+Isolate3	EMM52.1	EMM134.2*
 ```
 
 ## BLAST or PCR?
