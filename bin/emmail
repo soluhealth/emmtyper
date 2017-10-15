@@ -19,8 +19,11 @@ def buildParser():
                         help="Genome(s) to PCR against.")
     parser.add_argument("--db", required=True, type=str,
                         help="The database to BLAST PCR product against.")
-                        
-    parser.add_argument("-saveIntermediary", default=False, action="store_true",
+    
+    parser.add_argument("-v", "--version", action='version',
+                        version='%(prog)s {version}'.format(version=version))
+    
+    parser.add_argument("-save", "--save_intermediary", default=False, action="store_true",
                     help="Temporary isPcr and BLAST outputs will not be removed on mention.")
     
     # Clusterer Options
@@ -30,7 +33,7 @@ def buildParser():
     parser.add_argument("-output_type", nargs="?", type=str,
                         default="short", choices=["short", "verbose", "visual"],
                         help="Choose which output type is wanted. Default to short output.")
-    parser.add_argument("-outFinal", default="stdout", type=str,
+    parser.add_argument("-output_file", default="stdout", type=str,
                         help="File to stream final output. Default to terminal.")
     
     # BLAST subparser
