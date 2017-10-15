@@ -54,7 +54,9 @@ def buildSubparser(parser):
     return parser
     
 def main(args):
-    for query in args.query:
+    logger.info("Start running EmMAIL on {} queries.".format(len(args.query)))
+
+    for i, query in enumerate(args.query):
 
         outPCR = query.split("/")[-1].split(".")[0] + "_pcr.tmp"
         outBLAST = query.split("/")[-1].split(".")[0] + ".tmp"
@@ -87,12 +89,12 @@ def main(args):
         
         clusterer = Clusterer(blastOutputFile=outBLAST,
                             distance = args.clust_distance,
-                            output_stream=args.outFinal,
+                            output_stream=args.output_file,
                             output_type=args.output_type).main()
         
-        if not args.saveIntermediary:
+        if not args.save_intermediary:
             remove(outPCR)
             remove(outBLAST)
             # logger.info("{} and {} are removed from directory".format(args.outPCR))
-        
-        # logger.info("Result for {} is saved as {}".format(args.query.split("/")[-1], args.outBLAST))
+            
+    logger.info("Finished EmMAIL.")
