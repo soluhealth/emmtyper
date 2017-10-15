@@ -137,7 +137,7 @@ class Clusterer:
         elif self.output_type == "verbose":
             return self.verbose_stringer()
         elif self.output_type == "visual":
-            return self.map_stringer()
+            return self.ascii_vis
         else:
             raise Exception("Choice of output type is not provided.")
         
