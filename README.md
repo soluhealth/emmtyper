@@ -27,6 +27,8 @@ EmMAIL needs `blastn` and `ispcr`. As is, there is no way to automatically insta
 
 User (for now) will need to manually install the tools themselves and set them on $PATH for EmMAIL to work (EmMAIL expected both tools to be on $PATH).
 
+EmMAIL requires Python >= 3. It requires Numpy and Scipy, both included in the setup.py.
+
 ## Installation
 
 EmMAIL uses setup.py for easier installation. Clone the GitHub page for EmMAIL, and run setup.py over the command line on the directory where setup.py for EmMAIL is located.
