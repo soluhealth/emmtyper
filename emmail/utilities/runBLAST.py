@@ -4,6 +4,8 @@ import logging
 from emmail.objects.blast import BLAST
 from emmail.objects.clusterer import Clusterer
 
+from emmail.utilities import *
+
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
 
@@ -17,19 +19,19 @@ def buildSubparser(parser):
 
     parser.add_argument("-dust", default="no", type=str,
                         help="Filter query sequence with DUST. Default no.")
-    parser.add_argument("-perc_identity", default=95, type=int,
-                        help="Minimal percent identity of sequence. Default is 95.")
-    parser.add_argument("-culling_limit", default=5, type=int,
-                        help="Total hits to return in a position. Default is 5.")
+    parser.add_argument("-perc_identity", default=perc_id_default, type=int,
+                        help="Minimal percent identity of sequence. Default is {}.".format(perc_id_default))
+    parser.add_argument("-culling_limit", default=culling_default, type=int,
+                        help="Total hits to return in a position. Default is 5.".format(culling_default))
 
     # ResultRow options
     
-    parser.add_argument("-mismatch", default=4, type=int,
-                        help="Threshold for number of mismatch to allow in BLAST hit. Default is 4.")
-    parser.add_argument("-align_diff", default=5, type=int,
-                        help="Threshold for difference between alignment length and subject length in BLAST hit. Default is 5.")                        
-    parser.add_argument("-gap", default=2, type=int,
-                        help="Threshold gap to allow in BLAST hit. Default is 2.")
+    parser.add_argument("-mismatch", default=mismatch_default, type=int,
+                        help="Threshold for number of mismatch to allow in BLAST hit. Default is {}.".format(mismatch_default))
+    parser.add_argument("-align_diff", default=align_diff_default, type=int,
+                        help="Threshold for difference between alignment length and subject length in BLAST hit. Default is {}.".format(align_diff_default))
+    parser.add_argument("-gap", default=gap_default, type=int,
+                        help="Threshold gap to allow in BLAST hit. Default is {}.".format(gap_default))
     
     return parser
 
