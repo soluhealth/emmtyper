@@ -64,11 +64,11 @@ class Clusterer:
         
         for answer in answers:
             if type(answer) is ResultRow:
-                string += "{}:{}".format(answer.contig, answer.queryStart)
+                string += "{}:{}".format(answer.query, answer.queryStart)
             elif type(answer) is list:
                 positions = set([ans.queryStart for ans in answer])
                 for pos in positions:
-                    string += "({}:{})".format(";".join([(ans.contig, ans.queryStart) for ans in answer if ans.queryStart == pos]))
+                    string += "({}:{})".format(";".join([(ans.query, ans.queryStart) for ans in answer if ans.queryStart == pos]))
             else:
                 raise Exception("answer is {}".format(type(answer)))
             
@@ -149,7 +149,8 @@ class Clusterer:
             return [1]
         
         elif len(results) >= 2:
-            positions = [result.positions for result in results]
+            # Only take positions in specific contig
+            positions = [result.positions[1:2] for result in results]
             Z = linkage(positions, self.linkage)
             clusters = fcluster(Z, self.clust_distance, criterion="distance")
             
@@ -178,7 +179,7 @@ class Clusterer:
             
         else:
             # When there is no result, return a null ResultRow object.
-            return nullResult      
+            return nullResult
     
     def best_in_cluster_in_contig(self, contig):
         """

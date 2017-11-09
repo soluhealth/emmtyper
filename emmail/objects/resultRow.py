@@ -39,8 +39,7 @@ class ResultRow:
         eValue, bitScore, subjectLength) = rowSplit
 
         self.query = query
-        self.contig = int(query.split(".")[-1].split(":")[0]) if len(query.split(".")) > 1 else 0
-        
+
         self.blastHit = blastHit
         self.type = blastHit.split(".")[0]
         self.subtype = blastHit.split(".")[1]
@@ -58,7 +57,7 @@ class ResultRow:
         self.subjectLength = subjectLength
         
         # Score is percent identity, penalized by gap opening and difference in alignment length and actual subject length
-        self.positions = np.array([self.contig, self.queryStart, self.queryEnd], dtype="float64")
+        self.positions = np.array([self.query, self.queryStart, self.queryEnd])
         self.score = self.identity - (self.gapOpen + abs(self.alignmentLength - self.subjectLength))
             
     def __repr__(self):
