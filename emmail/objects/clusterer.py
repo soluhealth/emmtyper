@@ -1,15 +1,17 @@
 import numpy as np
 from os.path import isfile
-from emmail.objects.resultRow import ResultRow, EmmImposters
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+
+import emmail.objects.emm as emm
+from emmail.objects.resultRow import ResultRow, EmmImposters
 
 import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-short_header = "Isolate\tNumberOfClusters\tAnswers\tSuspectImposters\n"
-verbose_header = "Isolate\tNumberOfHits\tNumberOfClusters\tAnswers\tAnswerPositions\tSuspectImposters\tSuspectPositions\n"
+short_header = "Isolate\tNumberOfClusters\tAnswers\tSuspectImposters\tAnswersClusters\n"
+verbose_header = "Isolate\tNumberOfHits\tNumberOfClusters\tAnswers\tAnswerPositions\tSuspectImposters\tSuspectPositions\tAnswersClusters\n"
 
 nullResult = ResultRow("0\tEMM0.0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0") 
 
@@ -52,7 +54,7 @@ class Clusterer:
                 for pos in positions:
                     string += "({})".format(";".join([str(ans) for ans in answer if ans.queryStart == pos]))
             else:
-                raise Exception("answer is {}".format(type(answer)))
+                raise Exception("Answer is {}".format(type(answer)))
             
             string += ";"
             
@@ -70,31 +72,52 @@ class Clusterer:
                 for pos in positions:
                     string += "({}:{})".format(";".join([(ans.query, ans.queryStart) for ans in answer if ans.queryStart == pos]))
             else:
-                raise Exception("answer is {}".format(type(answer)))
+                raise Exception("Answer is {}".format(type(answer)))
             
             string += ";"
             
         return string[:-1]
-    
+        
+    def list_to_string_emm_clusters(self, answers):
+        string = ""
+        logger.debug("There are {} answers".format(len(answers)))
+        
+        for answer in answers:
+            if type(answer) is ResultRow:
+                string += emm.EMM(answer.type).emm_cluster
+            elif type(answer) is list:
+                positions = set([ans.queryStart for ans in answer])
+                for pos in positions:
+                    string += "({})".format([emm.EMM(ans.type).emm_cluster for ans in answer if ans.queryStart == pos])
+            else:
+                raise Exception("Answer is {}".format(type(answer)))
+            
+            string += ";"
+            
+        return string[:-1]
+        
     def short_stringer(self):
-        string = "{0}\t{1}\t{2}\t{3}".format(
+        string = "{0}\t{1}\t{2}\t{3}\t{4}".format(
                             self.isolate,
                             self.cluster_number,
                             self.list_to_string_emm(self.answers),
-                            self.list_to_string_emm(self.possible_imposters))
+                            self.list_to_string_emm(self.possible_imposters),
+                            self.list_to_string_emm_clusters(self.answers))
 
         string = short_header + string if self.header else string
+        
         return string
     
     def verbose_stringer(self):
-        string = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}".format(
+        string = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(
                                         self.isolate, 
                                         len(self.results), 
                                         self.cluster_number, 
                                         self.list_to_string_emm(self.answers),
                                         self.list_to_string_positions(self.answers),
                                         self.list_to_string_emm(self.possible_imposters),
-                                        self.list_to_string_positions(self.possible_imposters))
+                                        self.list_to_string_positions(self.possible_imposters),
+                                        self.list_to_string_emm_clusters(self.answers))
         
         string = verbose_header + string if self.header else string
         return string

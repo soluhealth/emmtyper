@@ -37,11 +37,11 @@ isPcr_result = ">contig1:113750+114924 emm 1175bp TATTCGCTTAGAAAATTAA GCAAGTTCTT
 isPcr_result_e = ""
 
 # For Clusterer
-header_short = "Isolate\tNumberOfClusters\tAnswers\tSuspectImposters\n"
-header_verbose = "Isolate\tNumberOfHits\tNumberOfClusters\tAnswers\tAnswerPositions\tSuspectImposters\tSuspectPositions\n"
+header_short = "Isolate\tNumberOfClusters\tAnswers\tSuspectImposters\tAnswersClusters\n"
+header_verbose = "Isolate\tNumberOfHits\tNumberOfClusters\tAnswers\tAnswerPositions\tSuspectImposters\tSuspectPositions\tAnswersClusters\n"
 
 test_blast_product = find("blast.fa.tsv")
 clusterer_repr_short = "Clusterer for {} with clustering distance 800bp\nshort output to stdout".format(test_blast_product)
-clusterer_result_short = "{}\t2\tEMM65.0\tEMM156.0~*".format(test_blast_product)
+clusterer_result_short = "{}\t2\tEMM65.0\tEMM156.0~*\tE6".format(test_blast_product)
 clusterer_repr_verbose = "Clusterer for {} with clustering distance 800bp\nverbose output to stdout".format(test_blast_product)
-clusterer_result_verbose = "{}{}\t6\t2\tEMM65.0\t.blast.5:82168\tEMM156.0~*\t.blast.5:80776".format(header_verbose, test_blast_product)
+clusterer_result_verbose = "{}{}\t6\t2\tEMM65.0\t.blast.5:82168\tEMM156.0~*\t.blast.5:80776\tE6".format(header_verbose, test_blast_product)
