@@ -1,14 +1,8 @@
-import os
-
-def find(filename):
-    for root, dirs, files in os.walk(os.path.dirname(__file__), topdown=False):
-        for name in files:
-            if name == filename:
-                return os.path.join(root, name)
+from emmail.utilities.find import find
 
 cluster_translations = dict()
 
-with open(find("emm_clusters.csv")) as handle:
+with open(find("emm_clusters.csv", __file__)) as handle:
     for line in handle.readlines():
         emm, cluster = line.split(",")
         cluster_translations[emm] = cluster.strip()

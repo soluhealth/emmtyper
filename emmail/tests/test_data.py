@@ -1,19 +1,15 @@
-import os
-
-def find(filename):
-    for root, dirs, files in os.walk(os.path.dirname(__file__), topdown=False):
-        for name in files:
-            if name == filename:
-                return os.path.join(root, name)
+from emmail.utilities.find import find
 
 test_null = "this is a null test"
 
-primer_path = find("isPcrPrim.tsv")
-db = find("8Jun17.fasta")
+primer_path = find("isPcrPrim.tsv", __file__)
+db = find("8Jun17.fasta", __file__)
 
-test_sequence_path = find("contig.fasta")
-test_empty_path = find("empty.fasta")
-test_pcr_product_path = find("amplicon.fasta")
+test_sequence_path = find("contig.fasta", __file__)
+test_empty_path = find("empty.fasta", __file__)
+test_pcr_product_path = find("amplicon.fasta", __file__)
+
+test_blast_product = find("blast.fa.tsv", __file__)
 
 # For ResultRow
 string = "SP3LAU\tEMM89.0\t100\t180\t0\t0\t737626\t737805\t1\t180\t1.93e-89\t333\t180"
@@ -40,7 +36,6 @@ isPcr_result_e = ""
 header_short = "Isolate\tNumberOfClusters\tAnswers\tSuspectImposters\tAnswersClusters\n"
 header_verbose = "Isolate\tNumberOfHits\tNumberOfClusters\tAnswers\tAnswerPositions\tSuspectImposters\tSuspectPositions\tAnswersClusters\n"
 
-test_blast_product = find("blast.fa.tsv")
 clusterer_repr_short = "Clusterer for {} with clustering distance 800bp\nshort output to stdout".format(test_blast_product)
 clusterer_result_short = "{}\t2\tEMM65.0\tEMM156.0~*\tE6".format(test_blast_product)
 clusterer_repr_verbose = "Clusterer for {} with clustering distance 800bp\nverbose output to stdout".format(test_blast_product)
