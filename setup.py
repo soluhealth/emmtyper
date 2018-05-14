@@ -25,11 +25,13 @@ setup(name= emmail.__name__,
         packages=["emmail"],
         zip_safe=False,
         install_requires = [
-            "scipy>=1", 
+            "scipy>=1",
             "numpy>=1"],
         test_suite="nose.collector",
         tests_require=["nose"],
-        scripts=["bin/emmail"],
+        entry_points= {
+            "console_scripts":["run_emmail=emmail.bin.run_emmail:main"]
+        },
         classifiers=[
             "Development Status :: 3 - Alpha",
             "Intended Audience :: Science/Research",
