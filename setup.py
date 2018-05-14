@@ -1,4 +1,5 @@
 from sys import exit, version_info
+from setuptools import setup, find_packages
 from os import environ
 import logging
 
@@ -22,7 +23,7 @@ setup(name= emmail.__name__,
         author = emmail.__author__,
         author_email= emmail.__email__,
         license = emmail.__license__,
-        packages=["emmail"],
+        packages=find_packages(),
         zip_safe=False,
         install_requires = [
             "scipy>=1",
