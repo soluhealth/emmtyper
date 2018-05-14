@@ -40,5 +40,6 @@ setup(name= emmail.__name__,
             "Natural Language :: English",
             "Programming Language :: Python :: 3 :: Only",
             "Topic :: Scientific/Engineering :: Bio-Informatics"
-        ]
+        ],
+        package_data={'emmail': ['objects/*.csv']}
     )
