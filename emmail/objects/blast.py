@@ -107,6 +107,8 @@ class BLAST(Command):
                                 self.perc_identity, self.culling_limit,
                                 "\"{}\"".format(self.outformat))
 
+        logger.info(f"Running command {command}")
+
         return command
     
     def filter_blastn_results(self, outputs):
