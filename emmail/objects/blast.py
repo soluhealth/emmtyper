@@ -1,6 +1,7 @@
 from os import path, environ
 import logging
 import subprocess
+import shlex
 
 from emmail.objects.command import Command, FileNotInPathException
 from emmail.objects.resultRow import ResultRow
@@ -39,8 +40,8 @@ class BLAST(Command):
         
         self.version = self.get_version()
         
-        self.db = self.assert_db_and_return(db)
-        self.query = Command.assert_filepath_and_return(query)
+        self.db = '\"\\"' + self.assert_db_and_return(db) + '\"\\"'
+        self.query = shlex.quote(Command.assert_filepath_and_return(query))
         
         self.dust = dust
         self.perc_identity = perc_identity
