@@ -1,4 +1,4 @@
-from emmail.utilities.find import find
+from emmtyper.utilities.find import find
 
 cluster_translations = dict()
 

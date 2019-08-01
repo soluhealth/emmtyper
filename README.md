@@ -1,4 +1,4 @@
-# EmMAIL - Emm Automatic Isolate Labeller
+# emmtyper - Emm Automatic Isolate Labeller
 
 ## Table of Content
 
@@ -6,8 +6,8 @@
 2. [Requirements](#requirements)
 3. [Installation](#installation)
 4. [Usage](#usage)
-	- [Arguments for EmMAIL](#arguments-for-emmail)
-	- [Arguments for Tools in EmMAIL](#arguments-for-tools-in-emmail)
+	- [Arguments for emmtyper](#arguments-for-emmtyper)
+	- [Arguments for Tools in emmtyper](#arguments-for-tools-in-emmtyper)
 		- [blastn Options](#blastn-options)
 		- [ispcr Options](#ispcr-options)
 	- [Example Commands](#example-commands)
@@ -17,42 +17,42 @@
 
 ## Introduction
 
-EmMAIL is a command line tool for emm-type classification of Streptococcus pyogenes based on the isolate's whole genome sequence.
+emmtyper is a command line tool for emm-type classification of Streptococcus pyogenes based on the isolate's whole genome sequence.
 
-The use of EmMAIL will follow the dependencies of the tools within its pipeline, namely `blastn` and `ispcr`.
+The use of emmtyper will follow the dependencies of the tools within its pipeline, namely `blastn` and `ispcr`.
 
 ## Requirements
 
-EmMAIL needs `blastn` and `ispcr`. As is, there is no way to automatically install both automatically with setup.py.
+emmtyper needs `blastn` and `ispcr`. As is, there is no way to automatically install both automatically with setup.py.
 
-User (for now) will need to manually install the tools themselves and set them on $PATH for EmMAIL to work (EmMAIL expected both tools to be on $PATH).
+User (for now) will need to manually install the tools themselves and set them on $PATH for emmtyper to work (emmtyper expected both tools to be on $PATH).
 
-EmMAIL requires Python >= 3. It requires Numpy and Scipy, both included in the setup.py.
+emmtyper requires Python >= 3. It requires Numpy and Scipy, both included in the setup.py.
 
 ## Installation
 
-EmMAIL uses setup.py for easier installation. Clone the GitHub page for EmMAIL, and run setup.py over the command line on the directory where setup.py for EmMAIL is located.
+emmtyper uses setup.py for easier installation. Clone the GitHub page for emmtyper, and run setup.py over the command line on the directory where setup.py for emmtyper is located.
 The command is:
 
 ```sh
 $ python3 setup.py install
 ``` 
 
-You will then be able to use EmMAIL by calling `emmail` on the command line.
+You will then be able to use emmtyper by calling `emmtyper` on the command line.
 
 ## Usage
 
-EmMAIL has 2 branches of usage: direct BLAST, or isPcr followed by BLAST. Product of any of the two pipelines will go through EmMAIL's clusterer to derive the type of the isolate.
+emmtyper has 2 branches of usage: direct BLAST, or isPcr followed by BLAST. Product of any of the two pipelines will go through emmtyper's clusterer to derive the type of the isolate.
 
-The basic usage of EmMAIL is in the form of:
+The basic usage of emmtyper is in the form of:
 
 ```sh
-emmail ... [blast/pcr] ...
+emmtyper ... [blast/pcr] ...
 ```
 
-On `[blast/pcr]`, you are required to choose between `blast` or `pcr` to choose which pipeline you want. The first ellipsis `...` is for EmMAIL's arguments. The second ellipsis `...` is for arguments within the tools used in EmMAIL; `blastn` for BLAST pathway, and `ispcr` and `blastn` for PCR pathway.
+On `[blast/pcr]`, you are required to choose between `blast` or `pcr` to choose which pipeline you want. The first ellipsis `...` is for emmtyper's arguments. The second ellipsis `...` is for arguments within the tools used in emmtyper; `blastn` for BLAST pathway, and `ispcr` and `blastn` for PCR pathway.
 
-### Arguments for EmMAIL
+### Arguments for emmtyper
 These arguments are required for both of the pipelines:
 
 | Argument | Variable Type | Description |
@@ -69,7 +69,7 @@ While the optional arguments are:
 | -saveIntermediary | boolean | False | On mention, do not remove intermediary files between tools |
 | -outFinal | tsv | stdout | File to stream final output |
 
-### Arguments for Tools in EmMAIL
+### Arguments for Tools in emmtyper
 #### blastn Options
 Options in `blastn` that can be manually changed for both BLAST and PCR pipeline.
 
@@ -100,16 +100,16 @@ Again, you can also manually change the [options in blastn](#blastn-options) wit
 
 ### Example Commands
 ```sh
-emmail --query isolate1.fa --db emm.fasta blast
-emmail --query *.fa --db emm.fasta pcr --primer emmPrimer.tsv
-emmail --query *.fa --db blastDB/emm.fasta -saveIntermediary blast -culling_limit 10 -align_diff 10
-emmail --query Run19Jun/*.fa --db emm.fasta -output_type visual pcr --primer emmPrimer.tsv -maxSize 2000 -mismatch 5
+emmtyper --query isolate1.fa --db emm.fasta blast
+emmtyper --query *.fa --db emm.fasta pcr --primer emmPrimer.tsv
+emmtyper --query *.fa --db blastDB/emm.fasta -saveIntermediary blast -culling_limit 10 -align_diff 10
+emmtyper --query Run19Jun/*.fa --db emm.fasta -output_type visual pcr --primer emmPrimer.tsv -maxSize 2000 -mismatch 5
 ```
 
 ## Result Format
-EmMAIL has three different result formats: `short`, `verbose`, and `visual`.
+emmtyper has three different result formats: `short`, `verbose`, and `visual`.
 
-EmMAIL by default produces the `short` five tab-separated values to the command line. You can call `-output_type <option>` to choose the other two result format.
+emmtyper by default produces the `short` five tab-separated values to the command line. You can call `-output_type <option>` to choose the other two result format.
 
 The short result returns: **Isolate name_Number of clusters_Predicted type_Possible imposters_Answer's EMM cluster**
 
@@ -145,11 +145,11 @@ Isolate3	EMM52.1	EMM134.2*
 
 If you are not sure which pipeline to choose from, I recommend using `blast` first, and use `pcr` when you want to check if anything weird is happening in your `blast` result. 
 
-An example problem where this might be useful is when there are too much hits reported by EmMAIL. 
+An example problem where this might be useful is when there are too much hits reported by emmtyper. 
 
 An important thing to note is that not all emm-like can be caught in the conventional PCR typing. PCR pipeline here can be used to see which hits would be returned in the setting of a conventional typing. This is however not fail-proof, as in silico PCR fails when the two primers do not align in the same contig. Better assembly would resolve this problem.
 
 ## Contact 
 
-Should you want to fill issues or contact me about anything regarding EmMAIL, 
+Should you want to fill issues or contact me about anything regarding emmtyper, 
 you can reach me here or on my email: andre.sutanto.91@gmail.com.

@@ -1,10 +1,10 @@
 from os import remove, environ
 import logging
 
-from emmail.objects.blast import BLAST
-from emmail.objects.clusterer import Clusterer
+from emmtyper.objects.blast import BLAST
+from emmtyper.objects.clusterer import Clusterer
 
-from emmail.utilities import *
+from emmtyper.utilities import *
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
@@ -13,7 +13,7 @@ def buildSubparser(parser):
     """
     Add arguments to the subparser, and return the subparser.
     """
-    parser.usage = "emmail --query <QUERY>  --db <DB> [OPTIONS] blast [OPTIONS]"
+    parser.usage = "emmtyper --query <QUERY>  --db <DB> [OPTIONS] blast [OPTIONS]"
 
     # BLAST options
 
@@ -36,7 +36,7 @@ def buildSubparser(parser):
     return parser
 
 def main(args):
-    logger.info("Start running EmMAIL on {} queries.".format(len(args.query)))
+    logger.info("Start running emmtyper on {} queries.".format(len(args.query)))
 
     for i, query in enumerate(args.query):
     
@@ -66,4 +66,4 @@ def main(args):
             remove(outBLAST)
             # logger.info("{} is removed from directory".format(outBLAST))
         
-    logger.info("Finished EmMAIL.")
+    logger.info("Finished emmtyper.")

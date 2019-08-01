@@ -1,6 +1,6 @@
 import unittest
 
-from emmail.objects.clusterer import Clusterer
+from emmtyper.objects.clusterer import Clusterer
 from tests.data import *
 
 # Single BLAST output file

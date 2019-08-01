@@ -2,8 +2,8 @@ import numpy as np
 from os.path import isfile
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 
-import emmail.objects.emm as emm
-from emmail.objects.resultRow import ResultRow, EmmImposters
+import emmtyper.objects.emm as emm
+from emmtyper.objects.resultRow import ResultRow, EmmImposters
 
 import logging
 

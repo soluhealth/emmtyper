@@ -1,4 +1,4 @@
-from emmail.utilities.find import find
+from emmtyper.utilities.find import find
 import shlex
 
 test_null = "this is a null test"

@@ -1,18 +1,18 @@
 '''
-For running emmail
+For running emmtyper
 '''
 
 import argparse
 
-from emmail.__init__ import __version__ as version
-from emmail.__init__ import __description__ as description
-from emmail.__init__ import __author__ as author
-from emmail.__init__ import __email__ as email
-from emmail.__init__ import __name__ as name
+from emmtyper.__init__ import __version__ as version
+from emmtyper.__init__ import __description__ as description
+from emmtyper.__init__ import __author__ as author
+from emmtyper.__init__ import __email__ as email
+from emmtyper.__init__ import __name__ as name
 
 
-from emmail.utilities import runBLAST
-from emmail.utilities import runIsPCR
+from emmtyper.utilities import runBLAST
+from emmtyper.utilities import runIsPCR
 
 def build_parser():
     parser = argparse.ArgumentParser(prog=name,

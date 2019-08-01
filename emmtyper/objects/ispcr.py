@@ -3,7 +3,7 @@ import logging
 import subprocess
 import shlex
 
-from emmail.objects.command import Command, FileNotInPathException
+from emmtyper.objects.command import Command, FileNotInPathException
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)

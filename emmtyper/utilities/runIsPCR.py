@@ -1,11 +1,11 @@
 from os import remove, environ
 import logging
 
-from emmail.objects.ispcr import IsPCR
-from emmail.objects.blast import BLAST
-from emmail.objects.clusterer import Clusterer
+from emmtyper.objects.ispcr import IsPCR
+from emmtyper.objects.blast import BLAST
+from emmtyper.objects.clusterer import Clusterer
 
-from emmail.utilities import *
+from emmtyper.utilities import *
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ def buildSubparser(parser):
     """
     Add arguments to the subparser, and return the subparser.
     """
-    parser.usage = "emmail --query <QUERY> --db <DB> [OPTIONS] pcr --primer <PRIMER> [OPTIONS]"
+    parser.usage = "emmtyper --query <QUERY> --db <DB> [OPTIONS] pcr --primer <PRIMER> [OPTIONS]"
     
     parser.add_argument("--primer", required=True, type=str,
                         help="PCR primer. Text file with 3 columns: Name, Forward Primer, Reverse Primer.")
@@ -50,7 +50,7 @@ def buildSubparser(parser):
     return parser
     
 def main(args):
-    logger.info("Start running EmMAIL on {} queries.".format(len(args.query)))
+    logger.info("Start running emmtyper on {} queries.".format(len(args.query)))
 
     for i, query in enumerate(args.query):
 
@@ -93,4 +93,4 @@ def main(args):
             remove(outBLAST)
             # logger.info("{} and {} are removed from directory".format(args.outPCR))
             
-    logger.info("Finished EmMAIL.")
+    logger.info("Finished emmtyper.")

@@ -3,8 +3,8 @@ import logging
 import subprocess
 import shlex
 
-from emmail.objects.command import Command, FileNotInPathException
-from emmail.objects.resultRow import ResultRow
+from emmtyper.objects.command import Command, FileNotInPathException
+from emmtyper.objects.resultRow import ResultRow
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ class BLAST(Command):
     
     Requires user to install blastn on own, and needs ResultRow class.
     
-    This class is developed to be used within emmail, thus the output format. 
+    This class is developed to be used within emmtyper, thus the output format. 
     You need to change the output format AFTER filtering if you want anything other than "6 std slen".
     """
     

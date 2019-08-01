@@ -1,7 +1,7 @@
 import unittest
 
-from emmail.objects.ispcr import IsPCR
-from emmail.objects.blast import BLAST
+from emmtyper.objects.ispcr import IsPCR
+from emmtyper.objects.blast import BLAST
 
 from tests.data import *
 

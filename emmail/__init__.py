@@ -1,7 +1,0 @@
-__name__ = "EmMAIL"
-__version__ = "2.0"
-__author__ = "Andre Tan"
-__email__ = "andre.sutanto.91@gmail.com"
-__url__ = "https://github.com/Andre-Tan/EmMAIL"
-__license__ = "GPL-3.0"
-__description__ = "Emm Automatic Isolate Labeller"
