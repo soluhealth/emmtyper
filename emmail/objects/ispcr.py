@@ -1,6 +1,7 @@
 from os import path, environ
 import logging
 import subprocess
+import shlex
 
 from emmail.objects.command import Command, FileNotInPathException
 
@@ -14,8 +15,8 @@ class IsPCR(Command):
                 
         Command.__init__(self, "isPcr")
         
-        self.assembly_filename = Command.assert_filepath_and_return(assembly_filename)
-        self.primer_filename = Command.assert_filepath_and_return(primer_filename)
+        self.assembly_filename = shlex.quote(Command.assert_filepath_and_return(assembly_filename))
+        self.primer_filename = shlex.quote(Command.assert_filepath_and_return(primer_filename))
         
         self.min_perfect = min_perfect
         self.min_good = min_good
