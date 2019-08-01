@@ -26,6 +26,7 @@ setup(name= emmtyper.__name__,
         maintainer = emmtyper.__maintainer__,
         maintainer_email = emmtyper.__maintainer_email__,
         license = emmtyper.__license__,
+        python_requires=">=3.6, <4",
         packages=find_packages(exclude=["contrib", "docs", "tests"]),
         zip_safe=False,
         install_requires = [
