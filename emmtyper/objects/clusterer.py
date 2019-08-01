@@ -120,7 +120,7 @@ class Clusterer:
 
             string += ";"
 
-        return string[:-1]
+        return string.strip(";") if len(string) > 1 else "NA"
 
     def short_stringer(self):
         string = "{0}\t{1}\t{2}\t{3}\t{4}".format(
