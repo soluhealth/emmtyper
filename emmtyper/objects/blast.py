@@ -9,6 +9,7 @@ from emmtyper.objects.resultRow import ResultRow
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
 
+
 class BLAST(Command):
     """
     Wrapper class for command-line blastn.
@@ -30,122 +31,161 @@ class BLAST(Command):
     This class is developed to be used within emmtyper, thus the output format. 
     You need to change the output format AFTER filtering if you want anything other than "6 std slen".
     """
-    
-    def __init__(self, db, query, dust,
-                perc_identity, culling_limit,
-                output_stream, header,
-                mismatch, align_diff, gap):
-                
+
+    def __init__(
+        self,
+        db,
+        query,
+        dust,
+        perc_identity,
+        culling_limit,
+        output_stream,
+        header,
+        mismatch,
+        align_diff,
+        gap,
+    ):
+
         Command.__init__(self, "blastn")
-        
+
         self.version = self.get_version()
-        
-        self.db = '\"\\"' + self.assert_db_and_return(db) + '\"\\"'
+
+        self.db = '"\\"' + self.assert_db_and_return(db) + '"\\"'
         self.query = shlex.quote(Command.assert_filepath_and_return(query))
-        
+
         self.dust = dust
         self.perc_identity = perc_identity
         self.culling_limit = culling_limit
-        
+
         self.outformat = "6 std slen"
         self.output_stream = output_stream
-        
+
         self.want_header = header
-        
+
         # Threshold for ResultRow filtering
-        
+
         self.mismatch = mismatch
         self.align_diff = align_diff
         self.gap = gap
-        
+
         self.command_string = self.build_blastn_command()
-    
+
     def __repr__(self):
         return self.command_string
-    
+
     def __str__(self):
-        string = ("{0}\n"
-                    "Query = {1}\n"
-                    "DB = {2}\n"
-                    "Dust filter = {3}\n"
-                    "% Identity = {4}\n"
-                    "Culling limit = {5}\n"
-                    "Outformat = {6}\n"
-                    "Output to = {7}\n"
-                    "Mismatch filter = {8}\n"
-                    "Align difference filter = {9}\n"
-                    "Gap filter = {10}")
-        
-        string = string.format(self.version, self.query, self.db, self.dust, self.perc_identity, 
-                                self.culling_limit, self.outformat, self.output_stream,
-                                self.mismatch, self.align_diff, self.gap)
-        
+        string = (
+            "{0}\n"
+            "Query = {1}\n"
+            "DB = {2}\n"
+            "Dust filter = {3}\n"
+            "% Identity = {4}\n"
+            "Culling limit = {5}\n"
+            "Outformat = {6}\n"
+            "Output to = {7}\n"
+            "Mismatch filter = {8}\n"
+            "Align difference filter = {9}\n"
+            "Gap filter = {10}"
+        )
+
+        string = string.format(
+            self.version,
+            self.query,
+            self.db,
+            self.dust,
+            self.perc_identity,
+            self.culling_limit,
+            self.outformat,
+            self.output_stream,
+            self.mismatch,
+            self.align_diff,
+            self.gap,
+        )
+
         return string
-    
+
     def get_version(self):
-        process = subprocess.Popen(args="{} -version".format(self.tool_name), 
-                        shell=True,
-                        stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE)
-        
+        process = subprocess.Popen(
+            args="{} -version".format(self.tool_name),
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+
         stdout, stderr = process.communicate()
-        
+
         return stdout.decode("ascii")
-    
-    def assert_db_and_return(self, file_path):  
-        if not (path.isfile(file_path+".nin") and path.isfile(file_path+".nhr") and path.isfile(file_path+".nsq")):
-            raise FileNotInPathException("{} is not a BLAST database!".format(file_path))
+
+    def assert_db_and_return(self, file_path):
+        if not (
+            path.isfile(file_path + ".nin")
+            and path.isfile(file_path + ".nhr")
+            and path.isfile(file_path + ".nsq")
+        ):
+            raise FileNotInPathException(
+                "{} is not a BLAST database!".format(file_path)
+            )
             exit(1)
-                
+
         return file_path
-        
+
     def build_blastn_command(self):
-        string = ("blastn -db {0} -query {1} -dust {2} -perc_identity {3}"
-                    " -culling_limit {4} -outfmt {5}")
-        
-        command = string.format(self.db, self.query, self.dust,
-                                self.perc_identity, self.culling_limit,
-                                "\"{}\"".format(self.outformat))
+        string = (
+            "blastn -db {0} -query {1} -dust {2} -perc_identity {3}"
+            " -culling_limit {4} -outfmt {5}"
+        )
+
+        command = string.format(
+            self.db,
+            self.query,
+            self.dust,
+            self.perc_identity,
+            self.culling_limit,
+            '"{}"'.format(self.outformat),
+        )
 
         logger.info(f"Running command {command}")
 
         return command
-    
+
     def filter_blastn_results(self, outputs):
-        
-        ok_results = [ResultRow(output) for output in outputs 
-                        if ResultRow(output).filter(self.mismatch, self.align_diff, self.gap)]
-        
+
+        ok_results = [
+            ResultRow(output)
+            for output in outputs
+            if ResultRow(output).filter(self.mismatch, self.align_diff, self.gap)
+        ]
+
         return ok_results
-    
+
     def result_to_output(self, filtered_outputs):
         string = ""
-        
+
         for output in filtered_outputs:
-            string = "\n".join([repr(output) for output in filtered_outputs]) 
-            
+            string = "\n".join([repr(output) for output in filtered_outputs])
+
         # Log if BLAST produces no result
         if not string:
             logger.info("There is no output for {}".format(self.query))
-        
+
         # Produces header if wanted, attach to string
         if self.want_header and string:
             string = ResultRow.build_header() + string
-        
+
         # Where to output product
         if self.output_stream in [None, "None", "stdout"]:
             print(string)
         else:
             with open(self.output_stream, "w") as handle:
                 handle.write(string)
-                
+
         return string
-        
+
     def run_blastn_pipeline(self):
         # logger.info("Running on {}".format(self.query))
-        
+
         outputs = Command.run(self).split("\n")[:-1]
-        
+
         filtered_outputs = self.filter_blastn_results(outputs)
-        
+
         return self.result_to_output(filtered_outputs)
