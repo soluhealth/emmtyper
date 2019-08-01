@@ -3,7 +3,7 @@ import unittest
 from emmail.objects.ispcr import IsPCR
 from emmail.objects.blast import BLAST
 
-from emmail.tests.test_data import *
+from tests.data import *
 
 ispcr = IsPCR(test_sequence_path, primer_path,
             min_perfect=15, min_good=15,

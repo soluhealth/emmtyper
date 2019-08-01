@@ -1,6 +1,6 @@
 import unittest
 from emmail.objects.resultRow import ResultRow, WrongLengthException
-from emmail.tests.test_data import *
+from tests.data import *
 
 row = ResultRow(string)
 row_not100 = ResultRow(string_not100)

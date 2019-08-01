@@ -1,7 +1,7 @@
 import unittest
 
 from emmail.objects.blast import BLAST
-from emmail.tests.test_data import *
+from tests.data import *
 
 # Normal no nonsense BLAST.
 blast = BLAST(db, test_sequence_path, dust="no",
