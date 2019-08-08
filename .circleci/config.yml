@@ -5,13 +5,17 @@ jobs: # A basic unit of work in a run
     working_directory: ~/repo
     docker: # run the steps with Docker
       # CircleCI Python images available at: https://hub  .docker.com/r/circleci/python/
-      - image: circleci/python:3.7.3
+      - image: continuumio/miniconda3
         environment: # environment variables for primary container
           PIPENV_VENV_IN_PROJECT: true
     steps: # steps that comprise the `build` job
       - checkout # check out source code to working directory
       - run: sudo chown -R circleci:circleci /usr/local/bin
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+      - run: sudo chown -R circleci:circleci /opt/conda
+      - run: conda config --add channels bioconda conda-forge 
+      - run: conda config --set always_true true
+      - run: conda install blast
       - restore_cache:
       # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
           key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
@@ -28,8 +32,3 @@ jobs: # A basic unit of work in a run
       - run:
           command: |
             pipenv run pytest
-      - store_test_results: # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-          path: test-results
-      - store_artifacts: # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
-          path: test-results
-          destination: tr1
