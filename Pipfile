@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 "e1839a8" = {path = "."}
+python-dateutil = "*"
+click = "*"
 
 [dev-packages]
 pytest = "*"
