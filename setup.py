@@ -30,7 +30,7 @@ setup(
     python_requires=">=3.6, <4",
     packages=find_packages(exclude=["contrib", "docs", "tests"]),
     zip_safe=False,
-    install_requires=["scipy>=1.1.0", "numpy>=1.15.0"],
+    install_requires=["scipy>=1.1.0", "numpy>=1.15.0", "python-dateutil", "click"],
     test_suite="nose.collector",
     tests_require=["nose"],
     entry_points={
