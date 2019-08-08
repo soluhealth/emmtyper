@@ -36,7 +36,7 @@ setup(
     entry_points={
         "console_scripts": [
             "emmtyper=emmtyper.bin.run_emmail:main",
-            "emmtyper-db:emmtyper.utilities.make_db:emmtyper_db",
+            "emmtyper-db=emmtyper.utilities.make_db:emmtyper_db",
         ]
     },
     classifiers=[
