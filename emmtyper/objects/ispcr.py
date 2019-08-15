@@ -46,14 +46,14 @@ class IsPCR(Command):
 
         string = (
             "{tool_path} {db} {query} {output} "
-            "-minPerfect={} -minGood={} "
-            "-maxSize={}"
+            "-minPerfect={min_perfect} -minGood={min_good} "
+            "-maxSize={max_size}"
         )
 
         command = string.format(
-            self.min_perfect,
-            self.min_good,
-            self.max_product_length,
+            min_perfect=self.min_perfect,
+            min_good=self.min_good,
+            max_size=self.max_product_length,
             db=self.assembly_filename,
             query=self.primer_filename,
             output=self.output_stream,

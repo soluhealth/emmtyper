@@ -33,13 +33,13 @@ class testIsPCRapp(unittest.TestCase):
         self.assertIs(type(ispcr_e), IsPCR)
 
     def test_isPcr_command(self):
-        self.assertEqual(ispcr.build_isPCR_command(), isPcr_command)
+        self.assertTrue(isPcr_command in ispcr.build_isPCR_command())
 
     def test_isPcr_result(self):
         self.assertEqual(ispcr.run_isPCR(), isPcr_result)
 
     def test_empty_command(self):
-        self.assertEqual(ispcr_e.build_isPCR_command(), isPcr_command_e)
+        self.assertTrue(isPcr_command_e in ispcr_e.build_isPCR_command())
 
     def test_empty_result(self):
         self.assertEqual(ispcr_e.run_isPCR(), isPcr_result_e)
