@@ -16,6 +16,7 @@ import shutil
 
 import click
 
+
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging
 
@@ -49,7 +50,7 @@ class DBMetadata:
         LOGGER.debug(f"Date of new db: {new_date.date()}")
         LOGGER.debug(f"Date of current db: {self.uploaded_to_server_on.date()}")
         LOGGER.debug(
-            f"{new_date:%Y-%m-%d} is larger than {self.uploaded_to_server_on:%Y-%m-%d}: {new_date.date() > self.uploaded_to_server_on.date()}"
+            f"{new_date:%Y-%m-%d} is later than {self.uploaded_to_server_on:%Y-%m-%d}: {new_date.date() > self.uploaded_to_server_on.date()}"
         )
         return new_date.date() > self.uploaded_to_server_on.date()
 
@@ -90,6 +91,9 @@ def make_db(fasta_file, date):
 def download_cdc_db(
     db_folder, passwd, user="anonymous", db_metadata="db_metadata.json"
 ):
+    '''
+    Download the CDC DB.
+    '''
     db_path = pathlib.Path(db_folder)
     db_metadata = db_path / db_metadata
     db_fasta = db_path / "emm.fna"
@@ -151,8 +155,14 @@ def get_db_folder():
     show_default=True,
 )
 def emmtyper_db(email, db_folder):
-    """
-    Email used to connect to CDC FTP server
+    """\
+    EMAIL is needed to connect to CDC FTP server.
+
+    By default, db_folder will be taken from EMM_DB environmental folder.
+    If can't find the folder, will default to where emmtyper
+    is installed. If it cannot write to the installation folder,
+    it will make a suggestion in your /home folder.
+
     """
     download_cdc_db(db_folder, email)
 
