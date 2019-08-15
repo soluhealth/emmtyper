@@ -16,11 +16,13 @@ class FileNotInPathException(Exception):
 
 class Command(object, metaclass=ABCMeta):
     @abstractmethod
-    def __init__(self, tool_name):
+    def __init__(self, tool_name, tool_path=None):
 
         self.tool_name = tool_name
-
-        self.tool_path = self.get_tool_path()
+        if tool_path is None:
+            self.tool_path = self.get_tool_path()
+        else:
+            self.tool_path = tool_path
         self.version = None
         self.command_string = None
         self.output_stream = None
