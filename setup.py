@@ -35,7 +35,7 @@ setup(
     tests_require=["nose"],
     entry_points={
         "console_scripts": [
-            "emmtyper=emmtyper.bin.run_emmail:main",
+            "emmtyper=emmtyper.bin.run_emmtyper:main",
             "emmtyper-db=emmtyper.utilities.make_db:emmtyper_db",
         ]
     },
@@ -47,5 +47,5 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
-    package_data={"emmtyper": ["objects/*.csv"]},
+    package_data={"emmtyper": ["objects/*.csv", "db/*"]},
 )
