@@ -15,6 +15,7 @@ blast = BLAST(
     mismatch=4,
     align_diff=5,
     gap=2,
+    tool_path=None,
 )
 
 # BLAST result with header.
@@ -29,6 +30,7 @@ blast_h = BLAST(
     mismatch=4,
     align_diff=5,
     gap=2,
+    tool_path=None,
 )
 
 # BLAST result will be empty.
@@ -43,6 +45,7 @@ blast_e = BLAST(
     mismatch=0,
     align_diff=0,
     gap=0,
+    tool_path=None,
 )
 
 
@@ -55,16 +58,16 @@ class testBLASTapp(unittest.TestCase):
         self.assertIs(type(blast_h), BLAST)
 
     def test_b_repr(self):
-        self.assertEqual(repr(blast), blast_command)
+        self.assertTrue(blast_command in repr(blast))
 
     def test_b_command(self):
-        self.assertEqual(blast.build_blastn_command(), blast_command)
+        self.assertTrue(blast_command in blast.build_blastn_command())
 
     def test_b_out(self):
         self.assertEqual(blast.run_blastn_pipeline(), blast_result)
 
     def test_h_command(self):
-        self.assertEqual(blast_h.build_blastn_command(), blast_command_h)
+        self.assertTrue(blast_command_h in blast_h.build_blastn_command())
 
     def test_h_out(self):
         self.assertEqual(blast_h.run_blastn_pipeline(), header + blast_result)

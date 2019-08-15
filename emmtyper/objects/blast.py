@@ -44,9 +44,10 @@ class BLAST(Command):
         mismatch,
         align_diff,
         gap,
+        tool_path=None,
     ):
 
-        Command.__init__(self, "blastn")
+        Command.__init__(self, "blastn", tool_path=tool_path)
 
         self.version = self.get_version()
 
@@ -131,17 +132,18 @@ class BLAST(Command):
 
     def build_blastn_command(self):
         string = (
-            "blastn -db {0} -query {1} -dust {2} -perc_identity {3}"
-            " -culling_limit {4} -outfmt {5}"
+            "{tool_path} -db {db} -query {query} -dust {dust} -perc_identity {perc_id}"
+            " -culling_limit {cull_limit} -outfmt \"{outfmt}\""
         )
 
         command = string.format(
-            self.db,
-            self.query,
-            self.dust,
-            self.perc_identity,
-            self.culling_limit,
-            '"{}"'.format(self.outformat),
+            tool_path=self.tool_path,
+            db=self.db,
+            query=self.query,
+            dust=self.dust,
+            perc_id=self.perc_identity,
+            cull_limit=self.culling_limit,
+            outfmt=self.outformat,
         )
 
         logger.info(f"Running command {command}")
