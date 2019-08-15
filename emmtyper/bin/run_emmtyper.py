@@ -3,26 +3,40 @@ For running emmtyper
 """
 
 import argparse
+import pathlib
+import os
 
 from emmtyper.__init__ import __version__ as version
-from emmtyper.__init__ import __description__ as description
-from emmtyper.__init__ import __author__ as author
-from emmtyper.__init__ import __email__ as email
 from emmtyper.__init__ import __name__ as name
+from emmtyper.__init__ import __description__ as description
+from emmtyper.__init__ import __epilog__ as epilog
 
 
 from emmtyper.utilities import runBLAST
 from emmtyper.utilities import runIsPCR
+
+DEFAULT_DB = pathlib.Path(__file__).parent.parent / "db" / "emm.fna"
+
+
+class CustomFormatter(
+    argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter
+):
+    """
+    Better formatting of argparse description and epilog, and include defaults.
+    """
+
+    pass
 
 
 def build_parser():
     parser = argparse.ArgumentParser(
         prog=name,
         description="{} - Version {}".format(description, version),
-        epilog="Developed by {} ({})".format(author, email),
+        epilog=epilog,
+        formatter_class=CustomFormatter,
     )
 
-    subparsers = parser.add_subparsers(title="Pipelines to choose from", metavar="")
+    subparsers = parser.add_subparsers(title="Approaches to choose from", metavar="")
 
     parser.add_argument(
         "--query", required=True, type=str, nargs="+", help="Genome(s) to PCR against."
@@ -32,6 +46,7 @@ def build_parser():
         required=True,
         type=str,
         help="The database to BLAST PCR product against.",
+        default=os.environ.get("EMM_DB", DEFAULT_DB),
     )
 
     parser.add_argument(
@@ -46,7 +61,7 @@ def build_parser():
         "--save_intermediary",
         default=False,
         action="store_true",
-        help="Temporary isPcr and BLAST outputs will not be removed on mention.",
+        help="Do not remove temporary isPcr and BLAST outputs.",
     )
 
     # Clusterer Options
@@ -55,7 +70,7 @@ def build_parser():
         "-clust_distance",
         default=500,
         type=int,
-        help="Distance between cluster to use. Default to cluster together within 500bp.",
+        help="Distance in bp between clusters.",
     )
     parser.add_argument(
         "-output_type",
@@ -63,23 +78,22 @@ def build_parser():
         type=str,
         default="short",
         choices=["short", "verbose", "visual"],
-        help="Choose which output type is wanted. Default to short output.",
+        help="Choose output type.",
     )
     parser.add_argument(
-        "-output_file",
-        default="stdout",
-        type=str,
-        help="File to stream final output. Default to terminal.",
+        "-output_file", default="stdout", type=str, help="File to stream final output."
     )
 
     # BLAST subparser
-    parser_blast = subparsers.add_parser("blast", help="Direct BLAST to genome reads.")
+    parser_blast = subparsers.add_parser("blast", help="BLAST genomes against DB.")
     parser_blast = runBLAST.buildSubparser(parser_blast)
     parser_blast.set_defaults(func=runBLAST.main)
 
     # PCR + BLAST subparser
 
-    parser_pcr = subparsers.add_parser("pcr", help="PCR genome, then BLAST against it.")
+    parser_pcr = subparsers.add_parser(
+        "pcr", help="Generate in silico PCR products, then BLAST against DB."
+    )
     parser_pcr = runIsPCR.buildSubparser(parser_pcr)
     parser_pcr.set_defaults(func=runIsPCR.main)
 
