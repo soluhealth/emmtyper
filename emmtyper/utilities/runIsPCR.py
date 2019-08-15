@@ -134,6 +134,7 @@ def main(args):
             min_good=args.minGood,
             max_product_length=args.maxSize,
             output_stream="stdout",
+            tool_path=args.ispcr_path,
         )
 
         # Run isPcr, take output and use it as input for Blast.
@@ -151,6 +152,7 @@ def main(args):
             mismatch=args.mismatch,
             align_diff=args.align_diff,
             gap=args.gap,
+            tool_path=args.tool_path,
         )
 
         blast.run_blastn_pipeline()

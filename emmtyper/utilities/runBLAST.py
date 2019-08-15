@@ -94,6 +94,7 @@ def main(args):
             mismatch=args.mismatch,
             align_diff=args.align_diff,
             gap=args.gap,
+            tool_path=args.blast_path,
         )
 
         blast.run_blastn_pipeline()
