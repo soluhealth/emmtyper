@@ -2,6 +2,7 @@ from os import path, environ
 import logging
 import subprocess
 import shlex
+import pathlib
 
 from emmtyper.objects.command import Command, FileNotInPathException
 
@@ -18,9 +19,10 @@ class IsPCR(Command):
         min_good,
         max_product_length,
         output_stream,
+        tool_path=None,
     ):
 
-        Command.__init__(self, "isPcr")
+        Command.__init__(self, "isPcr", tool_path=tool_path)
 
         self.assembly_filename = shlex.quote(
             Command.assert_filepath_and_return(assembly_filename)
@@ -43,7 +45,9 @@ class IsPCR(Command):
     def build_isPCR_command(self):
 
         string = (
-            "isPcr {db} {query} {output} " "-minPerfect={} -minGood={} " "-maxSize={}"
+            "{tool_path} {db} {query} {output} "
+            "-minPerfect={} -minGood={} "
+            "-maxSize={}"
         )
 
         command = string.format(
@@ -53,6 +57,7 @@ class IsPCR(Command):
             db=self.assembly_filename,
             query=self.primer_filename,
             output=self.output_stream,
+            tool_path=self.tool_path,
         )
 
         return command
