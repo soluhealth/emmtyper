@@ -102,6 +102,20 @@ def buildSubparser(parser):
         help="Threshold gap to allow in BLAST hit. Default is {}.".format(gap_default),
     )
 
+    parser.add_argument(
+        "--blast_path",
+        default=None,
+        type=str,
+        help="Specify full path to blastn executable. Otherwise search $PATH."
+    )
+
+    parser.add_argument(
+        "--ispacr_path",
+        default=None,
+        type=str,
+        help="Specify full path to isPcr executable. Otherwise search $PATH."
+    )
+
     return parser
 
 
