@@ -1,8 +1,14 @@
+'''
+Define the EMM class
+'''
+import pathlib
 from emmtyper.utilities.find import find
+
+EMM_CLUSTERS = pathlib.Path(__file__).parent.parent / "data" / "emm_clusters.csv"
 
 cluster_translations = dict()
 
-with open(find("emm_clusters.csv", __file__)) as handle:
+with open(EMM_CLUSTERS) as handle:
     for line in handle.readlines():
         emm, cluster = line.split(",")
         cluster_translations[emm] = cluster.strip()
