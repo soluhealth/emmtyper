@@ -67,6 +67,9 @@ class DBMetadata:
 
 
 def make_db(fasta_file, date):
+    '''
+    Main function to generate a BLAST DB
+    '''
     title = f'"EMM DB created on {date}"'
     with tempfile.TemporaryDirectory() as tmpdir:
         os.chdir(tmpdir)
