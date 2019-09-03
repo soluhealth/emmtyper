@@ -1,5 +1,8 @@
 # emmtyper - Emm Automatic Isolate Labeller
 
+[![CircleCI](https://circleci.com/gh/MDU-PHL/emmtyper.svg?style=svg)](https://circleci.com/gh/MDU-PHL/emmtyper)
+[![Coverage Status](https://coveralls.io/repos/github/MDU-PHL/emmtyper/badge.svg?branch=master)](https://coveralls.io/github/MDU-PHL/emmtyper?branch=master)
+
 ## Table of Content
 
 1. [Introduction](#introduction)
