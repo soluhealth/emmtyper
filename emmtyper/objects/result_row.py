@@ -1,5 +1,9 @@
+'''
+Define the ResultRow class to store resultss
+'''
 import numpy as np
 
+# define some known emm-like genes
 PHE_emmLike = [
     "EMM51",
     "EMM134",
@@ -24,10 +28,16 @@ EmmImposters = PHE_emmLike + Suspects
 
 
 class WrongLengthException(Exception):
+    '''
+    Exception to handle wrong length matches
+    '''
     pass
 
 
 class ResultRow:
+    '''
+    Store and print Blast results
+    '''
     variableList = [
         "Query",
         "BlastHit",
