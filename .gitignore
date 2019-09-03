@@ -1,5 +1,6 @@
 emmtyper.egg-info/
 __pycache__/
 build/
+dist/
 .pytest_cache/
 .coverage
