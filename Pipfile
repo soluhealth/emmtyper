@@ -13,5 +13,8 @@ pytest = "*"
 bumpversion = "*"
 pytest-cov = "*"
 coveralls = "*"
+pre-commit = "*"
+twine = "*"
+invoke = "*"
 
 [requires]
