@@ -16,6 +16,11 @@
   - [Usage](#usage)
     - [Example Commands](#example-commands)
   - [Result Format](#result-format)
+    - [Short format](#short-format)
+    - [Verbose format](#verbose-format)
+    - [Visual format](#visual-format)
+    - [Tags](#tags)
+    - [Example outputs](#example-outputs)
   - [BLAST or PCR?](#blast-or-pcr)
   - [Contact](#contact)
 
@@ -172,35 +177,68 @@ emmtyper --query *.fa -output_type visual pcr --primer emmPrimer.tsv -maxSize 20
 ```
 
 ## Result Format
+
+### Short format
+
 emmtyper has three different result formats: `short`, `verbose`, and `visual`.
 
-emmtyper by default produces the `short` five tab-separated values to the command line. You can call `-output_type <option>` to choose the other two result format.
+emmtyper by default produces the `short` version. This consists of five values in tab-separated format printed to stdout.
 
-The short result returns: **Isolate name_Number of clusters_Predicted type_Possible imposters_Answer's EMM cluster**
+The values are:
 
-While the verbose result returns: **Isolate name_Number of BLAST hits_Number of clusters_Predicted type_Position in assembly_Possible imposters_Imposters position in assembly_Answer's EMM cluster**,
-where the positions are presented in <contig_number>:<position_in_contig>.
+* Isolate name
+* Number of clusters: should be between 1 and 3, larger values could indicate contamination
+* Predicted `emm-type`
+* Possible `emm-like` alleles (semi-colon separated list)
+* EMM cluster: Functional grouping of EMM types into 48 clusters
 
-The visual result returns an ASCII map of the emm-types in the genome. Types in a single contig are separated with "-", each representing 500bp distance from each other. Types found in different contigs are separated with tab.
+### Verbose format
 
-The types are presented with flags when something is not right, the possible flags for now being:
+The verbose result returns:
+* Isolate name
+* Number of BLAST hits
+* Number of clusters: should be between 1 and 3, larger values could indicate contamination
+* Predicted `emm-type`
+* Position(s) `emm-like` alleles in the assembly
+* Possible `emm-like` alleles (semi-colon separated list)
+* `emm-like` position(s) in assembly
+* EMM cluster: Functional grouping of EMM types into 48 clusters
 
-| Flag | Description | Additional Information |
+The positions in the assembly are presented in the following format `<contig_number>:<position_in_contig>`.
+
+### Visual format
+
+The visual result returns an ASCII map of the `emm` and, if found any `emm-alleles`, in the genome. Alleles on a single contig are separated by "-", with each "-" representing 500bp. Alleles found on different contigs are separated with tab.
+
+### Tags
+
+The alleles can be tagged with a suffix character to indicate different possibilities:
+
+| Tag | Description | Additional Information |
 | ------ | ------ | ------ |
-| * | Suspect Imposter | Types acknowledged in the CDC database as possibly not emm |
+| * | Suspect `emm-like` | Allele flagged in the CDC database as possibly `emm-like` |
 | ~ | Imperfect score | Match score below 100% |
+
+### Example outputs
 
 Example for all result format:
 
+Short format:
 ```
-Isolate1	1	EMM65.0	E6
+Isolate1	1	EMM65.0	NA	E6
 Isolate2	3	EMM4.0	EMM236.3*;EMM156.0*	E1
 Isolate3	2	EMM52.1	EMM134.2*	D4
+```
 
+Verbose format:
+```
 Isolate1	6	1	EMM65.0	5:82168	E6
 Isolate2	8	3	EMM4.0	2:104111	EMM236.3*;EMM156.0*	2:102762;2:105504	E1
 Isolate3	5	2	EMM52.1	14:10502	EMM134.2*	5:913	D4
+```
 
+Visual format:
+```
 Isolate1	EMM65.0
 Isolate2	EMM156.0*--EMM4.0--EMM236.3*
 Isolate3	EMM52.1	EMM134.2*
@@ -208,11 +246,11 @@ Isolate3	EMM52.1	EMM134.2*
 
 ## BLAST or PCR?
 
-If you are not sure which pipeline to choose from, I recommend using `blast` first, and use `pcr` when you want to check if anything weird is happening in your `blast` result.
+If you are not sure which pipeline to choose from, we recommend using `blast` first. The `blast` workflow is fast and works well with assemblies. You can then use the `pcr` mode if you wish to perform some troubleshooting.
 
-An example problem where this might be useful is when there are too much hits reported by emmtyper.
+For example, the `pcr` workflow might be useful when troubleshooting isolates for which emmtyper has reported more than 3 clusteres and/or too many alleles.
 
-An important thing to note is that not all emm-like can be caught in the conventional PCR typing. PCR pipeline here can be used to see which hits would be returned in the setting of a conventional typing. This is however not fail-proof, as in silico PCR fails when the two primers do not align in the same contig. Better assembly would resolve this problem.
+An important thing to note is that not all `emm-like` alleles can be identified by using by PCR typing. The `pcr` workflow can be used to test which hits would be returned if carrying out conventional M-typing using PCR. However, the workflow is not foolproof, as *in silico* PCR will fail when one or both primers do not align in the same contig (i.e., the allele is broken across two or more contigs) or there are mutations in the primer sites. In the former case, this might be an indication of poor sequence coverage or contamination.
 
 ## Contact
 
