@@ -1,7 +1,7 @@
 # emmtyper - Emm Automatic Isolate Labeller
 
 [![CircleCI](https://circleci.com/gh/MDU-PHL/emmtyper.svg?style=svg)](https://circleci.com/gh/MDU-PHL/emmtyper)
-[![Coverage Status](https://coveralls.io/repos/github/MDU-PHL/emmtyper/badge.svg?branch=master)](https://coveralls.io/github/MDU-PHL/emmtyper?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/MDU-PHL/emmtyper/badge.svg?branch=master)](https://coveralls.io/github/MDU-PHL/emmtyper?branch=master) ![PyPI - Implementation](https://img.shields.io/pypi/implementation/emmtyper) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/emmtyper) ![PyPI - Wheel](https://img.shields.io/pypi/wheel/emmtyper) ![Conda](https://img.shields.io/conda/pn/bioconda/emmtyper?label=bioconda) ![GitHub issues](https://img.shields.io/github/issues-raw/MDU-PHL/emmtyper)
 
 ## Table of Content
 
@@ -47,7 +47,7 @@ Possible arrangments:
 
 ## Requirements
 
- * `blastn` 
+ * `blastn`
  * `ispcr`
  * `python` ≥ 3.6
 
@@ -208,13 +208,13 @@ Isolate3	EMM52.1	EMM134.2*
 
 ## BLAST or PCR?
 
-If you are not sure which pipeline to choose from, I recommend using `blast` first, and use `pcr` when you want to check if anything weird is happening in your `blast` result. 
+If you are not sure which pipeline to choose from, I recommend using `blast` first, and use `pcr` when you want to check if anything weird is happening in your `blast` result.
 
-An example problem where this might be useful is when there are too much hits reported by emmtyper. 
+An example problem where this might be useful is when there are too much hits reported by emmtyper.
 
 An important thing to note is that not all emm-like can be caught in the conventional PCR typing. PCR pipeline here can be used to see which hits would be returned in the setting of a conventional typing. This is however not fail-proof, as in silico PCR fails when the two primers do not align in the same contig. Better assembly would resolve this problem.
 
-## Contact 
+## Contact
 
-Should you want to fill issues or contact me about anything regarding emmtyper, 
+Should you want to fill issues or contact me about anything regarding emmtyper,
 you can reach me here or on my email: andre.sutanto.91@gmail.com.
