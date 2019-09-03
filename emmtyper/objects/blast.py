@@ -1,3 +1,6 @@
+'''
+Define a wrapper class for BLAST
+'''
 from os import path, environ
 import logging
 import subprocess
