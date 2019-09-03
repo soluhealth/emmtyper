@@ -5,18 +5,19 @@
 
 ## Table of Content
 
-1. [Introduction](#introduction)
-2. [Requirements](#requirements)
-3. [Installation](#installation)
-4. [Usage](#usage)
-	- [Arguments for emmtyper](#arguments-for-emmtyper)
-	- [Arguments for Tools in emmtyper](#arguments-for-tools-in-emmtyper)
-		- [blastn Options](#blastn-options)
-		- [ispcr Options](#ispcr-options)
-	- [Example Commands](#example-commands)
-5. [Result Format](#result-format)
-6. [BLAST or PCR?](#blast-or-pcr)
-7. [Contact](#contact)
+- [emmtyper - Emm Automatic Isolate Labeller](#emmtyper---emm-automatic-isolate-labeller)
+  - [Table of Content](#table-of-content)
+  - [Background](#background)
+    - [Inner workings](#inner-workings)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+    - [Brew](#brew)
+    - [Conda](#conda)
+  - [Usage](#usage)
+    - [Example Commands](#example-commands)
+  - [Result Format](#result-format)
+  - [BLAST or PCR?](#blast-or-pcr)
+  - [Contact](#contact)
 
 ## Background
 
