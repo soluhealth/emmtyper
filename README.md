@@ -52,7 +52,7 @@ Possible arrangments:
 
 ## Requirements
 
- * `blastn`
+ * `blastn` ≥ 2.6 (tested on 2.9)
  * `ispcr`
  * `python` ≥ 3.6
 
