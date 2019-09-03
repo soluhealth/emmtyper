@@ -18,6 +18,9 @@ cluster_translations["0"] = "-"
 
 
 class EMM:
+    '''
+    Identify to which cluster the emm type belongs
+    '''
     def __init__(self, string):
         self.number = "".join([char for char in string if char.isdigit()])
         self.code = "".join([char for char in string if not char.isdigit()])
