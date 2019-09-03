@@ -2,3 +2,4 @@ emmtyper.egg-info/
 __pycache__/
 build/
 .pytest_cache/
+.coverage
