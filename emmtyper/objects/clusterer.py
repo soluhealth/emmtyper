@@ -7,7 +7,7 @@ from os.path import isfile
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
 
 import emmtyper.objects.emm as emm
-from emmtyper.objects.resultRow import ResultRow, EmmImposters
+from emmtyper.objects.result_row import ResultRow, EmmImposters
 
 import logging
 
