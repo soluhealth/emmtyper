@@ -7,7 +7,7 @@ import subprocess
 import shlex
 
 from emmtyper.objects.command import Command, FileNotInPathException
-from emmtyper.objects.resultRow import ResultRow
+from emmtyper.objects.result_row import ResultRow
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
