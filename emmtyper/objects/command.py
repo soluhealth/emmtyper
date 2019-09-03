@@ -1,3 +1,6 @@
+'''
+Define the Command class to provide a wrapper around subprocess and run shell commands
+'''
 from os import path, environ
 import shutil
 import subprocess
@@ -11,10 +14,16 @@ logger = logging.getLogger()
 
 
 class FileNotInPathException(Exception):
+    '''
+    Custom exception for missing file
+    '''
     pass
 
 
 class Command(object, metaclass=ABCMeta):
+    '''
+    A wrapper class to run shell commands using subprocess
+    '''
     @abstractmethod
     def __init__(self, tool_name, tool_path=None):
 
