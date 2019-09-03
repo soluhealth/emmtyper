@@ -1,3 +1,6 @@
+'''
+Define the isPCR class
+'''
 from os import path, environ
 import logging
 import subprocess
@@ -11,6 +14,9 @@ logger = logging.getLogger(__name__)
 
 
 class IsPCR(Command):
+    '''
+    Run isPCR. Inherits from Command
+    '''
     def __init__(
         self,
         assembly_filename,
