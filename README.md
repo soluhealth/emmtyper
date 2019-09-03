@@ -61,7 +61,7 @@ Possible arrangments:
 ### Brew
 
 ```bash
-brew install blastn ispcr
+brew install python blastn ispcr
 pip3 install emmtyper
 emmtyper --help
 ```
