@@ -1,5 +1,9 @@
+'''
+Define the workflow to run PCR using isPcr
+'''
 from os import remove, environ
 import logging
+import pathlib
 
 from emmtyper.objects.ispcr import IsPCR
 from emmtyper.objects.blast import BLAST
@@ -10,6 +14,7 @@ from emmtyper.utilities import *
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
 
+DEFAULT_PRIMERS = pathlib.Path(__file__).parent.parent / "data" / "isPcrPrim.tsv"
 
 def buildSubparser(parser):
     """
@@ -24,6 +29,7 @@ def buildSubparser(parser):
         required=True,
         type=str,
         help="PCR primer. Text file with 3 columns: Name, Forward Primer, Reverse Primer.",
+        default = environ.get("EMM_PCR", DEFAULT_PRIMERS)
     )
 
     # isPcr options
