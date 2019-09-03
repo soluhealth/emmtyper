@@ -72,64 +72,102 @@ emmtyper has 2 workflows: directly BLASTing the contigs against the DB, or using
 
 The basic usage of emmtyper is in the form of:
 
-```sh
-emmtyper ... [blast/pcr] ...
+```bash
+emmtyper --query contig1 contig2 ... contigN [emmtyper options] <blast|pcr> [workflow options]
 ```
 
-On `[blast/pcr]`, you are required to choose between `blast` or `pcr` to choose which pipeline you want. The first ellipsis `...` is for emmtyper's arguments. The second ellipsis `...` is for arguments within the tools used in emmtyper; `blastn` for BLAST pathway, and `ispcr` and `blastn` for PCR pathway.
+Select between `<blast|pcr>` to select the desired workflow.
 
-### Arguments for emmtyper
-These arguments are required for both of the pipelines:
+Set global options with `[emmtyper options]`.
 
-| Argument | Variable Type | Description |
-| ------ | ------ | ------ |
-| --query | FASTA | An assembled genome FASTA |
-| --db | blast DB | A BLAST database file |
+These can be inspected with `emmtyper --help`
 
-While the optional arguments are:
+```bash
+optional arguments:
+  -h, --help            show this help message and exit
+  --query QUERY [QUERY ...]
+                        Genome(s) to PCR against. (default: None)
+  --db DB               The database to BLAST PCR product against. (default:
+                        /path/to/emmtyper/db/emm.fna)
+  -v, --version         show program\'s version number and exit
+  -save, --save_intermediary
+                        Do not remove temporary isPcr and BLAST outputs.
+                        (default: False)
+  -clust_distance CLUST_DISTANCE
+                        Distance in bp between clusters. (default: 500)
+  -output_type [{short,verbose,visual}]
+                        Choose output type. (default: short)
+  -output_file OUTPUT_FILE
+                        File to stream final output. (default: stdout)
+```
 
-| Argument | Variable Type | Default | Description |
-| ------ | ------ | ------ | ------ |
-| -clust_distance | integer | 500 | Distance between clusters to use |
-| -output_type | string | short | Output type format. Choose within "short", "verbose", or "visual" |
-| -saveIntermediary | boolean | False | On mention, do not remove intermediary files between tools |
-| -outFinal | tsv | stdout | File to stream final output |
+Most of these options are self explanatory. The two expections are:
 
-### Arguments for Tools in emmtyper
-#### blastn Options
-Options in `blastn` that can be manually changed for both BLAST and PCR pipeline.
+ 1. `clust_distance` defines the minimum distance between clusters of matched sequences on the contigs to generate separate `emm-type` calls for each clusters. Clusters of matches that are within the minimum `clust-distance` are treated as a single location match.
+ 2. `output_type` demonstrated below.
 
-| Argument | Variable Type | Default | Description |
-| ------ | ------ | ------ | ------ |
-| -dust | string | no | Filter query sequence with DUST |
-| -perc_identity | integer | 95 | Minimal percent identity of sequence |
-| -culling_limit | integer | 5 | Total hits to return in a single position |
-| -mismatch | integer | 4 | Threshold number of mismatch to allow in BLAST hit |
-| -align_diff | integer | 5 | Threshold for difference between alignment length and subject length in BLAST hit |
-| -gap | integer | 2 | Threshold number of gap to allow in BLAST hit |
+Set workflow specific options with `[workflow options]`. These vary depending on which workflow is chosen:
 
-#### ispcr Options
-Options in `ispcr` that can be manually changed for the PCR pipeline. Aside from the optionals, the PCR pipeline has an additional required argument.
+You can inspect each with `emmtyper blast --help` or `emmtyper pcr --help`:
 
-| Argument | Variable Type | Description |
-| ------ | ------ | ------ |
-| --primer | tsv | A tsv file containing primer set in the format "PrimerSetName\tPrimer1Sequence\tPrimer2Sequence" |
+For `blast`
 
-| Argument | Variable Type | Default | Description |
-| ------ | ------ | ------ | ------ |
-| -minPerfect | integer | 15 | Minimum size of perfect match at 3' primer end |
-| -minGood | integer | 15 | Minimum size where there must be 2 matches for each mismatch | 
-| -maxSize | integer | 4000 | Positive integer value for maximum product length |
-| -savePCR | boolean | False | On mention, PCR output file will not be automatically removed | 
+```bash
+  -h, --help            show this help message and exit
+  -dust DUST            Filter query sequence with DUST. Default no.
+  -perc_identity PERC_IDENTITY
+                        Minimal percent identity of sequence. Default is 95.
+  -culling_limit CULLING_LIMIT
+                        Total hits to return in a position. Default is 5.
+  -mismatch MISMATCH    Threshold for number of mismatch to allow in BLAST
+                        hit. Default is 4.
+  -align_diff ALIGN_DIFF
+                        Threshold for difference between alignment length and
+                        subject length in BLAST hit. Default is 5.
+  -gap GAP              Threshold gap to allow in BLAST hit. Default is 2.
+  --blast_path BLAST_PATH
+                        Specify full path to blastn executable. Otherwise
+                        search $PATH.
+```
 
-Again, you can also manually change the [options in blastn](#blastn-options) within the PCR pipeline.
+For `pcr`:
+
+```bash
+  -h, --help            show this help message and exit
+  --primer PRIMER       PCR primer. Text file with 3 columns: Name, Forward
+                        Primer, Reverse Primer.
+  -minPerfect MINPERFECT
+                        Minimum size of perfect match at 3\' primer end.
+                        Default is 15.
+  -minGood MINGOOD      Minimum size where there must be 2 matches for each
+                        mismatch. Default is 15; there must be 10 match in
+                        15bases primer size.
+  -maxSize MAXSIZE      Maximum size of PCR product. Default is 2000.
+  -dust DUST            Filter query sequence with DUST. Default no.
+  -perc_identity PERC_IDENTITY
+                        Minimal percent identity of sequence. Default is 95.
+  -culling_limit CULLING_LIMIT
+                        Total hits to return in a position. Default is 5.
+  -mismatch MISMATCH    Threshold for number of mismatch to allow in BLAST
+                        hit. Default is 4.
+  -align_diff ALIGN_DIFF
+                        Threshold for difference between alignment length and
+                        subject length in BLAST hit. Default is 5.
+  -gap GAP              Threshold gap to allow in BLAST hit. Default is 2.
+  --blast_path BLAST_PATH
+                        Specify full path to blastn executable. Otherwise
+                        search $PATH.
+  --ispacr_path ISPACR_PATH
+                        Specify full path to isPcr executable. Otherwise
+                        search $PATH.
+```
 
 ### Example Commands
-```sh
-emmtyper --query isolate1.fa --db emm.fasta blast
-emmtyper --query *.fa --db emm.fasta pcr --primer emmPrimer.tsv
-emmtyper --query *.fa --db blastDB/emm.fasta -saveIntermediary blast -culling_limit 10 -align_diff 10
-emmtyper --query Run19Jun/*.fa --db emm.fasta -output_type visual pcr --primer emmPrimer.tsv -maxSize 2000 -mismatch 5
+```bash
+emmtyper --query isolate1.fa
+emmtyper --query *.fa pcr --primer emmPrimer.tsv
+emmtyper --query *.fa -saveIntermediary blast -culling_limit 10 -align_diff 10
+emmtyper --query *.fa -output_type visual pcr --primer emmPrimer.tsv -maxSize 2000 -mismatch 5
 ```
 
 ## Result Format
