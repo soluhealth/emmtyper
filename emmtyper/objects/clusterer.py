@@ -1,3 +1,7 @@
+
+'''
+Define the clustered class to determine the EMM type for each cluster of matches
+'''
 import numpy as np
 from os.path import isfile
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
@@ -17,6 +21,9 @@ nullResult = ResultRow("0\tEMM0.0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0")
 
 
 class Clusterer:
+    '''
+    Class to identify distinct clusters of matching sequences
+    '''
     def __init__(
         self,
         blastOutputFile,
