@@ -12,8 +12,8 @@ from emmtyper.__init__ import __description__ as description
 from emmtyper.__init__ import __epilog__ as epilog
 
 
-from emmtyper.utilities import runBLAST
-from emmtyper.utilities import runIsPCR
+from emmtyper.utilities import run_blast
+from emmtyper.utilities import run_ispcr
 
 DEFAULT_DB = pathlib.Path(__file__).parent.parent / "db" / "emm.fna"
 
