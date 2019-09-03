@@ -17,7 +17,6 @@ from emmtyper.utilities import runIsPCR
 
 DEFAULT_DB = pathlib.Path(__file__).parent.parent / "db" / "emm.fna"
 
-
 class CustomFormatter(
     argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter
 ):
@@ -29,6 +28,9 @@ class CustomFormatter(
 
 
 def build_parser():
+    '''
+    Parse command line arguments and options
+    '''
     parser = argparse.ArgumentParser(
         prog=name,
         description="{} - Version {}".format(description, version),
@@ -101,6 +103,9 @@ def build_parser():
 
 
 def main():
+    '''
+    Main function to parse command line arguments and options
+    '''
     parser = build_parser()
     args = parser.parse_args()
     args.func(args)
