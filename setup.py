@@ -47,5 +47,5 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
-    package_data={"emmtyper": ["objects/*.csv", "db/*"]},
+    package_data={"emmtyper": ["data/*", "db/*"]},
 )
