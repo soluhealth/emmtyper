@@ -1,3 +1,6 @@
+'''
+Define the workflow to run BLAST
+'''
 from os import remove, environ
 import logging
 
