@@ -40,22 +40,35 @@ Possible arrangments:
 
 ---->>>>>>----->>>>>>------>>>>>>-----
 
-emmtyper requires Python >= 3. It requires Numpy and Scipy, both included in the setup.py.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*emm*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*enn*
+
+----->>>>>>------>>>>>>-----
+
+## Requirements
+
+ * `blastn` 
+ * `ispcr`
+ * `python` ≥ 3.6
 
 ## Installation
 
-emmtyper uses setup.py for easier installation. Clone the GitHub page for emmtyper, and run setup.py over the command line on the directory where setup.py for emmtyper is located.
-The command is:
+### Brew
 
-```sh
-$ python3 setup.py install
-``` 
+```bash
+brew install blastn ispcr
+pip3 install emmtyper
+emmtyper --help
+```
 
-You will then be able to use emmtyper by calling `emmtyper` on the command line.
+### Conda
+
+```bash
+conda install -c bioconda emmtyper
+```
 
 ## Usage
 
-emmtyper has 2 branches of usage: direct BLAST, or isPcr followed by BLAST. Product of any of the two pipelines will go through emmtyper's clusterer to derive the type of the isolate.
+emmtyper has 2 workflows: directly BLASTing the contigs against the DB, or using isPcr to generate an *in silico* PCR product that is then BLASTed against the DB. The BLAST results go through emmtyper's business logic to distinguish between `emm` and `emm-like` alleles and derive the isoolate M-type.
 
 The basic usage of emmtyper is in the form of:
 
