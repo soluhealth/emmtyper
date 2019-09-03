@@ -18,17 +18,27 @@
 6. [BLAST or PCR?](#blast-or-pcr)
 7. [Contact](#contact)
 
-## Introduction
+## Background
 
-emmtyper is a command line tool for emm-type classification of Streptococcus pyogenes based on the isolate's whole genome sequence.
+`emmtyper` is a command line tool for emm-typing of *Streptococcus pyogenes* using a *de novo* or complete assembly.
 
-The use of emmtyper will follow the dependencies of the tools within its pipeline, namely `blastn` and `ispcr`.
+By default, we use the U.S. Centers for Disease Control and Prevention trimmed emm subtype database,
+which can be found [here](https://www2a.cdc.gov/ncidod/biotech/strepblast.asp).
+The database is curated by Dr. Velusamy Srinivasan. We take this opportunity to thank Dr. Srinivasan for his work.
 
-## Requirements
+### Inner workings
 
-emmtyper needs `blastn` and `ispcr`. As is, there is no way to automatically install both automatically with setup.py.
+The difficulty in performing M-typing is that there is a single gene of interest (`emm`), but two other homologue genes (`enn` and `mrp`), often referred to as `emm-like`. The homologue genes may or may not occur in the isolate of interest. When performing `emm-typing` from an assembly, we can distinguish betweeen one or more clusters of matches on the contigs. The best match for each of the clusters identified is then parsed from the BLAST results. Where possible, we try to distinguish between matches to the `emm` gene, and matches to one of the `emm-like` genes.
 
-User (for now) will need to manually install the tools themselves and set them on $PATH for emmtyper to work (emmtyper expected both tools to be on $PATH).
+Possible arrangments:
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*emm*
+
+---->>>>>>>----
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*mrp*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*emm*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*enn*
+
+---->>>>>>----->>>>>>------>>>>>>-----
 
 emmtyper requires Python >= 3. It requires Numpy and Scipy, both included in the setup.py.
 
