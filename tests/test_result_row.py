@@ -1,5 +1,5 @@
 import unittest
-from emmtyper.objects.resultRow import ResultRow, WrongLengthException
+from emmtyper.objects.result_row import ResultRow, WrongLengthException
 from tests.data import *
 
 row = ResultRow(string)
