@@ -4,11 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-"e1839a8" = {path = "."}
+"e1839a8" = {editable = true, path = "."}
 python-dateutil = "*"
 click = "*"
 
 [dev-packages]
 pytest = "*"
+bumpversion = "*"
+pytest-cov = "*"
+coveralls = "*"
 
 [requires]
