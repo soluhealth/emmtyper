@@ -22,7 +22,9 @@
     - [Tags](#tags)
     - [Example outputs](#example-outputs)
   - [BLAST or PCR?](#blast-or-pcr)
-  - [Contact](#contact)
+  - [Authors](#authors)
+  - [Maintainer](#maintainer)
+  - [Issues](#issues)
 
 ## Background
 
@@ -252,7 +254,28 @@ For example, the `pcr` workflow might be useful when troubleshooting isolates fo
 
 An important thing to note is that not all `emm-like` alleles can be identified by using by PCR typing. The `pcr` workflow can be used to test which hits would be returned if carrying out conventional M-typing using PCR. However, the workflow is not foolproof, as *in silico* PCR will fail when one or both primers do not align in the same contig (i.e., the allele is broken across two or more contigs) or there are mutations in the primer sites. In the former case, this might be an indication of poor sequence coverage or contamination.
 
-## Contact
+## Authors
 
-Should you want to fill issues or contact me about anything regarding emmtyper,
-you can reach me here or on my email: andre.sutanto.91@gmail.com.
+* Andre Tan
+* Torsten Seemann
+* Jake Lacey
+* Hannah Frost
+* Deborah Williamson
+* Anders Gon&ccedil;alves da Silva
+
+The codebase for `emmtyper` was primarly written by Andre Tan as part of his Master's
+Degree in Bioinformatics. Torsten Seemann, Deborah Williamson, and Anders Gon&ccedil;alves da Silva provided supervision and assistance.
+
+Hannah Frost contributed with EMM clustering by suggesting we incorporate it in to the code, and providing the necessary information to do so.
+
+Jake Lacey has provided assistance in validationg `emmtyper`.
+
+## Maintainer
+
+The code is actively maintained by MDU Bioinformatics Team.
+
+Contact the principal maintainer at andersgs at gmail dot com.
+
+## Issues
+
+Please post bug reports, questions, suggestions in the [Issues](MDU-PHL/emmtyper/issues) section.
