@@ -259,6 +259,8 @@ An important thing to note is that not all `emm-like` alleles can be identified 
 * Andre Tan
 * Torsten Seemann
 * Jake Lacey
+* Mark Davies
+* Liam Mcintyre
 * Hannah Frost
 * Deborah Williamson
 * Anders Gon&ccedil;alves da Silva
@@ -266,9 +268,9 @@ An important thing to note is that not all `emm-like` alleles can be identified 
 The codebase for `emmtyper` was primarly written by Andre Tan as part of his Master's
 Degree in Bioinformatics. Torsten Seemann, Deborah Williamson, and Anders Gon&ccedil;alves da Silva provided supervision and assistance.
 
-Hannah Frost contributed with EMM clustering by suggesting we incorporate it in to the code, and providing the necessary information to do so.
+Hannah Frost contributed with EMM clustering by suggesting we incorporate it in to the code, and providing the necessary information to do so and test it.
 
-Jake Lacey has provided assistance in validationg `emmtyper`.
+Jake Lacey, Liam Mcintyre, and Mark Davies provided assistance in validating `emmtyper`.
 
 ## Maintainer
 
