@@ -2,6 +2,7 @@ from sys import exit, version_info
 from setuptools import setup, find_packages
 from os import environ
 import logging
+import emmtyper
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 
@@ -9,8 +10,6 @@ if version_info <= (3, 0):
     logging.fatal("Sorry, requires Python 3.x, not Python 2.x\n")
     exit(1)
 
-from setuptools import setup
-import emmtyper
 
 with open("README.md", "r") as f:
     long_description = f.read()
@@ -40,11 +39,14 @@ setup(
         ]
     },
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
+        "Programming Language :: Python :: Implementation :: CPython",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Natural Language :: English",
         "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
     package_data={"emmtyper": ["data/*", "db/*"]},

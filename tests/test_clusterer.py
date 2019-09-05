@@ -1,7 +1,17 @@
+"""
+Test the Clustered object
+"""
 import unittest
 
 from emmtyper.objects.clusterer import Clusterer
-from tests.data import *
+from tests.data import (
+    test_blast_product,
+    test_null,
+    clusterer_repr_short,
+    clusterer_repr_verbose,
+    clusterer_result_short,
+    clusterer_result_verbose,
+)
 
 # Single BLAST output file
 
@@ -35,10 +45,10 @@ class testClusterer(unittest.TestCase):
         self.assertEqual(repr(clusterer_verbose), clusterer_repr_verbose)
 
     def test_run_short(self):
-        self.assertEqual(clusterer.main(), clusterer_result_short)
+        self.assertEqual(clusterer(), clusterer_result_short)
 
     def test_run_verbose(self):
-        self.assertEqual(clusterer_verbose.main(), clusterer_result_verbose)
+        self.assertEqual(clusterer_verbose(), clusterer_result_verbose)
 
 
 if __name__ == "__main__":
