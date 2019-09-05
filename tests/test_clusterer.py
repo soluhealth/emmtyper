@@ -1,7 +1,17 @@
+"""
+Test the Clustered object
+"""
 import unittest
 
 from emmtyper.objects.clusterer import Clusterer
-from tests.data import *
+from tests.data import (
+    test_blast_product,
+    test_null,
+    clusterer_repr_short,
+    clusterer_repr_verbose,
+    clusterer_result_short,
+    clusterer_result_verbose,
+)
 
 # Single BLAST output file
 
