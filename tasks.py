@@ -45,5 +45,5 @@ def first_deploy(ctx):
     ctx.run("python3 setup.py sdist bdist_wheel")
     ctx.run("twine check dist/*")
     ctx.run("twine upload dist/*")
-    ctx.run("git tag 'v1.0.0'")
+    ctx.run("git tag 'v0.1.0'")
     ctx.run("git push --tags")
