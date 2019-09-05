@@ -1,10 +1,8 @@
-
-'''
+"""
 Define the clustered class to determine the EMM type for each cluster of matches
-'''
+"""
 import numpy as np
-from os.path import isfile
-from scipy.cluster.hierarchy import dendrogram, linkage, fcluster
+from scipy.cluster.hierarchy import linkage, fcluster
 
 import emmtyper.objects.emm as emm
 from emmtyper.objects.result_row import ResultRow, EmmImposters
@@ -21,9 +19,10 @@ nullResult = ResultRow("0\tEMM0.0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0\t0")
 
 
 class Clusterer:
-    '''
+    """
     Class to identify distinct clusters of matching sequences
-    '''
+    """
+
     def __init__(
         self,
         blastOutputFile,
@@ -178,14 +177,15 @@ class Clusterer:
 
             if j == 0:
                 string += hit
+                prev_pos = position
             else:
-                distance = int((position - prevPos) // self.clust_distance)
+                distance = int((position - prev_pos) // self.clust_distance)
                 if distance < 0:
                     string = "{}{}{}".format(hit, "-" * abs(distance), string)
                 else:
                     string = "{}{}{}".format(string, "-" * abs(distance), hit)
 
-            prevPos = position
+            prev_pos = position
 
         return string
 
@@ -286,10 +286,10 @@ class Clusterer:
         def process_answer_logic(voted_result):
             """
             To use when imposters filter is still used.
-            
+
             Take heed that the list of voted results can have objects in the form of ResultRow or list,
             list being there if ResultRow in the list all are 100-scoring.
-            
+
             Consider results that follow along the arguments:
             If there is only 1 object or list, return if it is not imposter.
             If there are more than 1 object or list, return the best scoring that is not imposter.
@@ -336,10 +336,10 @@ class Clusterer:
         def process_answer_absurd(voted_result):
             """
             To use when imposters filter is still used.
-            
+
             Take heed that the list of voted results can have objects in the form of ResultRow or list,
             list being there if ResultRow in the list all are 100-scoring.
-            
+
             Consider results that follow along the arguments:
             If there is only 1 object or list, return.
             If there are more than 1 object or list, return the best scoring.
@@ -404,7 +404,7 @@ class Clusterer:
         self.answers = logical_result
         self.possible_imposters = votes[~is_in(votes[:, 1], self.answers), 1]
 
-    def main(self):
+    def __call__(self):
         if len(self.results) > 0:
             self.best_in_clusters = []
 
