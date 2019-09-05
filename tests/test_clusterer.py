@@ -45,10 +45,10 @@ class testClusterer(unittest.TestCase):
         self.assertEqual(repr(clusterer_verbose), clusterer_repr_verbose)
 
     def test_run_short(self):
-        self.assertEqual(clusterer.main(), clusterer_result_short)
+        self.assertEqual(clusterer(), clusterer_result_short)
 
     def test_run_verbose(self):
-        self.assertEqual(clusterer_verbose.main(), clusterer_result_verbose)
+        self.assertEqual(clusterer_verbose(), clusterer_result_verbose)
 
 
 if __name__ == "__main__":
