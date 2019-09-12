@@ -63,7 +63,7 @@ Possible arrangments:
 ### Brew
 
 ```bash
-brew install python blastn ispcr
+brew install python blast ispcr
 pip3 install emmtyper
 emmtyper --help
 ```
@@ -71,7 +71,7 @@ emmtyper --help
 ### Conda
 
 ```bash
-conda install -c bioconda emmtyper
+conda install -c conda-forge -c bioconda -c defaults emmtyper
 ```
 
 ## Usage
