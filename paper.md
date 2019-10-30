@@ -26,7 +26,7 @@ authors:
     affiliation: 4
   - name: Deborah A. Williamson
     affiliation: "2, 3"
-  - name: Anders Gon&ccedil;alves da Silva
+  - name: Anders Gonçalves da Silva
     orcid: 0000-0002-2257-8781
     affiliation: 2
 affiliations:
