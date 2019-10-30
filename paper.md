@@ -43,6 +43,8 @@ bibliography: paper.bib
 
 # Summary
 
+Bacterial pathogen subtyping is a corner-stone of public health microbiology and epidemiology. By classifying bacterial strains at levels below species and sub-species, bacterial subtyping allows public health officials and epidemiologists to identify and track outbreaks, identify particularly virulent strains, and make decisions about vaccination programmes. As public health microbiology transitions to a workflow primarily based on genomic data, there is an increasing need for Bioinformatic tools to perform *in silico* bacterial subtyping. Such tools are essential to enable the carryover of vast troves of historical data and allow for a smooth transition to genomics-based public health.
+
 Transition to genomics in public health.
 
 Bacterial subtyping in public health.
@@ -53,4 +55,4 @@ GAS epidemiology.
 
 Prior use of emmtyper (Lacey).
 
-Statement of need: what it provides: support for transition to genomics.
+Statement of need: what it provides: support for transition to genomics. Validated tool.
