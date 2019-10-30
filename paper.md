@@ -5,6 +5,7 @@ tags:
   - Bioinformatics
   - Microbial Genomics
   - Public Health Microbiology
+  - Molecular Epidemiology
 authors:
   - name: Andre Tan
     affiliation: "1, 2"
