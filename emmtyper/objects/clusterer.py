@@ -68,9 +68,10 @@ class Clusterer:
             elif type(answer) is list:
                 positions = set([ans.queryStart for ans in answer])
                 for pos in positions:
-                    string += "({})".format(
-                        ";".join([str(ans) for ans in answer if ans.queryStart == pos])
-                    )
+                    emm_types = [str(ans)
+                                 for ans in answer if ans.queryStart == pos]
+                    emm_types_str = '({})'.format(';'.join(emm_types))
+                    string += emm_types_str
             else:
                 raise Exception("Answer is {}".format(type(answer)))
 
@@ -88,15 +89,16 @@ class Clusterer:
             elif type(answer) is list:
                 positions = set([ans.queryStart for ans in answer])
                 for pos in positions:
-                    string += "({}:{})".format(
-                        ";".join(
-                            [
-                                (ans.query, ans.queryStart)
-                                for ans in answer
-                                if ans.queryStart == pos
-                            ]
+                    hits = [
+                        '{}:{}'.format(
+                            ans.query,
+                            ans.queryStart
                         )
-                    )
+                        for ans in answer
+                        if ans.queryStart == pos
+                    ]
+                    hits_str = '({})'.format(';'.join(hits))
+                    string += hits_str
             else:
                 raise Exception("Answer is {}".format(type(answer)))
 
@@ -114,13 +116,10 @@ class Clusterer:
             elif type(answer) is list:
                 positions = set([ans.queryStart for ans in answer])
                 for pos in positions:
-                    string += "({})".format(
-                        [
-                            emm.EMM(ans.type).emm_cluster
-                            for ans in answer
-                            if ans.queryStart == pos
-                        ]
-                    )
+                    clusters = [
+                        emm.EMM(ans.type).emm_cluster for ans in answer if ans.queryStart == pos]
+                    clusters_str = '({})'.format(';'.join(clusters))
+                    string += clusters_str
             else:
                 raise Exception("Answer is {}".format(type(answer)))
 
@@ -157,7 +156,7 @@ class Clusterer:
         return string
 
     def map_stringer(self, contig):
-        ### EXPERIMENTAL
+        # EXPERIMENTAL
         # Visual map of emm hits within WGS
 
         def determine_position(result):
@@ -215,7 +214,8 @@ class Clusterer:
             return clusters
 
         else:
-            raise Exception("Cannot run with {} results.".format(len(positions)))
+            raise Exception(
+                "Cannot run with {} results.".format(len(positions)))
 
     def get_best_scoring(self, results):
         """
@@ -223,7 +223,8 @@ class Clusterer:
         """
         if len(results) > 0:
             maxScore = max([result.score for result in results])
-            maxResult = [result for result in results if result.score == maxScore]
+            maxResult = [
+                result for result in results if result.score == maxScore]
 
             if len(maxResult) == 1:
                 return maxResult[0]
@@ -264,7 +265,8 @@ class Clusterer:
                 )
 
         else:
-            raise Exception("Cannot run with {} results".format(len(within_contig)))
+            raise Exception(
+                "Cannot run with {} results".format(len(within_contig)))
 
         return answer
 
@@ -277,7 +279,8 @@ class Clusterer:
             bools = np.zeros(len(all_votes), dtype=bool)
 
             for index, vote in enumerate(all_votes):
-                logger.debug("is {} in answers? {}".format(vote, vote in answers))
+                logger.debug("is {} in answers? {}".format(
+                    vote, vote in answers))
                 bools[index] = 1 if vote in answers else 0
 
             logger.debug("is_in() returns {}".format(bools))
@@ -303,7 +306,8 @@ class Clusterer:
                 answer = []
                 if type(tmp_result) == ResultRow:
                     answer += (
-                        [tmp_result] if (tmp_result.type not in EmmImposters) else []
+                        [tmp_result] if (
+                            tmp_result.type not in EmmImposters) else []
                     )
                 elif type(tmp_result) == list:
                     # Make sure all in the list is not imposters, add as answer if all within the list follows if argument
@@ -312,7 +316,8 @@ class Clusterer:
                         for result in tmp_result
                         if (result.type not in EmmImposters)
                     ]
-                    answer += [tmp_answer] if len(tmp_answer) == len(tmp_result) else []
+                    answer += [tmp_answer] if len(
+                        tmp_answer) == len(tmp_result) else []
 
             elif voted_result.shape[0] > 1:
                 # If there is more than one, score would come into play
@@ -357,7 +362,8 @@ class Clusterer:
                     # Make sure all in the list is not imposters
                     tmp_answer = [result for result in tmp_result]
                     # Add as answer if all within the list follows if argument
-                    answer += [tmp_answer] if len(tmp_answer) == len(tmp_result) else []
+                    answer += [tmp_answer] if len(
+                        tmp_answer) == len(tmp_result) else []
 
             elif voted_result.shape[0] > 1:
                 logger.debug("Voted result is non-singular")
@@ -388,7 +394,8 @@ class Clusterer:
         if logical_result == []:
             logger.debug("Move to ignore emm-like filter")
 
-            votes = np.array([[item[0], item[1]] for item in self.best_in_clusters])
+            votes = np.array([[item[0], item[1]]
+                              for item in self.best_in_clusters])
             votes_sorted = sorted(set(votes[:, 0]), reverse=True)
 
             while logical_result == [] and len(votes_sorted) > 0:
@@ -397,7 +404,8 @@ class Clusterer:
 
                 logger.debug("Votes remaining = {}".format(len(votes_sorted)))
 
-            logger.debug("This is illogical, but answer is = {}".format(logical_result))
+            logger.debug(
+                "This is illogical, but answer is = {}".format(logical_result))
 
         logger.debug("The answer would be {}".format(logical_result))
 
