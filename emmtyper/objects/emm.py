@@ -28,7 +28,12 @@ class EMM:
 
     def translate_to_cluster(self):
         if self.code == "EMM":
-            return cluster_translations[self.number]
+            # The try/except block will catch emm-types 
+            # that are not assigned to a cluster
+            try:
+                return cluster_translations[self.number]
+            except KeyError:
+                return cluster_translations["0"]
 
         return cluster_translations["0"]
 
