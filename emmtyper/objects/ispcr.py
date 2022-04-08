@@ -23,6 +23,8 @@ class IsPCR(Command):
         primer_filename,
         min_perfect,
         min_good,
+        tile_size,
+        step_size,
         max_product_length,
         output_stream,
         tool_path=None,
@@ -40,6 +42,9 @@ class IsPCR(Command):
         self.min_perfect = min_perfect
         self.min_good = min_good
 
+        self.tile_size = tile_size
+        self.step_size = step_size
+
         self.max_product_length = max_product_length
         self.output_stream = output_stream
 
@@ -53,12 +58,15 @@ class IsPCR(Command):
         string = (
             "{tool_path} {db} {query} {output} "
             "-minPerfect={min_perfect} -minGood={min_good} "
+            "-tileSize={tile_size} -stepSize={step_size}"
             "-maxSize={max_size}"
         )
 
         command = string.format(
             min_perfect=self.min_perfect,
             min_good=self.min_good,
+            tile_size=self.tile_size,
+            step_size = self.step_size,
             max_size=self.max_product_length,
             db=self.assembly_filename,
             query=self.primer_filename,
