@@ -57,9 +57,11 @@ class IsPCR(Command):
 
         string = (
             "{tool_path} {db} {query} {output} "
-            "-minPerfect={min_perfect} -minGood={min_good} "
-            "-tileSize={tile_size} -stepSize={step_size}"
-            "-maxSize={max_size}"
+            "-minPerfect={min_perfect} -minGood={min_good}"
+            #" -tileSize={tile_size} -stepSize={step_size}"
+            " -tileSize={tile_size}"
+            " -stepSize={step_size}"
+            " -maxSize={max_size}"
         )
 
         command = string.format(
@@ -73,6 +75,7 @@ class IsPCR(Command):
             output=self.output_stream,
             tool_path=self.tool_path,
         )
+        logger.info(command)
 
         return command
 
