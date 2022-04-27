@@ -87,4 +87,16 @@ class IsPCR(Command):
         if not output:
             logger.info("There is no output for {}".format(self.assembly_filename))
 
-        return output[:-1]
+        #remove the primer in contigs headers
+        new_out = []
+        for line in output.split("\n"):
+            if len(line) > 0:
+                if line[0] == ">":
+                    new_line = " ".join(line.split()[:-2])
+                    new_out.append(new_line)
+                else:
+                    new_out.append(line)
+            else:
+                new_out.append(line)
+        return "\n".join(new_out)
+        #return output[:-1]

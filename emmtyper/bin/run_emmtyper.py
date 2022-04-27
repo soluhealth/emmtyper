@@ -5,6 +5,7 @@ For running emmtyper
 import logging
 import pathlib
 import os
+import sys
 
 import click
 
@@ -135,7 +136,7 @@ logger = logging.getLogger(__name__)
 @click.option(
     "--tile-size",
     default=6,
-    help="[isPcr] The size of match that triggers an alignment.",
+    help="[isPcr] The size of match that triggers an alignment.[6-18]",
     show_default=True,
 )
 @click.option(
@@ -182,6 +183,9 @@ def main(
     logger.info("Start running emmtyper on {} queries.".format(len(fasta)))
     for i, query in enumerate(fasta):
         if workflow == "pcr":
+            if int(tile_size) > 18 or int(tile_size) < 6:
+                logger.error("isPCR DNA tileSize must be between 6 and 18")
+                sys.exit()
             query = run_ispcr.get_amplicons(
                 query,
                 str(primer_db),

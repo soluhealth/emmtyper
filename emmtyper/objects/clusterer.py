@@ -322,8 +322,13 @@ class Clusterer:
             elif voted_result.shape[0] > 1:
                 # If there is more than one, score would come into play
                 logger.debug("Voted result is non-singular")
-
+                #logger.info(type(voted_result))
                 tmp_result = voted_result
+                try:
+                    x = tmp_result[0][0]
+                    tmp_result = tmp_result[0]
+                except:
+                    tmp_result = tmp_result
                 max_score = max([result.score for result in tmp_result])
                 answer = []
                 for result in tmp_result:
@@ -369,9 +374,16 @@ class Clusterer:
                 logger.debug("Voted result is non-singular")
 
                 tmp_result = voted_result
+                try:
+                    x = tmp_result[0][0]
+                    tmp_result = tmp_result[0]
+                except:
+                    tmp_result = tmp_result
+                #max_score = max([result.score for result in tmp_result])
                 max_score = max([result.score for result in tmp_result])
                 answer = []
                 for result in tmp_result:
+                    #answer += [result] if result.score == max_score else []
                     answer += [result] if result.score == max_score else []
 
             return answer
@@ -380,8 +392,10 @@ class Clusterer:
         Determine which cluster(s) is the best to return as answer,
         while returning the remaining clusters as possible imposters.
         """
-
-        votes = np.array([[item[0], item[1]] for item in self.best_in_clusters])
+        ###Test
+        #logger.info("best_in_cluster:")
+        #logger.info(self.best_in_clusters)
+        votes = np.array([[item[0], item[1]] for item in self.best_in_clusters], dtype=object)
         votes_sorted = sorted(set(votes[:, 0]), reverse=True)
         logical_result = []
 
