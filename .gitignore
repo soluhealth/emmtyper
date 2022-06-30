@@ -4,3 +4,5 @@ build/
 dist/
 .pytest_cache/
 .coverage
+.vscode
+.idea
