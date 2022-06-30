@@ -98,6 +98,7 @@ def download_cdc_db(
     Download the CDC DB.
     '''
     db_path = pathlib.Path(db_folder)
+    db_path.mkdir(parents=True, exist_ok=True)
     db_metadata = db_path / db_metadata
     db_fasta = db_path / "emm.fna"
     db = DBMetadata(db_metadata)
