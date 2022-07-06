@@ -1,0 +1,16 @@
+name: emmtyper
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - blast>=2.10.1
+  - ispcr>=33
+  - pip>=21.0.1
+  - python>=3.8
+  - pip:
+    - click>=7.1.2
+    - numpy>=1.23.0
+    - python-dateutil>=2.8.1
+    - scipy>=1.6.0
+prefix: /usr/local/anaconda3/envs/emmtyper
