@@ -1,5 +1,6 @@
 # emmtyper - Emm Automatic Isolate Labeller
 
+[![Tests](https://github.com/MDU-PHL/emmtyper/actions/workflows/python-package-conda.yml/badge.svg)]
 [![Coverage Status](https://coveralls.io/repos/github/MDU-PHL/emmtyper/badge.svg?branch=master)](https://coveralls.io/github/MDU-PHL/emmtyper?branch=master) ![PyPI - Implementation](https://img.shields.io/pypi/implementation/emmtyper) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/emmtyper) ![PyPI](https://img.shields.io/pypi/v/emmtyper) ![PyPI - License](https://img.shields.io/pypi/l/emmtyper) ![PyPI - Wheel](https://img.shields.io/pypi/wheel/emmtyper) ![Conda](https://img.shields.io/conda/pn/bioconda/emmtyper?label=bioconda) ![PyPI - Downloads](https://img.shields.io/pypi/dm/emmtyper) ![PyPI - Status](https://img.shields.io/pypi/status/emmtyper) ![GitHub issues](https://img.shields.io/github/issues-raw/MDU-PHL/emmtyper)
 
 ## Table of Content
