@@ -381,18 +381,16 @@ class Clusterer:
         Determine which cluster(s) is the best to return as answer,
         while returning the remaining clusters as possible imposters.
         """
-
+        
         votes = np.array([[item[0], item[1]] for item in self.best_in_clusters], dtype=object)
         votes_sorted = sorted(set(votes[:, 0]), reverse=True)
         logical_result = []
-        try:
-            while logical_result == [] and len(votes_sorted) > 0:
-                voted_result = votes[votes[:, 0] == votes_sorted.pop(0), 1]
-                logical_result = process_answer_logic(voted_result)
 
-                logger.debug("Votes remaining = {}".format(len(votes_sorted)))
-        except:
-            breakpoint()
+        while logical_result == [] and len(votes_sorted) > 0:
+            voted_result = votes[votes[:, 0] == votes_sorted.pop(0), 1]
+            logical_result = process_answer_logic(voted_result)
+
+            logger.debug("Votes remaining = {}".format(len(votes_sorted)))
 
         if logical_result == []:
             logger.debug("Move to ignore emm-like filter")
