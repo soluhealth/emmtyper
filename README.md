@@ -26,6 +26,7 @@
   - [Authors](#authors)
   - [Maintainer](#maintainer)
   - [Issues](#issues)
+  - [References](#references)
 
 ## Background
 
@@ -34,6 +35,11 @@
 By default, we use the U.S. Centers for Disease Control and Prevention trimmed emm subtype database,
 which can be found [here](https://www2a.cdc.gov/ncidod/biotech/strepblast.asp).
 The database is curated by Dr. Velusamy Srinivasan. We take this opportunity to thank Dr. Srinivasan for his work.
+
+The tool has two basic modes:
+
+* `blast`: In this mode the contigs are blasted against the trimmed FASTA database curated by the CDC.
+* `pcr`: In this mode, first an _in silico_ PCR is done on the contigs using the `isPCR` tool (Kuhn et al. 2013). The resulting fragments are then blasted against the trimmed FASTA database curated by the CDC. Two sets of primers are provided for the user to choose from: 1. The canonical CDC primers used for **conventional** PCR (Whatmore and Kehoe 1994); 2. the primers described by Frost et al. 2020. This last set uses the forward primers of Whatmore and Kehoe (1994), but provide a re-designed reverse primer. There is also the option of the user providing their own primer set in the format required by the `isPCR` tool.
 
 ### Inner workings
 
@@ -126,16 +132,18 @@ Options:
                                   [default: 2]
   --blast-path TEXT               [BLAST] Specify full path to blastn
                                   executable.
+  --pcr-primers [cdc|frost]       [isPcr] Primer set to use (either canonical
+                                  CDC or Frost et al. 2020).  [default: cdc]
   --primer-db TEXT                [isPcr] PCR primer. Text file with 3
                                   columns: Name, Forward Primer, Reverse
-                                  Primer.  [default:
-                                  /path/to/emmtyper/data/isPcrPrim.tsv]
+                                  Primer. This options overrides --pcr-
+                                  primers.
   --min-perfect INTEGER           [isPcr] Minimum size of perfect match at 3\'
                                   primer end.  [default: 15]
   --min-good INTEGER              [isPcr] Minimum size where there must be 2
                                   matches for each mismatch.  [default: 15]
   --max-size INTEGER              [isPcr] Maximum size of PCR product.
-                                  [default: 2000]
+                                  [default: 2000] 
   --ispcr-path TEXT               [isPcr] Specify full path to isPcr
                                   executable.
   --help                          Show this message and exit.
@@ -157,8 +165,12 @@ emmtyper -w pcr *.fa
 # basic call changing some of the options for blast
 emmtyper --keep --culling_limit 10 --align_diff 10 *.fa
 # call using the pcr workflow changing some of the isPcr options and
-# using the visual output format
+# using the visual output format - this will run the with the CDC canonical
+# primers
 emmtyper -w pcr --output-format visual --max-size 2000 --mismatch 5 *.fa
+
+# same as above, but now with the Frost et al. 2020 primers.
+emmtyper -w pcr --output-format visual --max-size 2000 --mismatch 5 --pcr-primers frost *.fa
 ```
 
 ## Result Format
@@ -276,3 +288,11 @@ Contact the principal maintainer at andersgs at gmail dot com.
 ## Issues
 
 Please post bug reports, questions, suggestions in the [Issues](https://github.com/MDU-PHL/emmtyper/issues) section.
+
+## References
+
+Frost, H. R., Davies, M. R., Velusamy, S., Delforge, V., Erhart, A., Darboe, S., Steer, A., Walker, M. J., Beall, B., Botteaux, A., & Smeesters, P. R. (2020). Updated emm-typing protocol for Streptococcus pyogenes. Clinical Microbiology and Infection: The Official Publication of the European Society of Clinical Microbiology and Infectious Diseases, 26(7), 946.e5–e946.e8.
+
+Kuhn, R. M., Haussler, D., & Kent, W. J. (2013). The UCSC genome browser and associated tools. Briefings in Bioinformatics, 14(2), 144–161.
+
+Whatmore, A. M., & Kehoe, M. A. (1994). Horizontal gene transfer in the evolution of group A streptococcal emm-like genes: gene mosaics and variation in Vir regulons. Molecular Microbiology, 11(2), 363–374.
