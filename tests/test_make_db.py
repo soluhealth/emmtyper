@@ -12,7 +12,7 @@ def test_load_db_history(tmp_path):
     db_hist_path = tmp_path / "db_hist.json"
     with open(db_hist_path, "w") as db_hist_file:
         json.dump(db_hist, db_hist_file)
-    db_instance = make_db.DBMetadata(db_hist_path)
+    db_instance = make_db.DBMetadata(db_hist_path, "email@example.com")
 
     assert db_instance.metad["updated_on"] == datetime.datetime(2020, 10, 1, 0, 0)
     assert db_instance.metad["host"] == "ftp.cdc.gov"
@@ -23,7 +23,7 @@ def test_update_history(tmp_path):
     db_hist_path = tmp_path / "db_hist.json"
     with open(db_hist_path, "w") as db_hist_file:
         json.dump(db_hist, db_hist_file)
-    db_instance = make_db.DBMetadata(db_hist_path)
+    db_instance = make_db.DBMetadata(db_hist_path, "email@example.com")
     db_instance.update_info("updated_on", datetime.datetime(2021, 3, 3, 0, 0))
     db_instance.update_info("uploaded_to_server_on", datetime.datetime(2021, 3, 1, 0, 0))
     db_instance.update_metadata_file()
@@ -37,7 +37,7 @@ def test_make_db(tmp_path):
     fasta = tmp_path / "trimmed.tfa"
     local_fasta = pathlib.Path(__file__).parent / "8Jun17.fasta"
     fasta.write_bytes(local_fasta.read_bytes())
-    db_instance = make_db.DBMetadata(tmp_path / "db_hist.json")
+    db_instance = make_db.DBMetadata(tmp_path / "db_hist.json", "email@example.com")
     db_instance.make_db(fasta)
     db_instance.update_metadata_file()
     p = [p.name for p in pathlib.Path(tmp_path).glob("*.tfa*")]
