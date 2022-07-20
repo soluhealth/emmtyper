@@ -8,6 +8,7 @@ dependencies:
   - ispcr>=33
   - pip>=21.0.1
   - python>=3.8
+  - seqkit>=2.2.0
   - pip:
     - click>=7.1.2
     - numpy>=1.23.0

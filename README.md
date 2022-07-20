@@ -1,6 +1,6 @@
 # emmtyper - Emm Automatic Isolate Labeller
 
-![Tests Badge](https://github.com/MDU-PHL/emmtyper/actions/workflows/unit-tests.yml/badge.svg)
+[![CI](https://github.com/MDU-PHL/emmtyper/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/MDU-PHL/emmtyper/actions/workflows/unit-tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/MDU-PHL/emmtyper/badge.svg?branch=master)](https://coveralls.io/github/MDU-PHL/emmtyper?branch=master) ![PyPI - Implementation](https://img.shields.io/pypi/implementation/emmtyper) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/emmtyper) ![PyPI](https://img.shields.io/pypi/v/emmtyper) ![PyPI - License](https://img.shields.io/pypi/l/emmtyper) ![PyPI - Wheel](https://img.shields.io/pypi/wheel/emmtyper) ![Conda](https://img.shields.io/conda/pn/bioconda/emmtyper?label=bioconda) ![PyPI - Downloads](https://img.shields.io/pypi/dm/emmtyper) ![PyPI - Status](https://img.shields.io/pypi/status/emmtyper) ![GitHub issues](https://img.shields.io/github/issues-raw/MDU-PHL/emmtyper)
 
 ## Table of Content
@@ -83,7 +83,7 @@ conda install -c conda-forge -c bioconda -c defaults emmtyper
 
 ## Usage
 
-emmtyper has 2 workflows: directly BLASTing the contigs against the DB, or using isPcr to generate an _in silico_ PCR product that is then BLASTed against the DB. The BLAST results go through emmtyper's business logic to distinguish between `emm` and `emm-like` alleles and derive the isoolate M-type.
+`emmtyper` has two workflows: directly BLASTing the contigs against the DB, or using `isPcr` to generate an _in silico_ PCR product that is then BLASTed against the DB. The BLAST results go through `emmtyper`'s business logic to distinguish between `emm` and `emm-like` alleles and derive the isoolate M-type.
 
 The basic usage of emmtyper is in the form of:
 
@@ -91,7 +91,7 @@ The basic usage of emmtyper is in the form of:
 emmtyper [options] contig1 contig2 ... contigN
 ```
 
-All the available options can be inspected with `emmtyper --help`. Options passed on to `blast` are tagged with `[BLAST]`, and those for `isPcr` are tagged with `[isPcr]`.
+All the available options can be printed to the console with `emmtyper --help`. Options passed on to `blast` are tagged with `[BLAST]`, and those for `isPcr` are tagged with `[isPcr]`.
 
 ```bash
 Usage: emmtyper [OPTIONS] [FASTA]...
