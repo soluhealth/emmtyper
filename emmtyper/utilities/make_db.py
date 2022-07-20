@@ -38,12 +38,14 @@ class DBMetadata:
     Store and update the DB Metadata
     """
 
-    def __init__(self, metadata_db):
+    def __init__(self, metadata_db, passwd, user="anonymous"):
         self.path = pathlib.Path(metadata_db)
         self.db_folder = self.path.parent
         self.history = []
         self.update_dupes = []
         self.update_total_seqs = 0
+        self.user = user
+        self.passwd = passwd
         if self.path.exists():
             with open(self.path) as history:
                 self.history = json.load(history, object_hook=decode_history)
@@ -57,11 +59,13 @@ class DBMetadata:
                     "uploaded_to_server_on": "",
             }
 
-    def needs_updating(self, new_date):
+    def needs_updating(self):
+        con = ftplib.FTP(host=self.metad['host'], user=self.user, passwd=self.passwd)
+        modified_date = parser.parse(con.sendcmd("MDTM " + self.metad['db_name'])[4:])
         LOGGER.debug(
-            f"Is {new_date:%Y-%m-%d} later than {self.uploaded_to_server_on:%Y-%m-%d}?: {new_date.date() > self.uploaded_to_server_on.date()}"
+            f"Is {modified_date:%Y-%m-%d} later than {self.uploaded_to_server_on:%Y-%m-%d}?: {modified_date.date() > self.uploaded_to_server_on.date()}"
         )
-        return new_date.date() > self.uploaded_to_server_on.date()
+        return modified_date.date() > self.uploaded_to_server_on.date()
 
     def update_info(self, key, value):
         try:
@@ -143,7 +147,7 @@ def download_cdc_db(
             con.retrbinary(f"RETR {filename}", emm_fa.write)
         try:
             if db_fasta.exists():
-                make_db(db_fasta, updated_on)
+                db.make_db(db_fasta, updated_on)
                 db.update_info("updated_on", updated_on)
                 db.update_info("uploaded_to_server_on", f"{modified_time:%Y-%m-%d}")
                 db.update_metadata_file()
