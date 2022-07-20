@@ -143,7 +143,7 @@ def download_cdc_db(
             con.retrbinary(f"RETR {filename}", emm_fa.write)
         try:
             if db_fasta.exists():
-                make_db(db_fasta, updated_on)
+                db.make_db(db_fasta, updated_on)
                 db.update_info("updated_on", updated_on)
                 db.update_info("uploaded_to_server_on", f"{modified_time:%Y-%m-%d}")
                 db.update_metadata_file()
