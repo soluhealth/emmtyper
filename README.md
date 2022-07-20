@@ -83,7 +83,7 @@ conda install -c conda-forge -c bioconda -c defaults emmtyper
 
 ## Usage
 
-emmtyper has 2 workflows: directly BLASTing the contigs against the DB, or using isPcr to generate an _in silico_ PCR product that is then BLASTed against the DB. The BLAST results go through emmtyper's business logic to distinguish between `emm` and `emm-like` alleles and derive the isoolate M-type.
+`emmtyper` has two workflows: directly BLASTing the contigs against the DB, or using `isPcr` to generate an _in silico_ PCR product that is then BLASTed against the DB. The BLAST results go through `emmtyper`'s business logic to distinguish between `emm` and `emm-like` alleles and derive the isoolate M-type.
 
 The basic usage of emmtyper is in the form of:
 
@@ -91,7 +91,7 @@ The basic usage of emmtyper is in the form of:
 emmtyper [options] contig1 contig2 ... contigN
 ```
 
-All the available options can be inspected with `emmtyper --help`. Options passed on to `blast` are tagged with `[BLAST]`, and those for `isPcr` are tagged with `[isPcr]`.
+All the available options can be printed to the console with `emmtyper --help`. Options passed on to `blast` are tagged with `[BLAST]`, and those for `isPcr` are tagged with `[isPcr]`.
 
 ```bash
 Usage: emmtyper [OPTIONS] [FASTA]...
