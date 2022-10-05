@@ -128,11 +128,16 @@ class Clusterer:
         return string.strip(";") if len(string) > 1 else "NA"
 
     def short_stringer(self):
+
+        str_2 = self.list_to_string_emm(self.answers).replace("EMM", "_emm_")
+        str_3 = self.list_to_string_emm(self.possible_imposters).replace("EMM", "_emm_")
         string = "{0}\t{1}\t{2}\t{3}\t{4}".format(
             self.isolate,
             self.cluster_number,
-            self.list_to_string_emm(self.answers),
-            self.list_to_string_emm(self.possible_imposters),
+            #self.list_to_string_emm(self.answers),
+            str_2,
+            #self.list_to_string_emm(self.possible_imposters),
+            str_3,
             self.list_to_string_emm_clusters(self.answers),
         )
 
@@ -141,13 +146,17 @@ class Clusterer:
         return string
 
     def verbose_stringer(self):
+        str_2 = self.list_to_string_emm(self.answers).replace("EMM", "_emm_")
+        str_3 = self.list_to_string_emm(self.possible_imposters).replace("EMM", "_emm_")
         string = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}".format(
             self.isolate,
             len(self.results),
             self.cluster_number,
-            self.list_to_string_emm(self.answers),
+            #self.list_to_string_emm(self.answers),
+            str_2,
             self.list_to_string_positions(self.answers),
-            self.list_to_string_emm(self.possible_imposters),
+            #self.list_to_string_emm(self.possible_imposters),
+            str_3,
             self.list_to_string_positions(self.possible_imposters),
             self.list_to_string_emm_clusters(self.answers),
         )
