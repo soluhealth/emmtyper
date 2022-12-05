@@ -20,6 +20,8 @@ ispcr_cdc = IsPCR(
     primer_path_cdc,
     min_perfect=15,
     min_good=15,
+    tile_size = 6,
+    step_size = 5,
     max_product_length=4000,
     output_stream="stdout",
 )
@@ -29,6 +31,8 @@ ispcr_frost = IsPCR(
     primer_path_frost,
     min_perfect=15,
     min_good=15,
+    tile_size = 6,
+    step_size = 5,
     max_product_length=4000,
     output_stream="stdout",
 )
@@ -39,6 +43,8 @@ ispcr_e_cdc = IsPCR(
     primer_path_cdc,
     min_perfect=20,
     min_good=30,
+    tile_size = 6,
+    step_size = 5,
     max_product_length=4000,
     output_stream="stdout",
 )
@@ -49,6 +55,8 @@ ispcr_e_frost = IsPCR(
     primer_path_frost,
     min_perfect=20,
     min_good=30,
+    tile_size = 6,
+    step_size = 5,
     max_product_length=4000,
     output_stream="stdout",
 )
