@@ -20,18 +20,18 @@ test_pcr_product_path = find("amplicon.fasta", __file__)
 test_blast_product = find("blast.fa.tsv", __file__)
 
 # For ResultRow
-string = "SP3LAU\t_emm89.0\t100\t180\t0\t0\t737626\t737805\t1\t180\t1.93e-89\t333\t180"
-string_str = "_emm89.0"
+string = "SP3LAU\t_emm_89.0\t100\t180\t0\t0\t737626\t737805\t1\t180\t1.93e-89\t333\t180"
+string_str = "_emm_89.0"
 string_not100 = (
-    "SP3LAU\t_emm89.0\t99\t180\t1\t1\t737626\t737805\t1\t180\t1.93e-89\t333\t180"
+    "SP3LAU\t_emm_89.0\t99\t180\t1\t1\t737626\t737805\t1\t180\t1.93e-89\t333\t180"
 )
-string_not100_str = "_emm89.0~"
+string_not100_str = "_emm_89.0~"
 string_imp = (
-    "SP3LAU\t_emm202.0\t100\t180\t0\t0\t737626\t737805\t1\t180\t1.93e-89\t333\t180"
+    "SP3LAU\t_emm_202.0\t100\t180\t0\t0\t737626\t737805\t1\t180\t1.93e-89\t333\t180"
 )
-string_imp_str = "_emm202.0*"
+string_imp_str = "_emm_202.0"
 string_long = (
-    "SP3LAU\t65\t_emm89.0\t100\t180\t0\t0\t737626\t737805\t1\t180\t1.93e-89\t333\t180"
+    "SP3LAU\t65\t_emm_89.0\t100\t180\t0\t0\t737626\t737805\t1\t180\t1.93e-89\t333\t180"
 )
 
 # For BLAST and isPcr
@@ -59,7 +59,7 @@ isPcr_command_e_frost = "isPcr {} {} stdout -minPerfect=20 -minGood=30 -maxSize=
 header = "Query\tBlastHit\tIdentity\tAlignmentLength\tMismatch\tGapOpen\tQueryStart\tQueryEnd\tHitStart\tHitEnd\tE-Value\tBitScore\tSubjectLength\n"
 
 blast_result = (
-    "contig1\t_emm1.0\t100.000\t180\t0\t0\t113816\t113995\t1\t180\t1.50e-90\t333\t180"
+    "contig1\t_emm_1.0\t100.000\t180\t0\t0\t113816\t113995\t1\t180\t1.50e-90\t333\t180"
 )
 isPcr_result_cdc = ">contig1:113750+114924 emm 1175bp TATTCGCTTAGAAAATTAA GCAAGTTCTTCAGCTTGTTT\nTATTCGCTTAGAAAATTAAaaacaggaacggcttcagtagcggtagcttt\ngactgttttaggggcaggttttgcgaatcaaacagaggttaaggctaacg\ngtgatggtaatcctagggaagttatagaagatcttgcagcaaacaatccc\ngcaatacaaaatatacgtttacgtcacgaaaacaaggacttaaaagcgag\nattagagaatgcaatggaagttgcaggaagagattttaagagagctgaag\naacttgaaaaagcaaaacaagccttagaagaccagcgtaaagatttagaa\nactaaattaaaagaactacaacaagactatgacttagcaaaggaatcaac\naagttgggatagacaaagacttgaaaaagagttagaagagaaaaaggaag\nctcttgaattagcgatagaccaggcaagtcgggactaccatagagctacc\ngctttagaaaaagagttagaagagaaaaagaaagctcttgaattagcgat\nagaccaagcgagtcaggactataatagagctaacgtcttagaaaaagagt\ntagaaacgattactagagaacaagagattaatcgtaatcttttaggcaat\ngcaaaacttgaacttgatcaactttcatctgaaaaagagcagctaacgat\ncgaaaaagcaaaacttgaggaagaaaaacaaatctcagacgcaagtcgtc\naaagccttcgtcgtgacttggacgcatcacgtgaagctaagaaacaggtt\ngaaaaagatttagcaaacttgactgctgaacttgataaggttaaagaaga\ncaaacaaatctcagacgcaagccgtcaaggccttcgccgtgacttggacg\ncatcacgtgaagctaagaaacaggttgaaaaagatttagcaaacttgact\ngctgaacttgataaggttaaagaagaaaaacaaatctcagacgcaagccg\ntcaaggccttcgccgtgacttggacgcatcacgtgaagctaagaaacaag\nttgaaaaagctttagaagaagcaaacagcaaattagctgctcttgaaaaa\ncttaacaaagagcttgaagaaagcaagaaattaacagaaaaagaaaaagc\ntgaactacaagcaaaacttgaagcagaagcaaaagcactcaaagaacaat\ntagcgAAACAAGCTGAAGAACTcGC"
 isPcr_result_frost = ">contig1:113750+114820 emm 1071bp TATTCGCTTAGAAAATTAA TTCTTCAAGCTCTTTGTT\nTATTCGCTTAGAAAATTAAaaacaggaacggcttcagtagcggtagcttt\ngactgttttaggggcaggttttgcgaatcaaacagaggttaaggctaacg\ngtgatggtaatcctagggaagttatagaagatcttgcagcaaacaatccc\ngcaatacaaaatatacgtttacgtcacgaaaacaaggacttaaaagcgag\nattagagaatgcaatggaagttgcaggaagagattttaagagagctgaag\naacttgaaaaagcaaaacaagccttagaagaccagcgtaaagatttagaa\nactaaattaaaagaactacaacaagactatgacttagcaaaggaatcaac\naagttgggatagacaaagacttgaaaaagagttagaagagaaaaaggaag\nctcttgaattagcgatagaccaggcaagtcgggactaccatagagctacc\ngctttagaaaaagagttagaagagaaaaagaaagctcttgaattagcgat\nagaccaagcgagtcaggactataatagagctaacgtcttagaaaaagagt\ntagaaacgattactagagaacaagagattaatcgtaatcttttaggcaat\ngcaaaacttgaacttgatcaactttcatctgaaaaagagcagctaacgat\ncgaaaaagcaaaacttgaggaagaaaaacaaatctcagacgcaagtcgtc\naaagccttcgtcgtgacttggacgcatcacgtgaagctaagaaacaggtt\ngaaaaagatttagcaaacttgactgctgaacttgataaggttaaagaaga\ncaaacaaatctcagacgcaagccgtcaaggccttcgccgtgacttggacg\ncatcacgtgaagctaagaaacaggttgaaaaagatttagcaaacttgact\ngctgaacttgataaggttaaagaagaaaaacaaatctcagacgcaagccg\ntcaaggccttcgccgtgacttggacgcatcacgtgaagctaagaaacaag\nttgaaaaagctttagaagaagcaaacagcaaattagctgctcttgaaaaa\ncttAACAAAGAGCTTGAAGAA"
@@ -73,10 +73,10 @@ header_verbose = "Isolate\tNumberOfHits\tNumberOfClusters\tAnswers\tAnswerPositi
 clusterer_repr_short = "Clusterer for {} with clustering distance 800bp\nshort output to stdout".format(
     test_blast_product
 )
-clusterer_result_short = "{}\t2\t_emm65.0\t_emm156.0~*\tE6".format(test_blast_product)
+clusterer_result_short = "{}\t2\t_emm_65.0\t_emm_156.0~*\tE6".format(test_blast_product)
 clusterer_repr_verbose = "Clusterer for {} with clustering distance 800bp\nverbose output to stdout".format(
     test_blast_product
 )
-clusterer_result_verbose = "{}{}\t6\t2\t_emm65.0\t.blast.5:82168\t_emm156.0~*\t.blast.5:80776\tE6".format(
+clusterer_result_verbose = "{}{}\t6\t2\t_emm_65.0\t.blast.5:82168\t_emm_156.0~*\t.blast.5:80776\tE6".format(
     header_verbose, test_blast_product
 )
