@@ -256,7 +256,8 @@ class Clusterer:
 
         # Extract results that fall within contig and cluster them together
         within_contig = np.array(
-            [result for result in self.results if result.positions[0] == contig]
+            [result for result in self.results if result.positions[0] == contig], 
+            dtype=object
         )
         contig_cluster = self.cluster(within_contig)
 
@@ -401,9 +402,7 @@ class Clusterer:
         Determine which cluster(s) is the best to return as answer,
         while returning the remaining clusters as possible imposters.
         """
-        ###Test
-        #logger.info("best_in_cluster:")
-        #logger.info(self.best_in_clusters)
+
         votes = np.array([[item[0], item[1]] for item in self.best_in_clusters], dtype=object)
         votes_sorted = sorted(set(votes[:, 0]), reverse=True)
         logical_result = []
@@ -418,7 +417,7 @@ class Clusterer:
             logger.debug("Move to ignore emm-like filter")
 
             votes = np.array([[item[0], item[1]]
-                              for item in self.best_in_clusters])
+                              for item in self.best_in_clusters], dtype=object)
             votes_sorted = sorted(set(votes[:, 0]), reverse=True)
 
             while logical_result == [] and len(votes_sorted) > 0:

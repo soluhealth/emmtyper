@@ -14,7 +14,8 @@ from emmtyper.utilities import run_ispcr, run_blast
 from emmtyper.objects.clusterer import Clusterer
 
 DEFAULT_DB = pathlib.Path(__file__).parent.parent / "db" / "emm.fna"
-DEFAULT_PRIMERS = pathlib.Path(__file__).parent.parent / "data" / "isPcrPrim.tsv"
+CDC_PRIMERS = pathlib.Path(__file__).parent.parent / "data" / "isPcrPrim.tsv"
+FROST_PRIMERS = pathlib.Path(__file__).parent.parent / "data" / "isPcrPrim-Frost.tsv"
 
 logger = logging.getLogger(__name__)
 
@@ -110,9 +111,16 @@ logger = logging.getLogger(__name__)
     show_default=True,
 )
 @click.option(
+    "--pcr-primers",
+    default='cdc',
+    type=click.Choice(['cdc', 'frost'], case_sensitive=False),
+    help="[isPcr] Primer set to use (either canonical CDC or Frost et al. 2020).",
+    show_default=True,
+)
+@click.option(
     "--primer-db",
-    default=os.environ.get("EMM_PCR", DEFAULT_PRIMERS),
-    help="[isPcr] PCR primer. Text file with 3 columns: Name, Forward Primer, Reverse Primer.",
+    default=os.environ.get("EMM_PCR", None),
+    help="[isPcr] PCR primer. Text file with 3 columns: Name, Forward Primer, Reverse Primer. This options overrides --pcr-primers.",
     show_default=True,
 )
 @click.option(
@@ -171,6 +179,7 @@ def main(
     max_size,
     tile_size,
     step_size,
+    pcr_primers,
     ispcr_path,
 ):
     """
@@ -196,6 +205,23 @@ def main(
                 step_size,
                 ispcr_path
             )
+            if not primer_db and pcr_primers.lower() == 'cdc':
+                primer_db = CDC_PRIMERS
+                query = run_ispcr.get_amplicons(
+                    query, str(primer_db), min_perfect, min_good, max_size, ispcr_path
+                )
+            elif not primer_db and pcr_primers.lower() == 'frost':
+                primer_db = FROST_PRIMERS
+                query = run_ispcr.get_amplicons(
+                    query, str(primer_db), min_perfect, min_good, max_size, ispcr_path
+                )
+            elif primer_db:
+                query = run_ispcr.get_amplicons(
+                    query, str(primer_db), min_perfect, min_good, max_size, ispcr_path
+                )
+            else:
+                logger.error("No primer database specified.")
+                raise SystemExit(1)
 
         blast_matches = run_blast.get_matches(
             query,

@@ -1,13 +1,11 @@
 '''
 Define the isPCR class
 '''
-from os import path, environ
+from os import environ
 import logging
-import subprocess
 import shlex
-import pathlib
 
-from emmtyper.objects.command import Command, FileNotInPathException
+from emmtyper.objects.command import Command
 
 logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)

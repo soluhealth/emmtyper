@@ -1,13 +1,23 @@
 import unittest
 
 from emmtyper.objects.ispcr import IsPCR
-from emmtyper.objects.blast import BLAST
 
-from tests.data import *
+from tests.data import primer_path_cdc, \
+                       primer_path_frost, \
+                        test_sequence_path, \
+                        test_empty_path, \
+                        test_null, \
+                        isPcr_command_cdc, \
+                        isPcr_command_e_cdc, \
+                        isPcr_command_frost, \
+                        isPcr_command_e_frost, \
+                        isPcr_result_cdc, \
+                        isPcr_result_frost, \
+                        isPcr_result_e \
 
-ispcr = IsPCR(
+ispcr_cdc = IsPCR(
     test_sequence_path,
-    primer_path,
+    primer_path_cdc,
     min_perfect=15,
     min_good=15,
     max_product_length=4000,
@@ -16,9 +26,29 @@ ispcr = IsPCR(
     output_stream="stdout",
 )
 
-ispcr_e = IsPCR(
+ispcr_frost = IsPCR(
+    test_sequence_path,
+    primer_path_frost,
+    min_perfect=15,
+    min_good=15,
+    max_product_length=4000,
+    output_stream="stdout",
+)
+
+
+ispcr_e_cdc = IsPCR(
     test_empty_path,
-    primer_path,
+    primer_path_cdc,
+    min_perfect=20,
+    min_good=30,
+    max_product_length=4000,
+    output_stream="stdout",
+)
+
+
+ispcr_e_frost = IsPCR(
+    test_empty_path,
+    primer_path_frost,
     min_perfect=20,
     min_good=30,
     max_product_length=4000,
@@ -33,20 +63,26 @@ class testIsPCRapp(unittest.TestCase):
         self.assertEqual(test_null, "this is a null test")
 
     def test_is_IsPCR(self):
-        self.assertIs(type(ispcr), IsPCR)
-        self.assertIs(type(ispcr_e), IsPCR)
+        self.assertIs(type(ispcr_cdc), IsPCR)
+        self.assertIs(type(ispcr_e_cdc), IsPCR)
+        self.assertIs(type(ispcr_frost), IsPCR)
+        self.assertIs(type(ispcr_e_frost), IsPCR)
 
     def test_isPcr_command(self):
-        self.assertTrue(isPcr_command in ispcr.build_isPCR_command())
+        self.assertTrue(isPcr_command_cdc in ispcr_cdc.build_isPCR_command())
+        self.assertTrue(isPcr_command_frost in ispcr_frost.build_isPCR_command())
 
     def test_isPcr_result(self):
-        self.assertEqual(ispcr.run_isPCR(), isPcr_result)
+        self.assertEqual(ispcr_cdc.run_isPCR(), isPcr_result_cdc)
+        self.assertEqual(ispcr_frost.run_isPCR(), isPcr_result_frost)
 
     def test_empty_command(self):
-        self.assertTrue(isPcr_command_e in ispcr_e.build_isPCR_command())
+        self.assertTrue(isPcr_command_e_cdc in ispcr_e_cdc.build_isPCR_command())
+        self.assertTrue(isPcr_command_e_frost in ispcr_e_frost.build_isPCR_command())
 
     def test_empty_result(self):
-        self.assertEqual(ispcr_e.run_isPCR(), isPcr_result_e)
+        self.assertEqual(ispcr_e_cdc.run_isPCR(), isPcr_result_e)
+        self.assertEqual(ispcr_e_frost.run_isPCR(), isPcr_result_e)
 
     # How to test the connection between isPcr and BLAST?
 

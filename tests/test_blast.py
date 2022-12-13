@@ -1,7 +1,10 @@
 import unittest
 
 from emmtyper.objects.blast import BLAST
-from tests.data import *
+from tests.data import test_sequence_path, db, \
+                       test_empty_path, blast_command, \
+                        blast_command_h, blast_result, \
+                        test_null, header
 
 # Normal no nonsense BLAST.
 blast = BLAST(
