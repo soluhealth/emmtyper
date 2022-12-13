@@ -32,6 +32,8 @@ ispcr_frost = IsPCR(
     min_perfect=15,
     min_good=15,
     max_product_length=4000,
+    tile_size=6,
+    step_size=5,
     output_stream="stdout",
 )
 
@@ -42,6 +44,8 @@ ispcr_e_cdc = IsPCR(
     min_perfect=20,
     min_good=30,
     max_product_length=4000,
+    tile_size=6,
+    step_size=5,
     output_stream="stdout",
 )
 
