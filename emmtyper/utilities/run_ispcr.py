@@ -11,7 +11,7 @@ logging.basicConfig(level=environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
 
 
-def get_amplicons(query, primer_db, min_perfect, min_good, max_size, tool_path):
+def get_amplicons(query, primer_db, min_perfect, min_good, max_size, tile_size, step_size, tool_path):
     """
     Run isPcr and return temporary file with amplicons
     """
@@ -22,6 +22,8 @@ def get_amplicons(query, primer_db, min_perfect, min_good, max_size, tool_path):
         primer_filename=primer_db,
         min_perfect=min_perfect,
         min_good=min_good,
+        tile_size=tile_size,
+        step_size=step_size,
         max_product_length=max_size,
         output_stream="stdout",
         tool_path=tool_path,

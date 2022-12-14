@@ -5,6 +5,7 @@ For running emmtyper
 import logging
 import pathlib
 import os
+import sys
 
 import click
 
@@ -124,7 +125,7 @@ logger = logging.getLogger(__name__)
 )
 @click.option(
     "--min-perfect",
-    default=15,
+    default=5,
     help="[isPcr] Minimum size of perfect match at 3' primer end.",
     show_default=True,
 )
@@ -138,6 +139,18 @@ logger = logging.getLogger(__name__)
     "--max-size",
     default=2000,
     help="[isPcr] Maximum size of PCR product.",
+    show_default=True,
+)
+@click.option(
+    "--tile-size",
+    default=6,
+    help="[isPcr] The size of match that triggers an alignment.[6-18]",
+    show_default=True,
+)
+@click.option(
+    "--step-size",
+    default=5,
+    help="[isPcr] Spacing between tiles.",
     show_default=True,
 )
 @click.option(
@@ -164,6 +177,8 @@ def main(
     min_perfect,
     min_good,
     max_size,
+    tile_size,
+    step_size,
     pcr_primers,
     ispcr_path,
 ):
@@ -177,6 +192,19 @@ def main(
     logger.info("Start running emmtyper on {} queries.".format(len(fasta)))
     for i, query in enumerate(fasta):
         if workflow == "pcr":
+            if int(tile_size) > 18 or int(tile_size) < 6:
+                logger.error("isPCR DNA tileSize must be between 6 and 18")
+                sys.exit()
+            query = run_ispcr.get_amplicons(
+                query,
+                str(primer_db),
+                min_perfect,
+                min_good,
+                max_size,
+                tile_size,
+                step_size,
+                ispcr_path
+            )
             if not primer_db and pcr_primers.lower() == 'cdc':
                 primer_db = CDC_PRIMERS
                 query = run_ispcr.get_amplicons(
