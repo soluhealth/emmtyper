@@ -265,25 +265,25 @@ You can check out the validation comparison go to out binder:
 
 - Andre Tan
 - Torsten Seemann
+- Kristy Horan
 - Jake Lacey
-- Mark Davies
-- Liam Mcintyre
-- Hannah Frost
-- Deborah Williamson
+- Himal Shrestha
+- Raquel Cooper
 - Anders Gon&ccedil;alves da Silva
 
+## Acknowledgements
 The codebase for `emmtyper` was primarly written by Andre Tan as part of his Master's
 Degree in Bioinformatics. Torsten Seemann, Deborah Williamson, and Anders Gon&ccedil;alves da Silva provided supervision and assistance.
 
 Hannah Frost contributed with EMM clustering by suggesting we incorporate it in to the code, and providing the necessary information to do so and test it.
 
-Jake Lacey, Liam Mcintyre, and Mark Davies provided assistance in validating `emmtyper`.
+Validation was conducted within MDU-Bioinformatics `emmtyper`.
 
 ## Maintainer
 
 The code is actively maintained by MDU Bioinformatics Team.
 
-Contact the principal maintainer at andersgs at gmail dot com.
+Contact the principal maintainer at MDU-Bioinformatics@unimelb.edu.au.
 
 ## Issues
 
