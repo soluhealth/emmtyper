@@ -27,7 +27,7 @@ docker build . --tag solu/emmtyper:latest
 Test script
 
 ```
-docker run --rm -v "$(pwd):/data" -w /data emmtyper:latest *.fna
+docker run --rm -v "$(pwd):/data" -w /data emmtyper:latest emmtyper *.fna
 ```
 
 # emmtyper - Emm Automatic Isolate Labeller

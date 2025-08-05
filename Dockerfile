@@ -46,6 +46,3 @@ COPY . .
 RUN pip install --no-deps .
 
 USER emmtyper
-
-ENTRYPOINT ["emmtyper"]
-CMD ["--help"]
