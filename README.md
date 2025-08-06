@@ -1,3 +1,35 @@
+# SOLU INSTRUCTIONS
+
+## Deployment
+
+### Build image locally
+
+```
+docker build . --tag solu/emmtyper:$VERSION
+```
+
+## Release
+
+```
+gcloud auth login
+./release.sh -v <VERSION>
+gcloud auth revoke
+```
+
+## Development
+
+Build image
+
+```
+docker build . --tag solu/emmtyper:latest
+```
+
+Test script
+
+```
+docker run --rm -v "$(pwd):/data" -w /data emmtyper:latest emmtyper *.fna
+```
+
 # emmtyper - Emm Automatic Isolate Labeller
 
 [![CI](https://github.com/MDU-PHL/emmtyper/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/MDU-PHL/emmtyper/actions/workflows/unit-tests.yml)
@@ -38,8 +70,8 @@ The database is curated by Dr. Velusamy Srinivasan. We take this opportunity to 
 
 The tool has two basic modes:
 
-* `blast`: In this mode the contigs are blasted against the trimmed FASTA database curated by the CDC.
-* `pcr`: In this mode, first an _in silico_ PCR is done on the contigs using the `isPCR` tool (Kuhn et al. 2013). The resulting fragments are then blasted against the trimmed FASTA database curated by the CDC. Two sets of primers are provided for the user to choose from: 1. The canonical CDC primers used for **conventional** PCR (Whatmore and Kehoe 1994); 2. the primers described by Frost et al. 2020. This last set uses the forward primers of Whatmore and Kehoe (1994), but provide a re-designed reverse primer. There is also the option of the user providing their own primer set in the format required by the `isPCR` tool.
+- `blast`: In this mode the contigs are blasted against the trimmed FASTA database curated by the CDC.
+- `pcr`: In this mode, first an _in silico_ PCR is done on the contigs using the `isPCR` tool (Kuhn et al. 2013). The resulting fragments are then blasted against the trimmed FASTA database curated by the CDC. Two sets of primers are provided for the user to choose from: 1. The canonical CDC primers used for **conventional** PCR (Whatmore and Kehoe 1994); 2. the primers described by Frost et al. 2020. This last set uses the forward primers of Whatmore and Kehoe (1994), but provide a re-designed reverse primer. There is also the option of the user providing their own primer set in the format required by the `isPCR` tool.
 
 ### Inner workings
 
@@ -143,7 +175,7 @@ Options:
   --min-good INTEGER              [isPcr] Minimum size where there must be 2
                                   matches for each mismatch.  [default: 15]
   --max-size INTEGER              [isPcr] Maximum size of PCR product.
-                                  [default: 2000] 
+                                  [default: 2000]
   --ispcr-path TEXT               [isPcr] Specify full path to isPcr
                                   executable.
   --help                          Show this message and exit.
@@ -272,6 +304,7 @@ You can check out the validation comparison go to out binder:
 - Anders Gon&ccedil;alves da Silva
 
 ## Acknowledgements
+
 The codebase for `emmtyper` was primarly written by Andre Tan as part of his Master's
 Degree in Bioinformatics. Torsten Seemann, Deborah Williamson, and Anders Gon&ccedil;alves da Silva provided supervision and assistance.
 

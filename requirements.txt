@@ -1,0 +1,4 @@
+scipy>=1.6.0
+numpy>=1.23.0
+python-dateutil>=2.8.1
+click>=7.1.2
