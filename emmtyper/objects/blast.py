@@ -54,7 +54,7 @@ class BLAST(Command):
 
         self.version = self.get_version()
 
-        self.db = shlex.quote(self.assert_db_and_return(db))
+        self.db = '"\\"' + self.assert_db_and_return(db) + '"\\"'
         self.query = shlex.quote(Command.assert_filepath_and_return(query))
 
         self.dust = dust
