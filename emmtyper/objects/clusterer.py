@@ -30,7 +30,7 @@ class Clusterer:
         output_type="short",
         distance=500,
         linkage="ward",
-        header=False,
+        header=True,
     ):
         self.isolate = blastOutputFile
         self.results = self.extractFromFile(blastOutputFile)
